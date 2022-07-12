@@ -1,0 +1,4 @@
+utilities Package-> Contains utils (\src\test\java\com\project)
+ManageLocationPage -> Page Object File
+ManageLocationPageLocators -> Locator File
+TCG_SMK_ManageLocation -> Test Case Group

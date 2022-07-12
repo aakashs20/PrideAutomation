@@ -1,0 +1,1 @@
+[ { "Source": "work-api", "DetailType": "detailType", "Detail": "{\"loan_id\": \"loanGuid\",  \"loan_number\": \"loanNumber\", \"review_code\": \"reviewCode\"}", "EventBusName": "EventBusName_qa", "Resources": [ "testing" ] } ]
