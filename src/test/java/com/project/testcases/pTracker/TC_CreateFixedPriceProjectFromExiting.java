@@ -54,7 +54,7 @@ public class TC_CreateFixedPriceProjectFromExiting extends TestBase {
 	    // Prepare the path of excel file
 	    String workspace = System.getProperty("user.dir");
 		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateFixedPriceNewProject.xls";
-		logInfo("Reading Excel   "+datapoolPath);
+		logInfo("Reading Excel:   "+datapoolPath);
 		 String projectName = "test002";
 		  if(NewProject.createProjectFromExiting(projectName)) { 
 			     NewProject.NewProjectPageSaveBtn.click();

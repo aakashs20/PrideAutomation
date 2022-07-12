@@ -47,7 +47,10 @@ public class TC_CreateSupportNewProject extends TestBase {
 	@Test(groups = { "sanity", "regression" }, description = "Create Fixed Price New Project")
 	public void CreateSupportNewProject() throws Exception {
 
-		String datapoolPath = "D:\\Ketan Tank\\iautomate-ref-impl-main\\test-data-files\\UI-TestData\\TC_CreateSupportNewProject.xls";
+		// Prepare the path of excel file
+	    String workspace = System.getProperty("user.dir");
+		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateSupportNewProject.xls";
+		logInfo("Reading Excel:   "+datapoolPath);
 		
 		 if (NewProject.createNewProject()) 
 		 {
@@ -57,7 +60,8 @@ public class TC_CreateSupportNewProject extends TestBase {
 			 !RequestID.trim().isEmpty()) {
 			 logInfo("Project Successfully Saved/Submited with Request ID: " + RequestID);
 			 ExcelUtils.setCellData(datapoolPath, "Status", 2, "PASS", "GREEN");
-			 ExcelUtils.updateCellData(datapoolPath,2,2,RequestID);
+			 ExcelUtils.setCellData(datapoolPath, "RequestID", 2, RequestID, "");
+			 //ExcelUtils.updateCellData(datapoolPath,2,2,RequestID);
 		 
 		 } else { 
 			 logError("Fail to Saved/Submited Project."); 

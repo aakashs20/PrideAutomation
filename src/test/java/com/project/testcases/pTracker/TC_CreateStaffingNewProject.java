@@ -46,8 +46,8 @@ public class TC_CreateStaffingNewProject extends TestBase {
 	public void CreateStaffingNewProject() throws Exception {
 	    // Prepare the path of excel file
 	    String workspace = System.getProperty("user.dir");
-		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateSupportNewProject.xls";
-		logInfo("Reading Excel   "+datapoolPath);
+		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateStaffingNewProject.xls";
+		logInfo("Reading Excel:   "+datapoolPath);
 		 if (NewProject.createNewProject()) 
 		 {
 			 NewProject.fillProjectCreation(datapoolPath); 

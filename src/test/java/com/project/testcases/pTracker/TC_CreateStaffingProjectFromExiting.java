@@ -51,18 +51,16 @@ public class TC_CreateStaffingProjectFromExiting extends TestBase {
 	  
 	@Test 
 	public void CreatCreateStaffingProjectFromExiting() throws Exception {
+
+	    // Prepare the path of excel file
+	    String workspace = System.getProperty("user.dir");
+		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateStaffingNewProject.xls";
+		logInfo("Reading Excel:   "+datapoolPath);
 		
-		String datapoolPath = "D:\\Ketan Tank\\iautomate-ref-impl-main\\test-data-files\\UI-TestData\\TC_CreateStaffingNewProject.xls";
-		
-		//NewProject.createProjectFromExiting();
-		//NewProject.fillProjectCreation(datapoolPath);
 		 String projectName = "Demo new";
 		  if(NewProject.createProjectFromExiting(projectName)) { 
 			     NewProject.NewProjectPageSaveBtn.click();
-			     threadsleep(5000);
-			     //op.clickElement(NewProject.NewProjectPageSaveBtn, driver);
-				 //String RequestID1 = NewProject.RequestIDText.getText();
-				 //logInfo("Project Request ID is: " + RequestID1) ;
+			     threadsleep(2000);
 				 String RequestID = NewProject.getRequestID(); 
 				 if (RequestID != null &&
 				 !RequestID.trim().isEmpty()) {
