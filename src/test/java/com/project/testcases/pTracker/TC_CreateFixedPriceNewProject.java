@@ -29,9 +29,9 @@ public class TC_CreateFixedPriceNewProject extends TestBase {
 	public String uName = "abc";
 	public String uPassword = "xyz";
 
+	
 	@BeforeClass
 	public void groupInit() throws Exception {
-
 		driver = launchbrowser();
 		controlActions = new ControlActions(driver);
 		controlActions = new ControlActions(driver);
@@ -41,14 +41,14 @@ public class TC_CreateFixedPriceNewProject extends TestBase {
 		LoginPage.waitForPageLoaded(driver);
 		LoginPage.TC_Login(uName, uPassword);
 		LoginPage.TC_ChangeUser();
-
 	}
 
 	@Test(groups = { "sanity", "regression" }, description = "Create Fixed Price New Project")
 	public void CreateFixedPriceNewProject() throws Exception {
-		
-		String datapoolPath = "D:\\Ketan Tank\\iautomate-ref-impl-main\\test-data-files\\UI-TestData\\TC_CreateFixedPriceNewProject.xls";
-
+	    // Prepare the path of excel file
+	    String workspace = System.getProperty("user.dir");
+		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateFixedPriceNewProject.xls";
+		logInfo("Reading Excel   "+datapoolPath);
 		 if (NewProject.createNewProject()) 
 		 {
 			 NewProject.fillProjectCreation(datapoolPath); 
@@ -57,19 +57,14 @@ public class TC_CreateFixedPriceNewProject extends TestBase {
 			 !RequestID.trim().isEmpty()) {
 			 logInfo("Project Successfully Saved/Submited with Request ID: " + RequestID);
 			 ExcelUtils.setCellData(datapoolPath, "Status", 2, "PASS", "GREEN");
-			 ExcelUtils.updateCellData(datapoolPath,1,2,RequestID);
+			 ExcelUtils.setCellData(datapoolPath, "RequestID", 2, RequestID, "");
+			 //ExcelUtils.updateCellData(datapoolPath,1,3,RequestID);
 		 
 		 } else { 
 			 logError("Fail to Saved/Submited Project."); 
 			 ExcelUtils.setCellData(datapoolPath, "Status", 2, "FAIL", "RED");
 			 } 
 		 }
-
-		/*
-		 * if(NewProject.createNewProject()) { //NewProject.validateAlert();
-		 * NewProject.fillProjectCreation(); }
-		 */
-
 	}
 
 
