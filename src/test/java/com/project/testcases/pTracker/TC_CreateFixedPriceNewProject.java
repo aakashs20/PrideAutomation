@@ -45,13 +45,14 @@ public class TC_CreateFixedPriceNewProject extends TestBase {
 
 	@Test(groups = { "sanity", "regression" }, description = "Create Fixed Price New Project")
 	public void CreateFixedPriceNewProject() throws Exception {
-	    // Prepare the path of excel file
+		String projectState = "DRAFT"; //SUBMIT
+		// Prepare the path of excel file
 	    String workspace = System.getProperty("user.dir");
 		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateFixedPriceNewProject.xls";
 		logInfo("Reading Excel:   "+datapoolPath);
 		 if (NewProject.createNewProject()) 
 		 {
-			 NewProject.fillProjectCreation(datapoolPath); 
+			 NewProject.fillProjectCreation(datapoolPath,projectState); 
 			 String RequestID = NewProject.getRequestID(); 
 			 if (RequestID != null &&
 			 !RequestID.trim().isEmpty()) {

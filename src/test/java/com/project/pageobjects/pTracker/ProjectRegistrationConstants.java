@@ -72,6 +72,29 @@ public class ProjectRegistrationConstants {
 	
 	// SOW Fields
 	
+	//Customer Coordinator
+	public static final String ADD_COORDINATOR_BTN = "//*[@id='custimport']//span[contains(text(),'Add Coordinator')]";
+	public static final String ADD_CUSTOMER_COORDINATOR_DLG_TXT = "//*[@class='ui-dialog-title' and contains(text(),'Add Customer Coordinator')]";
+	public static final String ADD_CUSTOMER_COORDINATOR_DLG = "//*[@id='wwvFlowForm']//div[@aria-label='Add Customer Coordinator']";
+	public static final String COORDINATOR_NAME_TXT = "//*[@id='oj-inputsearch-input-P96_NAME_HIDDEN']";
+	public static final String PROJECT_ROLE_TXT = "//*[@id='P96_PROJECT_ROLE']";
+	public static final String DESIGNATION_TXT = "//*[@id='P96_DESIGNATION']";
+	public static final String EMAIL_ADDRESS_TXT = "//*[@id='P96_EMAIL_ADDRESS']";
+	public static final String ACTIVE_RADIO_BTN = "//*[@id='P96_STATUS']//label[contains(text(),'Active')]";
+	public static final String INACTIVE_RADIO_BTN = "//*[@id='P96_STATUS']//label[contains(text(),'Inactive')]";
+	public static final String ADD_COORDINATOR_CANCEL_BTN = "//*[@id='B379682200144213909' and contains(text(),'Cancel')]";
+	public static final String ADD_BTN = "//*[@id='B379684541596213911' and contains(text(),'Add')]";
+	
+	//Attachments
+	public static final String UPLOAD_BTN = "//*[@id='attach']//span[contains(text(),'Upload File')]";
+	public static final String ATTACHMENT_DLG_TXT = "//*[@class='ui-dialog-title' and contains(text(),'Attachment')]";
+	public static final String ATTACHMENT_DLG = "//*[@id='wwvFlowForm']//div[@aria-label='Attachment']";
+	public static final String FILE_TYPE_LST = "//*[@id='P8_FILE_TYPE']";
+	public static final String BROWSE_FILE = "//*[@id='P4_FILE_BLOB' and contains(@data-caption,'Choose file')]";
+	//*[@id='P8_FILE_BLOB_DROPZONE']//span[contains(text(),'Choose file')]
+	public static final String CANCEL_BTN = "//*[@id='B427327189639930983' and contains(text(),'Cancel')] ";
+	public static final String UPLOAD_ATTACHMENT_BTN = "//*[@id='B427327610526930984' and contains(text(),'Upload Attachment')]";
+	
 	// Manager Details Fields
 	public static final String PROJECT_SPONSOR = "//*[@id='P2_PROJECT_SPONSOR']";
 	public static final String PROJECT_SPONSOR_SEARCH_DLG = "//*[@id='PopupLov_2_P2_PROJECT_SPONSOR_dlg']//input[contains(@aria-label,'Search')]";

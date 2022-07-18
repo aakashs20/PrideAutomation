@@ -25,19 +25,15 @@ public class NewProjectsPageConstants {
 	public static final String CREATE_NEW_PROJECT_LNK = "//*[@class='a-Menu-labelContainer']//a[contains(text(),'New project')]";
 	public static final String SELECT_FROM_EXITING_DLG = "//*[@id='ui-id-4' and contains(text(),'Select From Existing Project')]";
 	
-	//public static final String EXITING_PROJECT_LBL = "#P29_PROJECT_NUMBER.popup_lov.popup_lov.apex-item-text.apex-item-popup-lov";
 	public static final String EXITING_PROJECT_LBL = "//*[@id='P29_PROJECT_NUMBER_CONTAINER']" ;
 	//public static final String EXITING_PROJECT_LBL = "//*[@id='P29_PROJECT_NUMBER_LABEL' and contains(text(),'Existing Project')]";
 	public static final String SELECT_PROJECT_LST = "#P29_PROJECT_NUMBER.popup_lov.popup_lov.apex-item-text.apex-item-popup-lov"; 
 	public static final String SELECT_PROJECT_BTN = "//*[@id='P29_PROJECT_NUMBER_lov_btn']"; 
 	public static final String ADD_PROJECT_BTN = "//*[@id='B455823610092085497' and contains(text(),'Add')]";
-	//*[@id="PopupLov_29_P29_PROJECT_NUMBER_dlg"]/div[1]/input
-	//*[@id='PopupLov_29_P29_PROJECT_NUMBER_dlg']//input[contains(@aria-label,'Search')]
-	//*[@id='t_PageBody']/div[6]//*[@id='PopupLov_29_P29_PROJECT_NUMBER_dlg']//input[contains(@aria-label,'Search')]
+
 	
 	public static final String PROJECT_SEARCH_TXT = "//*[@id='t_PageBody']//input[contains(@aria-label,'Search') and contains(@class,'a-PopupLOV-search')]";
 	public static final String SELECT_EXITING_PROJECT_LST = "//*[@id='PopupLov_29_P29_PROJECT_NUMBER_dlg']//span[contains(text(),'3IIN0007')]";
-	//*[@id="PopupLov_29_P29_PROJECT_NUMBER_dlg"]//*[contains(text(),'3IIN0007')]
 
 	public static final String NEWPROJECT_PAGE_CANCEL_BTN = "//*[@id='B421738502938553422' and contains(text(),'Cancel')]";
 	public static final String NEWPROJECT_PAGE_SAVE_BTN = "//*[@id='CREATE_DRAFT' and contains(text(),'Save')]";
@@ -45,7 +41,8 @@ public class NewProjectsPageConstants {
 	public static final String NEWPROJECT_PAGE_ALERT_MSG = "//*[@id='t_Alert_Notification']//h2[contains(text(),'errors have occurred')]";
 	public static final String NEWPROJECT_PAGE_ALERT_CLOSE_BTN = "//*[@id='t_Alert_Notification']//button[contains(@title,'Close Notification')]";
 	public static final String SAVEPROJECT_ALERT_MSG = "//*[@class='t-Alert-title'and contains(text(),'Changes Saved')]";
-	
+	public static final String PROJECT_SAVE_ALERT_MSG = "//*[@id='t_Alert_Notification']//li[contains(text(),'Please attach supporting document.')]";
+	public static final String CLOSE_ALERT_MSG = "//*[@id='t_Alert_Notification']//button[@title='Close Notification']";
 	
 
 

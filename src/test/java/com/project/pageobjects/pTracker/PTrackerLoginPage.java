@@ -100,6 +100,7 @@ public class PTrackerLoginPage extends TestBase{
 		  try {
 		    wait.until(ExpectedConditions.visibilityOfAllElements(webElement));
 		    logInfo("Element Successfully loaded on the page");
+		    log4jInfo("Element Successfully loaded on the page");
 		    return true;
 		  } catch (Exception e) {
 			  logError("Failed to load the element on the page"+ e);
@@ -123,7 +124,7 @@ public boolean waitForPageLoaded(WebDriver driver) {
                // return complete;
                 if (complete) {
                 	log4jInfo("Page Loaded Successfully completed.");
-                	System.out.println("Page Loaded Successfully completed");
+                	logInfo("Page Loaded Successfully completed");
                 	return complete;
                 }
                 return complete;
@@ -134,6 +135,7 @@ public boolean waitForPageLoaded(WebDriver driver) {
                   wait.until(expectation);
                   return true;
           } catch(Throwable e) {
+        	  	  logError("Timeout waiting for Page Load Request to complete");
         	      log4jError("Timeout waiting for Page Load Request to complete" + e.getMessage());
                   //Assert.assertFalse(true, "Timeout waiting for Page Load Request to complete.");
                   return false;
@@ -150,12 +152,12 @@ public boolean waitForPageLoaded(WebDriver driver) {
 		String title=null;
 		try {
 			title=controlActions.getTitle();
-			System.out.println("Got the title of the pag");
+			logInfo("Success, got the title of the page: "+title);
 			log4jInfo("Success, got the title of the page: "+title);
 			return title;
 		}
 		catch(Exception e){
-			System.out.println("Failed to get title of pageed");
+			logError("Failed to get title of page" + e.getMessage());
 			log4jError("Failed to get title of page" + e.getMessage());
 			return title;
 		}
@@ -171,16 +173,16 @@ public boolean waitForPageLoaded(WebDriver driver) {
 	public boolean enterTextToUserName(String uName) {
 		try {
 			isElementDisplayed(usernameTxt);
-			   
 			controlActions.WaitforelementToBeClickable(usernameTxt);
 			controlActions.sendKeys(usernameTxt, uName);
 			//controlActions.actionEnter();
+			logInfo("Entered text '"+uName+"' in user name Field");
 			log4jInfo("Entered text '"+uName+"' in user name Field");
 			return true;
 		}
 		catch(Exception e){
-			log4jError("Failed to enter text '"+uName+"' in user name Field" + 
-						e.getMessage());
+			logError("Failed to enter text '"+uName+"' in user name Field" + e.getMessage());
+			log4jError("Failed to enter text '"+uName+"' in user name Field" + e.getMessage());
 			return false;
 		}
 	}
@@ -196,10 +198,12 @@ public boolean waitForPageLoaded(WebDriver driver) {
 			controlActions.WaitforelementToBeClickable(passwordTxt);
 			controlActions.sendKeys(passwordTxt, uPassword);
 			//controlActions.actionEnter();
+			logInfo("Entered text '"+ uPassword +"' in password Field");
 			log4jInfo("Entered text '"+ uPassword +"' in password Field");
 			return true;
 		}
 		catch(Exception e){
+			logError("Failed to enter text '"+ uPassword +"' in password Field" + e.getMessage());
 			log4jError("Failed to enter text '"+ uPassword +"' in password Field" + e.getMessage());
 			return false;
 		}
@@ -214,8 +218,8 @@ public boolean waitForPageLoaded(WebDriver driver) {
 	public boolean clkLoginButton() {
 		try {
 			controlActions.clickElement(LoginBtn);
-			log4jInfo("Successfully clicked on Login Button");
 			logInfo("Successfully clicked on Login Button");
+			log4jInfo("Successfully clicked on Login Button");
 			return true;
 		}
 		catch(Exception e) {
@@ -237,9 +241,11 @@ public boolean waitForPageLoaded(WebDriver driver) {
 			//commonPage.Sync();
 			threadsleep(2000);
 			logInfo("Dashboard Icon is Visible On Page");
+			log4jInfo("Dashboard Icon is Visible On Page");
 			return DashboardIcon.isDisplayed();
 		} catch(Exception e) {
 			logError("Dashboard Icon Not is Visible On Page "+ e.getMessage());
+			log4jError("Dashboard Icon Not is Visible On Page "+ e.getMessage());
 			return false;
 		}
 	}
@@ -255,17 +261,20 @@ public boolean waitForPageLoaded(WebDriver driver) {
 			String actualString = LoginTitleTxt.getText(); 
 			if(actualString.contains("Change User"))
 			{
-			logInfo("Successfully clicked on Navigation Bar");
-			return true;
+				logInfo("Successfully clicked on Navigation Bar");
+				log4jInfo("Successfully clicked on Navigation Bar");
+				return true;
 			}
 			else
 			{
 				logError("Failed to click on Navigation Bar ");
+				log4jError("Failed to click on Navigation Bar ");
 				return false;
 			}
 		}
 		catch(Exception e) {
 			logError("Failed to click on Navigation Bar "+ e.getMessage());
+			log4jError("Failed to click on Navigation Bar "+ e.getMessage());
 			return false;
 		}
 	}
@@ -278,11 +287,13 @@ public boolean waitForPageLoaded(WebDriver driver) {
 	public boolean clkCancelButton() {
 		try {
 			controlActions.clickElement(CancelBtn);
-			logInfo("Successfully clicked on Cancle Button");
-			return true;
+			logInfo("Successfully clicked on Cancel Button");
+			log4jInfo("Successfully clicked on Cancel Button");
+			return true; 
 		}
 		catch(Exception e) {
-			logError("Failed to click on Cancle Button "+ e.getMessage());
+			logError("Failed to click on Cancel Button "+ e.getMessage());
+			log4jError("Failed to click on Cancel Button "+ e.getMessage());
 			return false;
 		}
 	}
@@ -301,10 +312,12 @@ public boolean waitForPageLoaded(WebDriver driver) {
 			waitUntilElementPresent(AlertTxt);
 			wait.until(ExpectedConditions.visibilityOf(AlertTxt));
 			logInfo("Change User Successfully Done");
+			log4jInfo("Change User Successfully Done");
 			return true;
 		}
 		catch(Exception e) {
 			logError("Failed to Change User "+ e.getMessage());
+			log4jError("Failed to Change User "+ e.getMessage());
 			return false;
 		}
 	}
@@ -321,10 +334,12 @@ public boolean waitForPageLoaded(WebDriver driver) {
 			controlActions.click(PersonIDTXT);
 			controlActions.sendKeys(PersonIDTXT, eName);
 			controlActions.click(PersonIdList);
+			logInfo("Entered text '"+eName+"' in user name Field");
 			log4jInfo("Entered text '"+eName+"' in user name Field");
 			return true;
 		}
 		catch(Exception e){
+			logError("Failed to enter text '"+eName+"' in user name Field" + e.getMessage());
 			log4jError("Failed to enter text '"+eName+"' in user name Field" + e.getMessage());
 			return false;
 		}
@@ -348,24 +363,29 @@ public boolean waitForPageLoaded(WebDriver driver) {
 				wait.until(ExpectedConditions.visibilityOf(ActiveTabTxt));
 				if(controlActions.isElementDisplayedOnPage(ActiveTabTxt))
 				{
+					logInfo("Successfully opend P-Tracker page");
 					log4jInfo("Successfully opend P-Tracker page");
 					return true;
 				}
 				else
 				{
 					logError("Failed to navigate to P-Tracker page");
+					log4jError("Failed to navigate to P-Tracker page");
 					return false;
 				}
 			}
 			else
 			{
 				logError("Failed to load Select Role List  on the page");
+				log4jError("Failed to load Select Role List  on the page");
 			}
 			
 			log4jInfo("Ptrack page opened successfully");
+			logInfo("Ptrack page opened successfully");
 			return true;
 		}
 		catch(Exception e){
+			logError("Failed to navigate to PTrack Page" + e.getMessage());
 			log4jError("Failed to navigate to PTrack Page" + e.getMessage());
 			return false;
 		}
@@ -384,7 +404,6 @@ public boolean waitForPageLoaded(WebDriver driver) {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
-
 		}
 
 	}

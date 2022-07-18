@@ -24,29 +24,29 @@ import java.awt.datatransfer.Transferable;
 import com.project.utilities.ControlActions;
 
 public class Operations extends ControlActions {
+	
+	WebDriverWait wait;
+	JavascriptExecutor jsExecutor;
 
 	public Operations(WebDriver driver) {
 		super(driver);
-		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-
-	}
+		wait = new WebDriverWait(driver, 20000);
+		jsExecutor = (JavascriptExecutor) driver;
+}
 	
-	private void sleepInMiliSeconds(int duration)
+	public void sleepInMiliSeconds(int duration)
 	{
 		try {
 			Thread.sleep(duration);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			logWarn("[DriverBotWarn]warning got InterruptedException exception(sleepInSeconds)."+ e.getMessage());
 			//e.printStackTrace();
 		}
 	}
 
-	// WebDriverWait wait = new WebDriverWait(driver, 20000);
-
+	
 	/**
 	 * scrollPageTo
-	 * 
 	 * @param element
 	 * @param driver
 	 */
@@ -69,7 +69,6 @@ public class Operations extends ControlActions {
 
 	/**
 	 * This method will click on Element with the given XPath
-	 * 
 	 * @param driver
 	 * @param xpathLocator
 	 */
@@ -82,6 +81,10 @@ public class Operations extends ControlActions {
 		}
 	}
 
+	/**
+	 * This method will click on Element using element
+	 * @param element
+	 */
 	public void clickElement(WebElement element) {
 		try {
 			element.click();
@@ -91,6 +94,11 @@ public class Operations extends ControlActions {
 		}
 	}
 
+	/**
+	 * This method will click on Element 
+	 * @param element
+	 * @param driver
+	 */
 	public void clickElement(WebElement element, WebDriver driver) {
 		try {
 			JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
@@ -103,13 +111,25 @@ public class Operations extends ControlActions {
 		}
 	}
 
+	/**
+	 * javascriptclick
+	 * This method will click on web element
+	 * @param driver
+	 * @param webElement
+	 */
 	public void javascriptclick(WebDriver driver, WebElement webElement) {
 		// WebElement webElement = driver.findElement(By.xpath(element));
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", webElement);
 		System.out.println("javascriptclick" + " " + webElement);
 	}
-
+	
+	/**
+	 * mouseHoverJScript
+	 * This method will perform mouseHover using Java Script
+	 * @param driver
+	 * @param xpathLocator
+	 */
 	public void mouseHoverJScript(WebDriver driver, String xpathLocator) {
 
 		String mouseOverScript = "if(document.createEvent){var evObj = document.createEvent('MouseEvents');evObj.initEvent('mouseover', true, false); arguments[0].dispatchEvent(evObj);} else if(document.createEventObject) { arguments[0].fireEvent('onmouseover');}";
@@ -118,8 +138,8 @@ public class Operations extends ControlActions {
 	}
 
 	/**
+	 * clickLink
 	 * This method will click on Link or Button with the given XPath
-	 * 
 	 * @param driver
 	 * @param xpathLocator
 	 */
@@ -133,8 +153,8 @@ public class Operations extends ControlActions {
 	}
 
 	/**
+	 * clickRadiobutton
 	 * This method will click on Radio-button with the given XPath
-	 * 
 	 * @param driver
 	 * @param xpathLocator
 	 */
@@ -148,8 +168,8 @@ public class Operations extends ControlActions {
 	}
 
 	/**
+	 * clickCheckbox
 	 * This method will click on checkbox with the given XPath
-	 * 
 	 * @param driver
 	 * @param xpathLocator
 	 */
@@ -164,7 +184,6 @@ public class Operations extends ControlActions {
 
 	/**
 	 * setElementValueByActions
-	 * 
 	 * @param driver
 	 * @param element
 	 * @param text
@@ -257,7 +276,6 @@ public class Operations extends ControlActions {
 
 	/**
 	 * This method will type text in a textbox with the given XPath
-	 * 
 	 * @param driver
 	 * @param xpathLocator
 	 * @param inputText
@@ -277,7 +295,6 @@ public class Operations extends ControlActions {
 
 	/**
 	 * setElementValueByActions
-	 * 
 	 * @param driver
 	 * @param element
 	 * @param text
@@ -296,7 +313,6 @@ public class Operations extends ControlActions {
 
 	/**
 	 * setElementValueByActions
-	 * 
 	 * @param text
 	 * @param element
 	 * @param driver
@@ -337,7 +353,6 @@ public class Operations extends ControlActions {
 
 	/**
 	 * This method will select a desired value from dropdown for the given xpath
-	 * 
 	 * @param driver
 	 * @param xpathLocator
 	 * @param inputText
@@ -356,6 +371,13 @@ public class Operations extends ControlActions {
 
 	}
 
+	/**
+	 * selectFromList
+	 * @param driver
+	 * @param xpath
+	 * @param text
+	 * @param ObjectName
+	 */
 	public void selectFromList(WebDriver driver, String xpathLocator, String inputText, String ListBoxName)
 			throws Exception {
 		try {
@@ -388,7 +410,6 @@ public class Operations extends ControlActions {
 
 	/**
 	 * This method will wait implicitly for the specified time in seconds
-	 * 
 	 * @param driver
 	 * @param maxTimeOutInSecond
 	 */
@@ -403,10 +424,9 @@ public class Operations extends ControlActions {
 
 	/**
 	 * This method will return me text for a given xpath
-	 * 
 	 * @param driver
 	 * @param xPathLocator
-	 * @return
+	 * @return text
 	 */
 	public String getText(WebDriver driver, String xPathLocator) {
 		String text = null;

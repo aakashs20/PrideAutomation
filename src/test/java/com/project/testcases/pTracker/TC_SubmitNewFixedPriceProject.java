@@ -2,6 +2,7 @@ package com.project.testcases.pTracker;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -20,7 +21,7 @@ import com.project.utilities.ControlActions;
 
 import com.project.utilities.ExcelReader;
 
-public class TC_CreateStaffingNewProject extends TestBase {
+public class TC_SubmitNewFixedPriceProject extends TestBase {
 
 	WebDriverWait wait;
 	PTrackerLoginPage LoginPage;
@@ -29,6 +30,7 @@ public class TC_CreateStaffingNewProject extends TestBase {
 	public String uName = "abc";
 	public String uPassword = "xyz";
 
+	
 	@BeforeClass
 	public void groupInit() throws Exception {
 		driver = launchbrowser();
@@ -42,12 +44,13 @@ public class TC_CreateStaffingNewProject extends TestBase {
 		LoginPage.TC_ChangeUser();
 	}
 
-	@Test(groups = { "sanity", "regression" }, description = "Create Staffing New Project")
-	public void CreateStaffingNewProject() throws Exception {
-		String projectState = "DRAFT"; //SUBMIT
+	@Test(groups = { "sanity", "regression" }, description = "Create Fixed Price New Project")
+	public void SubmitNewFixedPriceProject() throws Exception {
+		String projectState = "DRAFT"; //SUBMIT, DRAFT
 	    // Prepare the path of excel file
 	    String workspace = System.getProperty("user.dir");
-		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateStaffingNewProject.xls";
+		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateFixedPriceNewProject.xls";
+
 		logInfo("Reading Excel:   "+datapoolPath);
 		 if (NewProject.createNewProject()) 
 		 {
@@ -55,14 +58,14 @@ public class TC_CreateStaffingNewProject extends TestBase {
 			 String RequestID = NewProject.getRequestID(); 
 			 if (RequestID != null &&
 			 !RequestID.trim().isEmpty()) {
-			 logInfo("Project Successfully Saved/Submited with Request ID: " + RequestID);
-			 ExcelUtils.setCellData(datapoolPath, "Status", 2, "PASS", "GREEN");
-			 ExcelUtils.setCellData(datapoolPath, "RequestID", 2, RequestID, "");
-			 //ExcelUtils.updateCellData(datapoolPath,1,2,RequestID);
+			 logInfo("Project Successfully Submited with Request ID: " + RequestID);
+			 ExcelUtils.setCellData(datapoolPath, "Status", 4, "PASS", "GREEN");
+			 ExcelUtils.setCellData(datapoolPath, "RequestID", 4, RequestID, "");
+			 //ExcelUtils.updateCellData(datapoolPath,1,3,RequestID);
 		 
 		 } else { 
 			 logError("Fail to Saved/Submited Project."); 
-			 ExcelUtils.setCellData(datapoolPath, "Status", 2, "FAIL", "RED");
+			 ExcelUtils.setCellData(datapoolPath, "Status", 3, "FAIL", "RED");
 			 } 
 		 }
 	}
