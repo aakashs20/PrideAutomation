@@ -41,6 +41,7 @@ public class NewProjectsPageConstants {
 	public static final String NEWPROJECT_PAGE_ALERT_MSG = "//*[@id='t_Alert_Notification']//h2[contains(text(),'errors have occurred')]";
 	public static final String NEWPROJECT_PAGE_ALERT_CLOSE_BTN = "//*[@id='t_Alert_Notification']//button[contains(@title,'Close Notification')]";
 	public static final String SAVEPROJECT_ALERT_MSG = "//*[@class='t-Alert-title'and contains(text(),'Changes Saved')]";
+	public static final String PMO_APPROVAL_ALERT_MSG = "//*[@class='t-Alert-title'and contains(text(),'Sent to PMO for approval')]";
 	public static final String PROJECT_SAVE_ALERT_MSG = "//*[@id='t_Alert_Notification']//li[contains(text(),'Please attach supporting document.')]";
 	public static final String CLOSE_ALERT_MSG = "//*[@id='t_Alert_Notification']//button[@title='Close Notification']";
 	

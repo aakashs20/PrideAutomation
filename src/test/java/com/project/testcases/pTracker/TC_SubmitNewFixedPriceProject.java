@@ -46,7 +46,7 @@ public class TC_SubmitNewFixedPriceProject extends TestBase {
 
 	@Test(groups = { "sanity", "regression" }, description = "Create Fixed Price New Project")
 	public void SubmitNewFixedPriceProject() throws Exception {
-		String projectState = "DRAFT"; //SUBMIT, DRAFT
+		String projectState = "SUBMIT"; //SUBMIT, DRAFT
 	    // Prepare the path of excel file
 	    String workspace = System.getProperty("user.dir");
 		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateFixedPriceNewProject.xls";

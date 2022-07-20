@@ -1,5 +1,7 @@
 package com.project.testcases.pTracker;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -43,6 +45,7 @@ public class TC_PTrackerLogin extends TestBase {
 		Assert.assertTrue(isPasswordSet, "Failed to add text to Google search as '" + uPassword + "'");
 		boolean isLoginButtonClicked = LoginPage.clkLoginButton();
 		Assert.assertTrue(isLoginButtonClicked, "Failed to clicked on Login Button.");
+		driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
 		boolean isDashboardIconVisibleOnPage = LoginPage.isDashboardIconVisibleOnPage();
 		Assert.assertTrue(isDashboardIconVisibleOnPage, "Login Failed and Dashboard ICON not visible.");
 	}

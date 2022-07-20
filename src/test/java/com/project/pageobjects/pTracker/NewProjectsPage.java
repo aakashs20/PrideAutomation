@@ -143,6 +143,9 @@ public class NewProjectsPage extends TestBase{
 	@FindBy(xpath = NewProjectsPageConstants.SAVEPROJECT_ALERT_MSG)
 	public WebElement SaveProjectAlertMsg;
 	
+	@FindBy(xpath = NewProjectsPageConstants.PMO_APPROVAL_ALERT_MSG)
+	public WebElement PmoApprovalAlertMsg;
+	
 	@FindBy(xpath = NewProjectsPageConstants.PROJECT_SAVE_ALERT_MSG)
 	public WebElement ProjectSaveAlertMsg;
 	
@@ -1254,6 +1257,8 @@ public class NewProjectsPage extends TestBase{
 			if(controlActions.isElementDisplayedOnPage(SaveProjectAlertMsg))
 			{
 				logInfo("Draft Project Saved Successfully") ;
+				op.scrollPageTo(RequestIDText, driver1);
+				
 			}
 			else
 			{
@@ -1274,10 +1279,11 @@ public class NewProjectsPage extends TestBase{
 			if(performFileUpload(driver1))
 			{
 				NewProjectPageSubmitBtn.click();
-				wait.until(ExpectedConditions.visibilityOf(SaveProjectAlertMsg));
-				if(controlActions.isElementDisplayedOnPage(SaveProjectAlertMsg))
+				wait.until(ExpectedConditions.visibilityOf(PmoApprovalAlertMsg));
+				if(controlActions.isElementDisplayedOnPage(PmoApprovalAlertMsg))
 				{
 					logInfo("Project Saved Successfully");
+					op.clickElement(NewProjectLink);
 				}
 				else
 				{
@@ -1295,8 +1301,10 @@ public class NewProjectsPage extends TestBase{
 		//wait.until(ExpectedConditions.visibilityOf(SaveProjectAlertMsg));
 		
 		// Validate for Request ID 
-		op.scrollPageTo(RequestIDText, driver1);
+//		wait.until(ExpectedConditions.visibilityOf(RequestIDText));
+//		op.scrollPageTo(RequestIDText, driver1);
 		threadsleep(9000);
+		
 	}
 	
 	//get RequestID on Submitting or Saving the Project
@@ -1338,7 +1346,9 @@ public class NewProjectsPage extends TestBase{
 		isAttachmentDlgExist = controlActions.isElementDisplayedOnPage(AttachmentDlg);
 		logInfo("File Upload Dialog opened successfully: " + isAttachmentDlgExist );
 		//op.clickElement(CancelBtn, driver1);
-		op.clickElement(UploadAttachmentBtn, driver1);
+		//op.clickElement(UploadAttachmentBtn, driver1);
+		driver1.findElement(By.xpath("//*[@id='B427327610526930984' and contains(text(),'Upload Attachment')]")).click();
+		 op.sleepInMiliSeconds(1000);
 		
 		// switch back
 		//driver1.switchTo().activeElement();

@@ -5,13 +5,14 @@ import java.util.Arrays;
 //import java.util.LinkedHashMap;
 import java.util.List;
 //import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 //import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
-
+import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,6 +22,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import org.springframework.util.StopWatch;
 import com.project.testbase.TestBase;
 import com.project.utilities.ControlActions;
 
@@ -229,6 +231,7 @@ public boolean waitForPageLoaded(WebDriver driver) {
 		}
 	}
 	
+	
 	/**
 	 * This method is used to wait for few seconds before verifying whether element is displayed
 	 * @author - Ketan Tank
@@ -304,12 +307,18 @@ public boolean waitForPageLoaded(WebDriver driver) {
 	 * @return boolean This returns true if Successfully clicked on Submit Button 
 	 */
 	public boolean clkSubmitButton() {
-		try {
+	try {
 			controlActions.clickElement(SubmitBtn);
+			StopWatch stopWatch = new StopWatch();
+			stopWatch.start();
+			
+			//driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
 			//threadsleep(5000);
 			//waitForPageLoaded(driver);
 			//controlActions.perform_waitUntilVisibility(AlertTxt);
 			waitUntilElementPresent(AlertTxt);
+			stopWatch.stop();
+			logInfo("****** TIMER IS : " + stopWatch.getTotalTimeMillis());
 			wait.until(ExpectedConditions.visibilityOf(AlertTxt));
 			logInfo("Change User Successfully Done");
 			log4jInfo("Change User Successfully Done");
@@ -433,6 +442,7 @@ public boolean waitForPageLoaded(WebDriver driver) {
 		boolean isEmployeeSelected = selectEmployee(eName);
 		Assert.assertTrue(isEmployeeSelected, "Failed to add text to slect Employee search as '" + eName + "'");
 		boolean isSubmitButtonClicked = clkSubmitButton();
+		//driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
 		Assert.assertTrue(isSubmitButtonClicked, "Failed to click Submit Button on login page");
 		threadsleep(2000);
 		boolean ispTrackPageOpend = goToPTrack();
