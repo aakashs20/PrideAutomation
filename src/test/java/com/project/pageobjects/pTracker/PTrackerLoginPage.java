@@ -311,11 +311,15 @@ public boolean waitForPageLoaded(WebDriver driver) {
 			controlActions.clickElement(SubmitBtn);
 			StopWatch stopWatch = new StopWatch();
 			stopWatch.start();
-			
-			//driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
-			//threadsleep(5000);
-			//waitForPageLoaded(driver);
-			//controlActions.perform_waitUntilVisibility(AlertTxt);
+			int DEFAULT_TIME_OUT_MILLISEC = 60000;
+			//int count = (int)stopWatch.getTotalTimeMillis();
+			int count = Long.valueOf(stopWatch.getTotalTimeMillis()).intValue();
+			if(count > DEFAULT_TIME_OUT_MILLISEC)
+			{
+				controlActions.clickElement(SubmitBtn);
+				logInfo("****** TIMER Count is : " + count);
+				throw new Exception("Page did not finish initializing after "+ stopWatch.getTotalTimeSeconds() +" seconds.");
+			}
 			waitUntilElementPresent(AlertTxt);
 			stopWatch.stop();
 			logInfo("****** TIMER IS : " + stopWatch.getTotalTimeMillis());

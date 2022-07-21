@@ -441,4 +441,43 @@ public class Operations extends ControlActions {
 		return text;
 
 	}
-}
+	
+	/**
+	 * selectFromList
+	 * @param driver
+	 * @param xpath
+	 * @param text
+	 * @param ObjectName
+	 */
+	public List<WebElement> searchReportTable(WebDriver driver, String xpathLocator, String inputText)
+			throws Exception {
+		List<WebElement> ElementsList = driver.findElements(By.xpath(xpathLocator));
+		try {
+			
+			int size = ElementsList.size();
+			logInfo("List Size is: " + ElementsList.size());
+			logInfo("Try to Select " + inputText + " From List box Size: " + ElementsList.size());
+			if (!(size == 0)) {
+				for (int i = 0; i < ElementsList.size(); i++)
+				{
+					logInfo( i + " -----> " + ElementsList.get(i).getText());
+					if (ElementsList.get(i).getText().equals(inputText)) {
+					JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+					jsExecutor.executeScript("arguments[0].style.border='2px solid yellow'", ElementsList.get(i));
+					log4jInfo(ElementsList.get(i).getText() + " is selected from Search Table");
+					ElementsList.get(i).click();
+					waitImplicitely(driver, 10);
+				    }
+				}
+
+			} else {
+				logError("Search Error : No Data found for :" + inputText);
+			}
+		} catch (Exception e) {
+			logError("Failed to select the element " + inputText + " In Search Field");
+			e.printStackTrace();
+		}
+		return ElementsList;
+	}
+	
+} // End of Class

@@ -431,7 +431,6 @@ public class NewProjectsPage extends TestBase{
 		
 		HashMap<String, String> rowData = ExcelUtils.getTestDataXls(datapoolPath, sheetName, header, tc);
 		op.waitImplicitely(driver1, 10);
-		
 		System.out.println("\n******************** Filling Project Creation Details ********************\n");	
 		
 		//((JavascriptExecutor)driver1).executeScript("arguments[0].scrollIntoView(true);", NewProjectPageHeadings);
@@ -449,8 +448,9 @@ public class NewProjectsPage extends TestBase{
 			op.setText(driver1, ProjectRegistrationConstants.PROJECT_NAME, projectName);
 		    String val = ProjectBrief.getAttribute("value");
 		    System.out.println("Entered text is: " + val);
-			String a_text_1 = (String) ((JavascriptExecutor) driver1).executeScript("return arguments[0].value",
-					ProjectName);
+			//String a_text_1 = (String) ((JavascriptExecutor) driver1).executeScript("return arguments[0].value",ProjectName);
+			String a_text_1 = op.getElementTextValueByActions(driver1, ProjectName);
+			ExcelUtils.updateCellData(datapoolPath, 4, 5, a_text_1);
 			try {
 				Assert.assertEquals(a_text_1.contains(rowData.get("ProjectName")), "Failed to fill Project Name Field.");
 				op.waitImplicitely(driver1, 10);
