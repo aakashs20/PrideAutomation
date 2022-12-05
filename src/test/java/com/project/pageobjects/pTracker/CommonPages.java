@@ -9,6 +9,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -29,6 +30,7 @@ public class CommonPages extends TestBase {
 	ControlActions controlActions;
 	Operations op;
 	private static final int DELAY = 2000;
+	//WebDriver driver ;
 	
 	public CommonPages(WebDriver driver) {
 		PageFactory.initElements(driver, this);
@@ -40,6 +42,8 @@ public class CommonPages extends TestBase {
 		driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);
 	}
 	
+	
+
 	// ACTIVE PROJECT TAB OBJECTS 
 	@FindBy(xpath = CommonPagesConstants.ACTIVE_PROJECT_SEARCH_TXT)
 	public WebElement ActiveProjectSearchTxt;
@@ -59,11 +63,101 @@ public class CommonPages extends TestBase {
 	@FindBy(xpath = CommonPagesConstants.MANAGER_DETAILS_TAB)
 	public WebElement ManagerDetailsTab;
 	
+	@FindBy(xpath = CommonPagesConstants.ADD_SUB_MANAGER)
+	public WebElement AddSubManager;
+	
 	@FindBy(xpath = CommonPagesConstants.ADD_SUB_MANAGER_BTN)
 	public WebElement AddSubManagerBtn;
 	
 	@FindBy(xpath = CommonPagesConstants.SUB_MANAGER_TYPE)
 	public WebElement SubManagerType;
+	
+	//Prasanna//
+	
+		@FindBy(xpath = CustomerCoordinatorConstants.FIXED_PRICE)
+		public WebElement fixed_price;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.SEARCH_PROJECT)
+		public WebElement Search_project;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.GO_BUTTON)
+		public WebElement go_button;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.ACTIVE_PROJECTS_LIST)
+		public WebElement active_projects;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.PROJECT_TEST8877)
+		public WebElement project_test8877;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.CUSTOMER_COORDINATOR)
+		public WebElement customer_coordinator;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.ADD_COORDINATOR)
+		public WebElement add_coordinator;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.COORDINATOR_NAME)
+		public WebElement coordinator_name;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.PROJECT_ROLE)
+		public WebElement project_role;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.DESIGNATION)
+		public WebElement designation;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.EMAIL_ADDRESS)
+		public WebElement email_address;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.REMARK)
+		public WebElement remark;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.ADD_BUTTON)
+		public WebElement add_button;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.ADD_CUSTOMER_COORDINATOR_IFRAME)
+		public WebElement add_customer_coordinator_iframe;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.CANCEL_BUTTON)
+		public WebElement cancel_button;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.INACTIVE_RADIO_BUTTON)
+		public WebElement inactive_button;
+
+		@FindBy(xpath = CustomerCoordinatorConstants.ACTIVE_RADIO_BUTTON)
+		public WebElement active_button;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.EDIT_CUSTOMER_COORDINATOR_IFRAME_ACTIVE)
+		public WebElement edit_customer_coordinator_iframe_active;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.EDIT_COORDINATOR_NAME)
+		public WebElement edit_coordinator_name;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.EDIT_PROJECT_ROLE)
+		public WebElement edit_project_role;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.EDIT_DESIGNATION)
+		public WebElement edit_designation;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.EDIT_EMAIL_ADDRESS)
+		public WebElement edit_email_address;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.EDIT_REMARK)
+		public WebElement edit_remark;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.SAVE_CHANGES_BUTTON)
+		public WebElement save_changes_button;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.EDIT_CUSTOMER_COORDINATOR_IFRAME_INACTIVE)
+		public WebElement edit_customer_coordinator_iframe_inactive;
+		
+		@FindBy(xpath = DeliveryMilestoneConstants.SEARCH_PROJECT)
+		public WebElement searchProject;
+		
+		@FindBy(xpath = DeliveryMilestoneConstants.GO_BUTTON)
+		public WebElement goButton;
+		
+		@FindBy(xpath = CustomerCoordinatorConstants.ERROR_MESSAGE_COORDINATORNAME)
+		public WebElement errorMessageCoordinatorName;
+
 	
 	//Ganesh//
 	
@@ -102,6 +196,9 @@ public class CommonPages extends TestBase {
 	
 	@FindBy(xpath = CommonPagesConstants.PAYMENT_MILESTONE_DETAILS_TAB)
 	public WebElement paymentMilestoneDetailsTab;
+	
+	@FindBy(xpath = CommonPagesConstants.ADD_PAYMENT_MILESTONE)
+	public WebElement addPaymentMilestonebtn;
 	
 	@FindBy(xpath = CommonPagesConstants.ADD_PAYMENT_MILESTONE_BTN)
 	public WebElement addPaymentMilestone;
@@ -151,6 +248,9 @@ public class CommonPages extends TestBase {
 		@FindBy(xpath = CommonPagesConstants.SELECT_ADD_EMPLYOEE)
 		public WebElement SelectAddEmplyoee;
 		
+		@FindBy(xpath = CommonPagesConstants.ADD_EMPLYOEE_NAME)
+		public WebElement AddEmplyoeeName;
+		
 		@FindBy(xpath = CommonPagesConstants.ADD_EMPLYOEE_NAME_SEARCH)
 		public WebElement AddEmplyoeeNameSearch;
 		
@@ -168,9 +268,210 @@ public class CommonPages extends TestBase {
 		
 		@FindBy(xpath = CommonPagesConstants.END_DATE_PICKER)
 		public WebElement EndDatePicker;
+			
+		@FindBy(xpath = CommonPagesConstants.SOW_DETAILS_TAB)
+		public WebElement SowDetailsTab;
+		
+		@FindBy(xpath = CommonPagesConstants.CONNECT_SOW_BTN)
+		public WebElement ConnectSowBtn;
+		
+		@FindBy(xpath = CommonPagesConstants.CONFIRM_CHECKBOX)
+		public WebElement ConfirmCheckbox;
+		
+		@FindBy(xpath = CommonPagesConstants.PROCEED_BTN)
+		public WebElement ProceedBtn;
+		
+		@FindBy(xpath = CommonPagesConstants.SELECT_SOW_DROPDOWN)
+		public WebElement SelectSowDropdown;
+		
+		@FindBy(xpath = CommonPagesConstants.SELECT_SOW_ROW)
+		public WebElement SelectSowRow;
+		
+		@FindBy(xpath = CommonPagesConstants.ADD_BTN)
+		public WebElement AddBtn;
+		
+		@FindBy(xpath = CommonPagesConstants.VERIFY_SOW_ADD)
+		public WebElement VerifySowAdd;
 		
 	//Nikita//
+		
+		
+		
+		
+		//Ramya
+	    @FindBy(xpath = CommonPagesConstants.ACTIVE_PROJECT_NUMBER)
+		public WebElement ActiveProjectNumber;
+	   
+	    @FindBy(xpath = CommonPagesConstants.ACTIVE_PEOPLE_TAB)
+	    public WebElement ActivePeopleTab;
+	    
+	    @FindBy(xpath = CommonPagesConstants.ACTIVE_ATTACHMENTS_TAB)
+	    public WebElement ActiveAttachmentsTab;
+	    
+	    @FindBy(xpath = CommonPagesConstants.ACTIVE_TEAM_TAB)
+	    public WebElement ActiveTeamTab;
+	    
+	    @FindBy(xpath = CommonPagesConstants.ACTIVE_FOR_HISTORY_TAB)
+	    public WebElement ActiveForHistoryTab;
+	    
+	    
+	    @FindBy(xpath = CommonPagesConstants.ACTIVE_HISTORY_TAB)
+	    public WebElement ActiveHistoryTab;
+	    
+	    @FindBy(xpath = CommonPagesConstants.PROJECT_ADD_ROLE_BTN)
+	    public WebElement ProjectAddRoleBtn;   
+	    
+	    @FindBy(xpath = CommonPagesConstants.CLK_ROLE_TYPE)
+	   	public WebElement ClickRoleType;
+	   @FindBy(xpath = CommonPagesConstants.SELECT_ROLE_TYPE)
+	   	public WebElement SelectRoleType;
+	   
+	   @FindBy(xpath = CommonPagesConstants.CLK_LOCATION)
+	  	public WebElement ClickLocation;
+	    
+	    @FindBy(xpath = CommonPagesConstants.SELECT_LOCATION)
+	   	public WebElement SelectLocation;
+	    //...
+	    
+	    @FindBy(xpath = CommonPagesConstants.ROLETYPE_EDIT_ICON)
+	   	public WebElement RoleTypeEditIcon;
+	    
+	    @FindBy(xpath = CommonPagesConstants.EDIT_LABEL)
+	   	public WebElement EditLabel;
+			   
+	    @FindBy(xpath = CommonPagesConstants.VERF_Role)
+	    public WebElement VerifyRole;
+	    
+	    @FindBy(xpath = CommonPagesConstants.VERF_Location)
+	    public WebElement VerifyLocation;
+
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_DEC)
+	    public WebElement MonthlyLoadingDec;
+	     
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_JAN)
+	    public WebElement MonthlyLoadingJan;
+	     
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_FEB)
+	    public WebElement MonthlyLoadingFeb;
+	    
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_MAR)
+	    public WebElement MonthlyLoadingMar;
+	    
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_APR)
+	    public WebElement MonthlyLoadingApr;
+	    
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_MAY)
+	    public WebElement MonthlyLoadingMay;
+	    
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_JUN)
+	    public WebElement MonthlyLoadingJun;
+	    
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_JUL)
+	    public WebElement MonthlyLoadingJul;
+	    
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_AUG)
+	    public WebElement MonthlyLoadingAug;
+	    
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_SEP)
+	    public WebElement MonthlyLoadingSep;
+	    
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_OCT)
+	    public WebElement MonthlyLoadingOct;
+	    
+	    @FindBy(xpath = CommonPagesConstants.MONTHLY_LOADING_NOV)
+	    public WebElement MonthlyLoadingNov;
+	    
+	    @FindBy(xpath = CommonPagesConstants.ADDING_ADD_ROLE)
+	    public WebElement SubmitAddRole;
+	    
+	    @FindBy(xpath = CommonPagesConstants.CLICK_SAVE_CHANGES)
+	    public WebElement ClickSaveChanges;
+	    
+//	    @FindBy(xpath = CommonPagesConstants.BTN_ADD_ROLE)
+//	    public WebElement ButtonAdd;
+//Ramya//
+	    
+		/*
+		 * This method is used to verify Project Role and click on its action 
+		 * @return boolean
+		 */
+		public boolean selectProjectRole(WebDriver driver, String ProjectRole, String emplyoeeName) throws Exception {
+					threadsleep(2000);
+					int i;
+					List<WebElement> projectRoles = controlActions.perform_getListOfElementsByXPath("//*[@id='report_table_Manager-Details']/tbody/tr/td[1]");
+					try {
+						logInfo("Size of Project Role Web Table is : " + projectRoles.size());
+						if (projectRoles.size() == 0) {
+							logError("Project Role is not displayed in the table.");
+							return false;
+							//fail("Project Role is not displayed in the table.");
+						}
+						for (i = 0; i < projectRoles.size(); i++) {
+							//logInfo("Milestone id is --> " + addedMilestoneIDs.get(i).getText());
+							if (projectRoles.get(i).getText().equalsIgnoreCase(ProjectRole)) {
+								logInfo("Project Role is correctly displayed in the table." + i);
+								WebElement action = op.perform_getElementByXPath("//*[@id='report_table_Manager-Details']/tbody/tr["+(i + 1)+"]/td[5]/button/span[2]");
+								if(action.getText().contains("Reallocate"))
+								{
+									logInfo("Reallocating " + emplyoeeName);
+									action = op.perform_getElementByXPath("//*[@id='report_table_Manager-Details']/tbody/tr["+(i + 1)+"]/td[5]/button");
+									op.clickElement(action, driver);
+									return true;
+								}
+							}
+						}
+					} catch (Exception e) {
+						logError(e.getMessage());
+						return false;
+					}
+					if (i == projectRoles.size()) {
+						logError("Milestone id : " + ProjectRole + " is not displayed in the table.");
+						//fail("Milestone id : " + ProjectRole + " is not displayed in the table.");
+						return false;
+					} else {
+						return true;
+					}
+		}
 	
+	    
+		public boolean verifyActiveProject(WebDriver driver, String searchProjectNumber) {
+			try {
+				//controlActions.clickOnElement(activeProjectList); // User clicks on Active project
+				//controlActions.clickOnElement(fixedPrice); // User clicks on Fixed price project
+				boolean isProjectNumberSet = enterTextInSearchProjectField(searchProjectNumber); // User enters project no
+				IsTrue(isProjectNumberSet, "Project " + searchProjectNumber + " found successfully","Failed to add text to project search as '" + searchProjectNumber + "'");
+				controlActions.click(goButton);
+				WebElement projectNumber1 = controlActions.perform_getElementByXPath(DeliveryMilestoneConstants.PROJECT_NUMBER1.replace("PROJ_NUM", searchProjectNumber));
+				controlActions.isElementDisplayed(projectNumber1);
+				controlActions.click(projectNumber1);
+				return true;
+			} catch (Exception e) {
+				logError(e.getMessage());
+				return false;
+
+			}}
+		
+		
+		/**
+		 * This method is used to enter Project Number searchProjectNumber in Search
+		 * text box searchProjectNumber is available inside
+		 * TCG_CreateDeliveryMilestone.java
+		 * @param inputString [String]
+		 * @return boolean true if action successful else false
+		 */
+		public boolean enterTextInSearchProjectField(String searchProjectNumber) {
+			try {
+				controlActions.waitForElementToBeClickable(searchProject);
+				controlActions.sendKeys(searchProject, searchProjectNumber);
+				// controlActions.actionEnter();
+				logInfo("Entered text '" + searchProjectNumber + "' in Search Project Field");
+				return true;
+			} catch (Exception e) {
+				logError("Failed to enter text '" + searchProjectNumber + "' in Search Project Field" + e.getMessage());
+				return false;
+			}
+		}
+	    
 	public String[][] Search(WebDriver driver, String tableXpath, String projectName)
 	{
 		String[][] arrTabledata ;
@@ -220,7 +521,6 @@ public class CommonPages extends TestBase {
 	
 	/**
 	 * Wait for assync content in a determined period
-	 * //from   www.j  a v a 2 s .c o  m
 	 * @param driver Selenium web driver.
 	 * @param by Selenium By expression.
 	 * @param timeout Selenium time out.
@@ -315,7 +615,6 @@ public class CommonPages extends TestBase {
 			cancelSubManager.click();
 			logInfo("SubManager Cancel");
 			return true;
-
 		} catch (NoSuchElementException nsee) {
 			logError("ERROR:Submanager Not canceled ");
 			return false;
@@ -332,7 +631,7 @@ public class CommonPages extends TestBase {
 		int tc = tcRowNum-1;
 		HashMap<String, String> rowData = ExcelUtils.getTestDataXls(datapoolPath, sheetName, header, tc);
 		Operations op = new Operations(driver);
-		op.selectDropdown(driver, "//*[@class='ui-datepicker-month']", "Aug");
+		op.selectDropdown(driver, "//*[@class='ui-datepicker-month']", "Sep");
 		op.selectDropdown(driver, "//*[@class='ui-datepicker-year']", "2022");
 		op.selectFromList(driver, "//*[@id='ui-datepicker-div']/table/tbody/tr/td/a", rowData.get("StartDate"),"Start Day");
  	}
@@ -380,16 +679,19 @@ public class CommonPages extends TestBase {
 	public void waitTillSpinnerDisable() throws InterruptedException {
 		int count = 0;
 		while (spinner.size() != 0 && count < 90) {
-			Thread.sleep(5000);
+			threadsleep(5000);
 			count++;
 		}
-
 	}
 
 	public void waitSwitch() {
 		logInfo("SubManager waitswitch start");
 		wait.until(ExpectedConditions.visibilityOf(VerifySubManagerRole));
-
+	}
+	
+	public void waitSwitch(WebElement element) {
+		logInfo("Waiting for the element to visible -> " + element);
+		wait.until(ExpectedConditions.visibilityOf(element));
 	}
 
 	//Ganesh2//
@@ -417,7 +719,7 @@ public class CommonPages extends TestBase {
 		
 		    public boolean modifyPaymentMilestone(WebDriver driver, String amountModify, int tcRowNum) throws Exception {
 				try {
-					paymentMilestoneModifyClick.click();
+					//paymentMilestoneModifyClick.click();
 					threadsleep(4000);
 					op.switchToiFrameByXpath(driver,CommonPagesConstants.IFRAME);
 					paymentMilestoneStartDate.click();
@@ -450,7 +752,7 @@ public class CommonPages extends TestBase {
 			int tc = tcRowNum-1;
 			HashMap<String, String> rowData = ExcelUtils.getTestDataXls(datapoolPath, sheetName, header, tc);
 			Operations op = new Operations(driver);
-			op.selectDropdown(driver, "//*[@class='ui-datepicker-month']", "Aug");
+			op.selectDropdown(driver, "//*[@class='ui-datepicker-month']", "Sep");
 			op.selectDropdown(driver, "//*[@class='ui-datepicker-year']", "2022");
 			op.selectFromList(driver, "//*[@id='ui-datepicker-div']/table/tbody/tr/td/a", rowData.get("EndDate"),"End Day");
 	 	}
@@ -496,11 +798,264 @@ public class CommonPages extends TestBase {
 			boolean paymentMilestoneAmountDisplay = paymentMilestoneAmmountVerify.isDisplayed();
 			return paymentMilestoneAmountDisplay;
 		}
+	
+		public  boolean reallocateSubManager(WebDriver driver, String endDate, String emplyoeeName) throws Exception 
+		{
+//			    ReleaseResourceRequesTab.click();
+			    //op.clickElement(ReleaseResourceRequesTab, driver);
+			    op.switchToiFrameByXpath(driver,CommonPagesConstants.IFRAME);
+			    threadsleep(2000);
+			    SelectReleaseResourceEdate.sendKeys("");
+			    SelectReleaseResourceEdate.sendKeys(endDate);
+			    SelectReleaseResourceEdate.click();
+//				driver.findElement(By.xpath("//*[@id='ui-datepicker-div']/table/tbody/tr[2]/td[3]/span")).click();
+				driver.findElement(By.xpath("//*[@id='ui-datepicker-div']/table/tbody/tr/td[contains(@class, 'ui-datepicker-days-cell-over')]")).click();
+				threadsleep(2000);
+				AddEmplyoeeNameSearch.click();
+				op.switchToDefaultContent(driver);
+				AddEmplyoeeName.sendKeys(emplyoeeName);
+				//AddEmplyoeeNameSearch.sendKeys(emplyoeeName);
+				//driver.switchTo().defaultContent();
+				threadsleep(2000);
+				//op.switchToDefaultContent(driver);
+				op.clickElement(driver, CommonPagesConstants.ADD_EMPLYOEE_SELECT.replace("NameToBeReplaced", emplyoeeName));
+				//AddEmplyoeeSelect.click();
+				threadsleep(1500);
+				op.switchToiFrameByXpath(driver,CommonPagesConstants.IFRAME);
+				wait.until(ExpectedConditions.visibilityOf(SelectReleaseResourceEdate));
+				op.clickElement(ReallocateResourceSubmitBtn, driver);
+				//ReallocateResourceSubmitBtn.click();		
+				op.switchToDefaultContent(driver);
+				//driver.switchTo().defaultContent();
+				boolean resourceName = VerifyReallocation.isDisplayed();
+				return resourceName;
+		}
 		
+		public  boolean ConnectSow(WebDriver driver, String sowName) throws Exception 
+		{	
+				boolean isSowAdded = false ;
+				SowDetailsTab.click();
+				ConnectSowBtn.click();
+				op.switchToiFrameByXpath(driver,CommonPagesConstants.IFRAME);
+				//driver.switchTo().frame(frame1); 
+			    threadsleep(1500);
+				Operations op1= new Operations (driver) ;
+				op1.javascriptclick(driver, ConfirmCheckbox);
+		    	ProceedBtn.click();	
+				threadsleep(1500);
+				SelectSowDropdown.sendKeys("");
+				SelectSowDropdown.sendKeys(sowName);
+				op.switchToDefaultContent(driver);
+				//driver.switchTo().defaultContent();
+				boolean isSoWAvaiable = op.isElementDisplayed(SelectSowRow);
+				if(isSoWAvaiable)
+				{
+					SelectSowRow.click();
+					op.switchToiFrameByXpath(driver,CommonPagesConstants.IFRAME);
+					//driver.switchTo().frame(frame1); 
+					threadsleep(1500);
+					AddBtn.click();		
+					op.switchToDefaultContent(driver);
+					op.waitForAnElementToBeClickable(ConnectSowBtn);
+					//driver.switchTo().defaultContent();
+					isSowAdded = VerifySowAdd.isDisplayed();
+					return isSowAdded;
+				}
+				{
+				    logInfo("No results found in Select SOW List Box");
+					return isSowAdded;
+				}
+				
+	}
+
+		//Ramya-start
+		
+		public boolean goToEdit(String role) {
+			try {
+				wait.until(ExpectedConditions.visibilityOf(RoleTypeEditIcon));
+				controlActions.click(RoleTypeEditIcon);
+				wait.until(ExpectedConditions.visibilityOf(RoleTypeEditIcon));
+				return true;
+			}
+			catch(Exception e){
+				logError("Failed to navigate to PTrack Page" + e.getMessage());
+				return false;
+			}
+		}
+	
+		
+		public boolean waitUntilElementPresent(WebElement webElement) {
+			threadsleep(5000);
+			  try {
+			    wait.until(ExpectedConditions.visibilityOfAllElements(webElement));
+			    logInfo("Element Successfully loaded on the page");
+			    return true;
+			  } catch (Exception e) {
+				  logError("Failed to load the element on the page"+ e.getMessage());
+			    return false;
+			  }
+			}
+		
+		public boolean clkSaveChanges(WebDriver driver) {
+				WebElement aa ;
+				String isAlertOn= "true";
+				String isAlertPresent = prop.getProperty("isAlertOn").trim().toLowerCase();
+				logInfo("Alert is configured as : " + isAlertPresent);
+				SubmitAddRole.click(); 
+				logInfo("Successfully clicked on SubmitAddRole Button");
+				String xpath = "//*[@id='Btncfa_click']"; 
+				boolean isAlertMessagePresent = op.isElementDisplayed(xpath);
+				logInfo("Is Alert Message seen? : " + isAlertMessagePresent);
+				//if(isAlertPresent.equalsIgnoreCase(isAlertOn))
+				if(isAlertMessagePresent)
+				{
+					xpath = "//*[@id='Btncfa_click']"; 
+					aa = driver.findElement(By.xpath(xpath));
+				}
+				else
+				{
+					xpath = "//*[@id='app_link_customise_btn']//span[contains(text(),'customize')]" ;
+					aa = driver.findElement(By.xpath(xpath));
+				}
+
+//				boolean bb = controlActions.WaitUntilElementIsClickable(aa);
+				for(int count=0; count<=2; count++)
+				{
+					logInfo("Change User Retry Count is : " + count);
+					threadsleep(2000);	
+					if(!op.checkElementPresent(aa))
+					{
+						SubmitAddRole.click();
+					}
+					else
+					{
+						break;
+					}
+				}
+				if(isAlertPresent.equalsIgnoreCase(isAlertOn) )
+				{
+		 			waitUntilElementPresent(ClickSaveChanges);
+					wait.until(ExpectedConditions.visibilityOf(ClickSaveChanges));
+					if(op.checkElementPresent(ClickSaveChanges))
+					{
+						logInfo(" Successfully Done");
+						return true;
+					}
+					else
+					{
+						logError("Failed to");
+						return false;
+					}
+				}
+				else
+				{
+		 			waitUntilElementPresent(aa);
+					wait.until(ExpectedConditions.visibilityOf(aa));
+					if(op.checkElementPresent(aa))
+					{
+						logInfo("Successfully Done");
+						return true;
+					}
+					else
+					{
+						logError("Failed  ");
+						return false;
+				    }
+				}
+		}
+		
+		
+		public boolean selectEdit(String edit) {
+			try {
+				controlActions.click(ClickRoleType);
+				controlActions.click(SelectRoleType);
+				controlActions.sendKeys(SelectRoleType, edit);
+				//controlActions.click(PersonIdList);
+				logInfo("Entered text '"+edit+"' in user name Field");
+				return true;
+			}
+			catch(Exception e){
+				logError("Failed to enter text '"+edit+"' in user name Field" + e.getMessage());
+				return false;
+			}
+		}
+		
+		
+		public void TC_EDITROLE(WebDriver driver,String edit) throws Exception {
+			boolean isclkOnEditIcon = clkOnEditIcon();
+			Assert.assertTrue(isclkOnEditIcon, "Failed to click  Icon.");
+			isclkOnEditIcon = clkOnEditIcon();
+			Assert.assertTrue(isclkOnEditIcon, "Failed to click Navigation Icon.");
+			//String eName = "Mahajan, Milind";
+			boolean isEditSelected = selectEdit(edit);
+			Assert.assertTrue(isEditSelected, "Failed to add text to select Employee search as '" + edit + "'");
+			boolean isSubmitButtonClicked = clkSaveChanges(driver);
+			//driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
+			Assert.assertTrue(isSubmitButtonClicked, "Failed to click Submit Button on login page");
+			threadsleep(2000);
+		}
+		
+		public boolean clkOnEditIcon() {
+			try {
+				controlActions.clickElement(RoleTypeEditIcon);
+				String actualString = EditLabel.getText(); 
+				if(actualString.contains("Edit"))
+				{
+					logInfo("Successfully clicked");
+					return true;
+				}
+				else
+				{
+					logError("Failed to click");
+					return false;
+				}
+			}
+			catch(Exception e) {
+				logError("Failed to click"+ e.getMessage());
+				return false;
+			}
+		}
+		
+		public boolean goToEditIcon() {
+			try {
+				controlActions.click(RoleTypeEditIcon);
+				wait.until(ExpectedConditions.visibilityOf(ClickRoleType));
+				if(controlActions.isElementDisplayedOnPage(ClickRoleType))
+				{
+					log4jInfo("Select Role type is Displayed on the page");
+					controlActions.click(ClickRoleType);
+					controlActions.click(SelectRoleType);
+					controlActions.click(SubmitAddRole);
+					op.waitUntilElementIsClickable(ClickLocation);
+					//wait.until(ExpectedConditions.visibilityOf(ActiveTabTxt));
+					if(controlActions.isElementDisplayedOnPage(ClickLocation))
+					{
+						logInfo("Successfully opened  page");
+						return true;
+					}
+					else
+					{
+						logError("Failed to navigate to page");
+						return false;
+					}
+				}
+				else
+				{
+					logError("Failed to load Select Role Location  on the page");
+				}
+				logInfo("page opened successfully");
+				return true;
+			}
+			catch(Exception e){
+				logError("Failed to navigate to Page" + e.getMessage());
+				return false;
+			}
+		}
+		
+//Ramya-end
 
 		public  boolean ReallocateResource(WebDriver driver, String endDate, String emplyoeeName) throws Exception 
 		{
-			 
 			    ReleaseResourceRequesTab.click();
 			    driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='apex_dialog_1']/iframe"))); 
 			    
@@ -523,9 +1078,63 @@ public class CommonPages extends TestBase {
 				return resourceName;
 		}
 
+   // Aishwarya 
+//	public boolean verifyFilterCheckBox(WebElement FiterType, List<WebElement> activeProjectFilterMenuCheckBox, WebElement closedProjectFilter) {
+//		boolean isFilterMatched = false;
+//		wait.until(ExpectedConditions.elementToBeClickable(FiterType));
+//		op.clickElement(FiterType);
+//		threadsleep(3000);
+//		String appliedFilter = op.getText(FiterType).split("\n")[0].trim();
+//		System.out.println("appliedFilter -> " + appliedFilter);
+//		threadsleep(3000);
+//		op.clickElement(closedProjectFilter);
+//		threadsleep(3000);
+//		for(WebElement element:activeProjectFilterMenuCheckBox) {
+//			String checkboxText=op.getText(element).trim().replaceAll("\n", "");
+//			System.out.println("checkboxText - >>" + checkboxText);
+//			if(checkboxText.contains(appliedFilter)) {
+//				logInfo("Filter Matched");
+//				System.out.println("****** " + element.getAttribute("class").equals("apex-item-option is-checked"));
+//				if(element.getAttribute("class").equals("apex-item-option is-checked"))
+//				return isFilterMatched = true ;
+//			}
+//			else
+//			{
+//				logError("Failed to Match the Filter");
+//				return isFilterMatched = false;
+//			}
+//		}
+//		return isFilterMatched;
+//	}
+//	
+	//Vaishnavi Gupta
+		public boolean verifyProjectTypes(List<WebElement> tableRows,String projectTypes) {
+		boolean status=false;
+		int rowNumber=0;
+		for(;rowNumber<tableRows.size();rowNumber++) {
+			Equals(op.getText(tableRows.get(rowNumber)),projectTypes,"Filter applied to Row Number "+ rowNumber+1,"Filter did not applied to Row Number "+ rowNumber+1);
+		}
+		if(rowNumber==tableRows.size())
+			status=true;
+		return status;
+	}
 
-
+	public boolean verifyFilterCheckBox(WebElement FiterType, List<WebElement> closedProjectFilterMenuCheckBox, WebElement closedProjectFilter) {
+	wait.until(ExpectedConditions.elementToBeClickable(FiterType));
+	op.clickElement(FiterType);
+	String appliedFilter = op.getText(FiterType).split("\n")[0];
+	op.clickElement(closedProjectFilter);
+	for(WebElement element:closedProjectFilterMenuCheckBox ) {
+		String checkboxText=op.getText(element);
+		if(checkboxText.contains(appliedFilter)) {
+			if(element.getAttribute("class").equals("apex-item-option is-checked"))
+			return true ;
+		}
+	}
+	return false;	
+	}
 	
+
 	
 
 }

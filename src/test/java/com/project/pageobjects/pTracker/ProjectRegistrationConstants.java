@@ -42,7 +42,12 @@ public class ProjectRegistrationConstants {
 	public static final String XORIANT_NICHE_SKILLS = "//*[@id='P2_NICHE_SKILLS']";
 	public static final String TECHNOLOGY_DOMAIN = "//*[@id='P2_TECH_DOMAIN']"; 
 	public static final String PLANNED_GM = "//*[@id='P2_PLANNED_GM']";
-	
+	public static final String END_CUSTOMER_NAME ="//*[@id='oj-inputsearch-input-P2_END_CUSTOMER_NAME_HIDDEN']";
+	public static final String PARENT_PROJECT="//*[@id='oj-inputsearch-input-P2_PARENT_PROJECT_HIDDEN']";
+	public static final String PARENT_PROJECT_TEXTBOX = "//div[contains(@id,'P16_PARENT_PROJECT_CONTAINER')]//input[contains(@aria-labelledby,'P16_PARENT_PROJECT')]";
+	public static final String PROJECT_CURRENCY_CODE = "//*[@id='P2_PROJECT_CURRENCY_CODE']";
+	public static final String PROJECT_NUMBER = "//div[contains(@id,'P16_PROJECT_NUMBER_CONTAINER')]//input[contains(@aria-labelledby,'P16_PROJECT_NUMBER_LABEL')]";
+	public static final String PROJECT_NUMBER_FIELD = "//*[@id='oj-inputsearch-input-P2_PROJECT_NUMBER_HIDDEN']";	
 	// Project Information Fields
 	public static final String PROJECT_BRIEF = "//*[@id='P2_PROJECT_DESCRIPTION']";
 	public static final String XORIANT_CONTRIBUTION = "//*[@id='P2_XORIANT_CONTRIBUTION']";
@@ -104,6 +109,10 @@ public class ProjectRegistrationConstants {
 	public static final String ACCOUNT_MANAGER_SEARCH_DLG = "//*[@id='PopupLov_2_P2_ACCOUNT_MANAGER_ID_dlg']//input[contains(@aria-label,'Search')]";
 	public static final String DELIVERY_HEAD = "//*[@id='P2_DELIVERY_HEAD_ID']";
 	public static final String DELIVERY_HEAD_SEARCH_DLG = "//*[@id='PopupLov_2_P2_DELIVERY_HEAD_ID_dlg']//input[contains(@aria-label,'Search')]";
+	
+	public static final String SUBVERTICAL_HEAD = "//*[@id='P2_SUB_VERTICAL_HEAD_ID']";
+	public static final String SUBVERTICAL_HEAD_SEARCH_DLG = "//*[@id='PopupLov_2_P2_SUB_VERTICAL_HEAD_ID_dlg']//input[contains(@aria-label,'Search')]";
+	
 	public static final String PROGRAM_MANAGER = "//*[@id='P2_PROGRAM_MANAGER_ID']";
 	public static final String PROGRAM_MANAGER_SEARCH_DLG = "//*[@id='PopupLov_2_P2_PROGRAM_MANAGER_ID_dlg']//input[contains(@aria-label,'Search')]";
 	public static final String PROJECT_MANAGER = "//*[@id='P2_PROJECT_MANAGER_ID']";
@@ -123,6 +132,7 @@ public class ProjectRegistrationConstants {
 	public static final String CONNECT_SOW_HEADINGS = "//*[@id='connect_sow_region_heading']";
 	public static final String MANGER_DETAILS_HEADINGS = "//*[@id='manager_details_region_heading']";
 	public static final String HISTORY_HEADINGS = "//*[@id='history_region_heading']";
+	public static final String CLASSIFICATION_HEADINGS ="//*[@id='CLASS_heading']";
 	
 
 }

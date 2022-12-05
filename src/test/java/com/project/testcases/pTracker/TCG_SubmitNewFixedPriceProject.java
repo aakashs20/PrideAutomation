@@ -31,16 +31,20 @@ public class TCG_SubmitNewFixedPriceProject extends TestBase {
 	NewProjectsPage newProject;
 	ControlActions controlActions;
 	Operations op ;
-	private String uName = "abc";
-	private String uPassword = "xyz";
+	private String uName = "admin";
+	private String uPassword = "admin";
 	private static final int DELAY = 100;
 	String eName = "Mahajan, Milind";
 	//String eName = "Maydeo, Parag Prakash";
 	ExcelReader reader;
 		
-	@BeforeClass
+	@BeforeClass(alwaysRun = true)
 	public void groupInit() throws Exception {
+		// setting up property to suppress the warning
+		System.setProperty("webdriver.chrome.silentOutput","true");
 		driver = launchbrowser();
+        String currentWindow = driver.getWindowHandle();
+        driver.switchTo().window(currentWindow);
 	   // setting up property to suppress the warning
 		System.setProperty("webdriver.chrome.silentOutput","true");
 		driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
@@ -73,7 +77,7 @@ public class TCG_SubmitNewFixedPriceProject extends TestBase {
 		logInfo("Reading Excel:   "+datapoolPath);
 		 if (newProject.createNewProject()) 
 		 {
-			 	 newProject.fillProjectCreation(datapoolPath,projectState,tcRowNum); 
+			 	 newProject.fillProjectCreation(datapoolPath,sheetName,projectState,tcRowNum); 
 			 	 threadsleep(3000);
 				 HashMap<String, String> rowData = ExcelUtils.getTestDataXls(datapoolPath, sheetName, header, tcRowNum-1);
 				 String projectName = rowData.get("ActualProjectName");
@@ -85,11 +89,11 @@ public class TCG_SubmitNewFixedPriceProject extends TestBase {
 				 threadsleep(2000);
 				 String xpathLocator = "//*[@id='report_table_New-Project-Request']/tbody/tr/td";
 				 List<String> ElementsList = op.searchReportTable(driver, xpathLocator, projectName);
-//				 int size = ElementsList.size();
 				 logInfo("List Size is: " + ElementsList.size());
 				 logInfo("Project ID : " + ElementsList.get(0));
 				 logInfo("Project Name : " + ElementsList.get(1));
-				 logInfo("Project State : " + ElementsList.get(10));
+				 logInfo("Project State : " + ElementsList.get(9));
+//				 int size = ElementsList.size();
 //					for (int i = 0; i < size; i++)
 //					{
 //						logInfo( i + " -----> " + ElementsList.get(i));
@@ -97,7 +101,7 @@ public class TCG_SubmitNewFixedPriceProject extends TestBase {
 				 threadsleep(2000);
 			     String RequestID = ElementsList.get(0); 
 			     String exp_projectName = ElementsList.get(1); 
-			     String TestAction = ElementsList.get(10); 
+			     String TestAction = ElementsList.get(9); 
 				 if (projectName.equals(exp_projectName)) {
 				 logInfo("Project Successfully Submited with Request ID: " + RequestID);
 				 ExcelUtils.setCellData(datapoolPath, "Status", tcRowNum, "PASS", "GREEN");
@@ -111,8 +115,8 @@ public class TCG_SubmitNewFixedPriceProject extends TestBase {
 	}
 
 
-	@AfterClass
-	public void closeBrowser() throws InterruptedException {
-		driver.close();
+	@AfterClass(alwaysRun = true)
+	public void closeBrowser() throws InterruptedException, IOException {
+		op.closeBrowser(driver);
 	}
 }

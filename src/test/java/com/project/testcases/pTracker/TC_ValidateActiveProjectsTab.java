@@ -3,6 +3,7 @@ package com.project.testcases.pTracker;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -29,34 +30,39 @@ import com.project.utilities.ExcelReader;
 public class TC_ValidateActiveProjectsTab extends TestBase {
 
 	WebDriverWait wait;
-	PTrackerLoginPage LoginPage;
-	NewProjectsPage NewProject;
+	PTrackerLoginPage loginPage;
+	NewProjectsPage newProject;
 	Operations op ;
 	ControlActions controlActions;
-	public String uName = "abc";
-	public String uPassword = "xyz";
-	public String xpath;
+	private String uName = "admin";
+	private String uPassword = "admin";
+	private String xpath;
+	private static final int DELAY = 20000;
+	String eName = "Mahajan, Milind";
 
 	@BeforeClass
 	public void groupInit() throws Exception {
-
 		driver = launchbrowser();
+		driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
+		driver.manage().timeouts().setScriptTimeout(DELAY, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);
+		wait = new WebDriverWait(driver, DELAY);
 		controlActions = new ControlActions(driver);
-		wait = new WebDriverWait(driver, 20000);
+		//wait = new WebDriverWait(driver, 20000);
 		controlActions.getUrl(prop.getProperty("appl_url_dev"));
 		op = new Operations(driver);
-		LoginPage = new PTrackerLoginPage(driver);
-		NewProject = new NewProjectsPage(driver);
-		LoginPage.waitForPageLoaded(driver);
-		LoginPage.TC_Login(uName, uPassword);
-		LoginPage.TC_ChangeUser();
+		loginPage = new PTrackerLoginPage(driver);
+		newProject = new NewProjectsPage(driver);
+		loginPage.waitForPageLoaded(driver);
+		loginPage.TC_Login(driver,uName, uPassword);
+		loginPage.TC_ChangeUser(driver,eName);
 	}
 
 	@Test(priority = 1,groups = { "sanity", "regression" }, description = "Validate Functionalites on Active Project Tab")
 	public void TC_ValidateProjectCardTitleOnActiveProjectTab() throws Exception 
 	{
 		String[] strActProType = {"Fixed Price", "Support Project", "Staffing","Time and Material","Pending Closure"};  
-		if(NewProject.ActiveProjectTabFocused.isDisplayed())
+		if(newProject.ActiveProjectTabFocused.isDisplayed())
 		{ 
 			log4jInfo("Active Project Tab is focused on P-Tracker page");
 			try {
@@ -98,10 +104,10 @@ public class TC_ValidateActiveProjectsTab extends TestBase {
 	{
 		threadsleep(1000);
 		String[] strCloProType = {"Fixed Price", "Support Project", "Staffing","Time and Material"};  
-		op.clickElement(NewProject.ClosedProjectTabLink);
-		wait.until(ExpectedConditions.visibilityOf(NewProject.ClosedProjectTabFocused)); 
+		op.clickElement(newProject.ClosedProjectTabLink);
+		wait.until(ExpectedConditions.visibilityOf(newProject.ClosedProjectTabFocused)); 
 		
-		if(NewProject.ClosedProjectTabFocused.isDisplayed())
+		if(newProject.ClosedProjectTabFocused.isDisplayed())
 		{
 			log4jInfo("Closed Project Tab is focused on P-Tracker page");
 			try {
@@ -138,15 +144,15 @@ public class TC_ValidateActiveProjectsTab extends TestBase {
 		}
 	}
 	
-	@Test(priority = 2,groups = { "sanity", "regression" }, description = "Validate Functionalites on New Project Tab")
+	@Test(priority = 3,groups = { "sanity", "regression" }, description = "Validate Functionalites on New Project Tab")
 	public void TC_ValidateProjectCardTitleOnNewProjectsTab() throws Exception 
 	{
 		threadsleep(1000);
 		String[] strNewProType = {"Draft", "Pending with DH", "Pending with PMO","Pending with Finance"};  
-		op.clickElement(NewProject.NewProjectLink);
-		wait.until(ExpectedConditions.visibilityOf(NewProject.NewProjectTabFocused)); 
+		op.clickElement(newProject.NewProjectLink);
+		wait.until(ExpectedConditions.visibilityOf(newProject.NewProjectTabFocused)); 
 		
-		if(NewProject.NewProjectTabFocused.isDisplayed())
+		if(newProject.NewProjectTabFocused.isDisplayed())
 		{
 			log4jInfo("New Project Tab is focused on P-Tracker page");
 			try {
@@ -183,8 +189,13 @@ public class TC_ValidateActiveProjectsTab extends TestBase {
 		}
 	}
 	
-	@AfterClass
-	public void closeBrowser() throws InterruptedException {
-		driver.close();
+	@AfterClass (alwaysRun = true)
+	public void tearDown() {
+		try {
+			op.closeBrowser(driver);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
+	
 }

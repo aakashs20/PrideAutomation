@@ -19,7 +19,7 @@ import io.restassured.specification.RequestSpecification;
 
 import com.project.testbase.TestBase;
 import com.project.utilities.ExcelReader;
-import com.project.utilities.Constants;
+//import com.project.utilities.Constants;
 import com.project.utilities.ExcelReader;
 import com.project.utilities.DBHelper;
 import com.project.utilities.ApiUtils;
@@ -56,8 +56,8 @@ public class RestApiTests extends TestBase{
 		
 		ExcelReader reader = new ExcelReader();				
 
-		reqParamsData = reader.ReadAllDataFromExcelSheet(apiPath +File.separator+ apiName +".xlsx", "reqParams");
-		respAttributesData = reader.ReadAllDataFromExcelSheet(apiPath +File.separator+ apiName +".xlsx", "respAttributes");
+		reqParamsData = reader.readAllDataFromExcelSheet(apiPath +File.separator+ apiName +".xlsx", "reqParams");
+		respAttributesData = reader.readAllDataFromExcelSheet(apiPath +File.separator+ apiName +".xlsx", "respAttributes");
 		
 		reqJson = apiUtils.readAllJsonRequest(apiPath);		
 		Iterator reqJsonItr = reqJson.entrySet().iterator(); 

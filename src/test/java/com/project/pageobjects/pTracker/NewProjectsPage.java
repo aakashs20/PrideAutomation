@@ -12,13 +12,15 @@ import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-
+import org.openqa.selenium.TimeoutException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.openqa.selenium.WebDriver;
@@ -33,101 +35,125 @@ import com.project.pTracker.Utils.ExcelUtils;
 import com.project.pTracker.Utils.Operations;
 import com.project.testbase.TestBase;
 import com.project.utilities.ControlActions;
+import com.project.utilities.ExcelReader;
 
 
 public class NewProjectsPage extends TestBase{
-	
+
 	WebDriverWait wait;
 	PTrackerLoginPage LoginPage;
 	ControlActions controlActions;
 	WebDriver driver1 ;
 	Operations op ;
 	Actions actions;
-	
+	String projectModetxt; 
+	Random random ;
+	CommonPages cp;
+
 	public static boolean bResult;
-	
+
 	public NewProjectsPage(WebDriver driver) {
 		driver1 = driver ;
 		actions = new Actions(driver1);
 		PageFactory.initElements(driver, this);
-		wait = new WebDriverWait(driver, 20000);
+		wait = new WebDriverWait(driver, 10);
 		controlActions = new ControlActions(driver);
 		op = new Operations(driver1);
+		cp = new CommonPages(driver1);
+		random = new Random();
 	}
-	
+
 	// Tab Links 
 	@FindBy(xpath = NewProjectsPageConstants.NEWPROJECTS_LNK)
 	public WebElement NewProjectLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.NEW_PROJECTS_TAB_FOCUSED)
 	public WebElement NewProjectTabFocused;
-	
+
+	@FindBy(xpath = NewProjectsPageConstants.PROJECTACTION_TAB_TXT)
+	public WebElement ProjectActionTabTxt;
+
+	@FindBy(xpath = NewProjectsPageConstants.PROJECTACTION_TAB_FOCUSED)
+	public WebElement ProjectActionTabFocused;
+
 	@FindBy(xpath = NewProjectsPageConstants.CLOSED_PROJECTS_TAB_LNK)
 	public WebElement ClosedProjectTabLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.CLOSED_PROJECTS_TAB_FOCUSED)
 	public WebElement ClosedProjectTabFocused;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.ACTIVE_PROJECTS_TAB_LNK)
 	public WebElement ActiveProjectTabLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.ACTIVE_PROJECTS_TAB_FOCUSED)
 	public WebElement ActiveProjectTabFocused;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.CREATEPROJECTS_LNK)
 	public WebElement CreateProjectLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.DRAFTPROJECTS_LNK)
 	public WebElement DraftProjectLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.PENDINGWITH_DH_LNK)
 	public WebElement PendingWithDHLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.PENDINGWITH_PMO_LNK)
 	public WebElement PendingWithPMOLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.PENDINGWITH_FINANCE_LNK)
 	public WebElement PendingWithFinanceLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.SEARCH_PROJECTS_TXT)
 	public WebElement SearchProjectTxt;
-	
+
+	@FindBy(xpath = NewProjectsPageConstants.PROJECT_TABLE_ROWS)
+	public List<WebElement> ProjectTableRows;
+
+	@FindBy(xpath = NewProjectsPageConstants.NO_PROJECT_FOUND_MSG)
+	public WebElement NoProjectMessage;
+
+	@FindBy(xpath = NewProjectsPageConstants.NO_PENDING_PROJECT_FOUND_MSG)
+	public WebElement NoPendingProjectFoundMsg;
+
 	@FindBy(xpath = NewProjectsPageConstants.GO_BTN)
 	public WebElement GoBtn;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.FILTER_BTN)
 	public WebElement FilterBtn;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.DOWNLOAD_BTN)
 	public WebElement DownloadBtn;
-	
+
+	@FindBy(xpath = NewProjectsPageConstants.NEW_PROJECT_PAGINATION)
+	public List<WebElement> NewProjectPagination;
+
 	@FindBy(xpath = NewProjectsPageConstants.NEXTSET_BTN)
 	public WebElement NextSetBtn;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.CREATE_FROM_EXISTING_PROJECT_LNK)
 	public WebElement CreateFromExitingProjectLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.CREATE_NEW_PROJECT_LNK)
 	public WebElement CreateNewProjectLink;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.SELECT_FROM_EXITING_DLG)
 	public WebElement SelectFromExistingDlg;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.EXITING_PROJECT_LBL)
 	public WebElement ExistingProjectLbl;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.SELECT_PROJECT_BTN)
 	public WebElement SelectProjectBtn;
-	
+
 	@FindBy(css = NewProjectsPageConstants.SELECT_PROJECT_LST)
 	public WebElement SelectProjectLst;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.ADD_PROJECT_BTN)
 	public WebElement AddProjectBtn;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.PROJECT_SEARCH_TXT)
 	public WebElement ProjectSearchTxt;
-	
+
 	@FindBy(xpath = NewProjectsPageConstants.SELECT_EXITING_PROJECT_LST)
 	public WebElement SelectExitingProjectList;
 	
@@ -146,11 +172,17 @@ public class NewProjectsPage extends TestBase{
 	@FindBy(xpath = NewProjectsPageConstants.PMO_APPROVAL_ALERT_MSG)
 	public WebElement PmoApprovalAlertMsg;
 	
+	@FindBy(xpath = NewProjectsPageConstants.DH_APPROVAL_ALERT_MSG)
+	public WebElement DHApprovalAlertMsg;
+	
 	@FindBy(xpath = NewProjectsPageConstants.PROJECT_SAVE_ALERT_MSG)
 	public WebElement ProjectSaveAlertMsg;
 	
 	@FindBy(xpath = NewProjectsPageConstants.CLOSE_ALERT_MSG)
 	public WebElement CloseAlertMsg;
+	
+	@FindBy(xpath = NewProjectsPageConstants.ALERT)
+	public WebElement Alert;
 	
 	
 	@FindBy(xpath = NewProjectsPageConstants.NEWPROJECT_PAGE_ALERT_MSG)
@@ -361,9 +393,15 @@ public class NewProjectsPage extends TestBase{
 
 	@FindBy(xpath = ProjectRegistrationConstants.DELIVERY_HEAD)
 	public WebElement DeliveryHead;
-	
+
 	@FindBy(xpath = ProjectRegistrationConstants.DELIVERY_HEAD_SEARCH_DLG)
 	public WebElement DeliveryHeadSearchDlg;
+	
+	@FindBy(xpath = ProjectRegistrationConstants.SUBVERTICAL_HEAD)
+	public WebElement SubverticalHead;
+	
+	@FindBy(xpath = ProjectRegistrationConstants.SUBVERTICAL_HEAD_SEARCH_DLG)
+	public WebElement SubverticalHeadSearchDlg;
 	
 	@FindBy(xpath = ProjectRegistrationConstants.PROGRAM_MANAGER)
 	public WebElement ProgramManager;
@@ -415,22 +453,44 @@ public class NewProjectsPage extends TestBase{
 	@FindBy(xpath = ProjectRegistrationConstants.MANGER_DETAILS_HEADINGS)
 	public WebElement ManagerDetailsHeadings;
 	
+	@FindBy(xpath = ProjectRegistrationConstants.CLASSIFICATION_HEADINGS)
+	public WebElement ClassificationHeadings;
+	
 	@FindBy(xpath = ProjectRegistrationConstants.HISTORY_HEADINGS)
 	public WebElement HistoryHeadings;
+	
+	@FindBy(xpath = ProjectRegistrationConstants.END_CUSTOMER_NAME)
+	public WebElement EndCustomerName;
+	
+	@FindBy(xpath = ProjectRegistrationConstants.PARENT_PROJECT_TEXTBOX)
+	public WebElement parentProjectTextBox;
+	
+	@FindBy(xpath = ProjectRegistrationConstants.PARENT_PROJECT)
+	public WebElement ParentProject;
+	
+	@FindBy(xpath = ProjectRegistrationConstants.PROJECT_CURRENCY_CODE)
+	public WebElement ProjectCurrencyCode;
+	
+	@FindBy(xpath = ProjectRegistrationConstants.PROJECT_NUMBER)
+	public WebElement projectNumber;
+	
+	@FindBy(xpath = ProjectRegistrationConstants.PROJECT_NUMBER_FIELD)
+	public WebElement ProjectNumberField;
+	
 
 
-
-
-	public void fillProjectCreation(String datapoolPath,String projectState) throws Exception{
+	public void fillProjectCreation(String datapoolPath,String sheetName,String projectState,int tcRowNum) throws Exception{
+		String alertMsg = null;
 		bResult = false;
 		String readonly = null;
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
-		String sheetName = "Automation";
+		//String sheetName = "Automation";
 		int header=0; //Excel first row is 0
-		int tc=1;
-		
+		//int tcRowNum=1;
+		int tc = tcRowNum-1;
 		HashMap<String, String> rowData = ExcelUtils.getTestDataXls(datapoolPath, sheetName, header, tc);
-		op.waitImplicitely(driver1, 10);
+		threadsleep(2000);
+		//op.waitImplicitely(driver1, 10);
 		System.out.println("\n******************** Filling Project Creation Details ********************\n");	
 		
 		//((JavascriptExecutor)driver1).executeScript("arguments[0].scrollIntoView(true);", NewProjectPageHeadings);
@@ -445,14 +505,19 @@ public class NewProjectsPage extends TestBase{
 					+ readonly.contains("disableFields"));
 			op.clickElement(ProjectName, driver1);
 			String projectName = rowData.get("ProjectName") + timeStamp;
+			logInfo("Expected Project Name is: " + projectName);
 			op.setText(driver1, ProjectRegistrationConstants.PROJECT_NAME, projectName);
-		    String val = ProjectBrief.getAttribute("value");
-		    System.out.println("Entered text is: " + val);
 			//String a_text_1 = (String) ((JavascriptExecutor) driver1).executeScript("return arguments[0].value",ProjectName);
 			String a_text_1 = op.getElementTextValueByActions(driver1, ProjectName);
-			ExcelUtils.updateCellData(datapoolPath, 4, 5, a_text_1);
+			//logInfo("Actual Project Name is: " + a_text_1);
+			logInfo("Actual Project Name is: " + projectName);
+			// Update Excel for the ProjectName
+			//logInfo("Updating " + ProjectName +" in Excel " + a_text_1 +" at Row: "+ tcRowNum +" for ProjectName Column" );
+			logInfo("Updating " + ProjectName +" in Excel " + projectName +" at Row: "+ tcRowNum +" for ProjectName Column" );
+			//ExcelUtils.updateCellData(datapoolPath, 3, 5, projectName);
+			ExcelUtils.setCellData(datapoolPath, "ActualProjectName", tcRowNum, projectName, "YELLOW",sheetName);
 			try {
-				Assert.assertEquals(a_text_1.contains(rowData.get("ProjectName")), "Failed to fill Project Name Field.");
+				//Assert.assertEquals(a_text_1.equalsIgnoreCase(rowData.get("ProjectName")), "Expected Project name is " + projectName + " But Found Actual Project Name is : "+ a_text_1);
 				op.waitImplicitely(driver1, 10);
 				bResult = true;
 			} catch (AssertionError e) {
@@ -470,6 +535,7 @@ public class NewProjectsPage extends TestBase{
 		readonly = ProjectMode.getAttribute("class");
 		if (!readonly.contains("disableFields")) {
 			System.out.println("\n******************** " + rowData.get("ProjectMode"));
+			projectModetxt = rowData.get("ProjectMode").trim();
 			op.waitImplicitely(driver1, 10);
 			logInfo(rowData.get("ProjectMode") + " Field is editable " + readonly + " With Property : " + readonly.contains("disableFields"));
 			op.clickElement(ProjectMode, driver1);
@@ -515,18 +581,22 @@ public class NewProjectsPage extends TestBase{
 		
 		System.out.println("\n******************** " + rowData.get("ProjectStartDate"));
 		op.clickElement(ProjectStartDate, driver1);
+		threadsleep(1000);
 		op.selectDropdown(driver1, "//*[@class='ui-datepicker-month']", "Dec");
+		threadsleep(1000);
 		op.selectDropdown(driver1, "//*[@class='ui-datepicker-year']", "2021");
-		op.selectFromList(driver1,"//*[@id='ui-datepicker-div']/table/tbody/tr/td/a", rowData.get("StartDate"),"Start Day" );
+		op.selectFromList(driver1,"//*[@id='ui-datepicker-div']/table/tbody/tr/td/a", rowData.get("StartDate"),"Start Day");
 		op.waitImplicitely(driver1, 120);
 		System.out.println("\n******************** " + op.getText(ProjectStartDate));
 		//3
 
 		System.out.println("\n******************** " + rowData.get("ProjectEndDate"));
 		op.clickElement(ProjectEndDate, driver1);
+		threadsleep(1000);
 		op.selectDropdown(driver1, "//*[@class='ui-datepicker-month']", "Dec");
+		threadsleep(1000);
 		op.selectDropdown(driver1, "//*[@class='ui-datepicker-year']", "2022");
-		op.selectFromList(driver1,"//*[@id='ui-datepicker-div']/table/tbody/tr/td/a", rowData.get("EndDate"),"End Day" );
+		op.selectFromList(driver1,"//*[@id='ui-datepicker-div']/table/tbody/tr/td/a", rowData.get("EndDate"),"End Day");
 		op.waitImplicitely(driver1, 120);
 		System.out.println("\n******************** " + op.getText(ProjectEndDate));
 		//4
@@ -1016,11 +1086,12 @@ public class NewProjectsPage extends TestBase{
 		readonly = BusinessGoal.getAttribute("class");
 		if (!readonly.contains("disableFields")) {
 			System.out.println("\n******************** " + rowData.get("BusinessGoal"));
+			String a_text_28 = rowData.get("BusinessGoal");
 			logInfo(rowData.get("BusinessGoal") + " Field is editable " + readonly + " With Property : " + readonly.contains("disableFields"));
 			op.clickElement(BusinessGoal, driver1);
 			//String BusinessGoal = rowData.get("BusinessGoal");
 			op.setText(driver1, ProjectRegistrationConstants.BUSINESS_GOAL, rowData.get("BusinessGoal"));
-			String a_text_28 = op.getElementTextValueByActions(driver1, BusinessGoal);
+			//String a_text_28 = op.getElementTextValueByActions(driver1, BusinessGoal);
 			try {
 				Assert.assertEquals(a_text_28.contains(rowData.get("BusinessGoal")), "Failed to fill Business Goal Field.");
 				op.waitImplicitely(driver1, 10);
@@ -1039,11 +1110,12 @@ public class NewProjectsPage extends TestBase{
 		readonly = InvestmentGoal.getAttribute("class");
 		if (!readonly.contains("disableFields")) {
 			System.out.println("\n******************** " + rowData.get("InvestmentGoal"));
+			String a_text_29 = op.getElementTextValueByActions(driver1, InvestmentGoal);
 			logInfo(rowData.get("InvestmentGoal") + " Field is editable " + readonly + " With Property : " + readonly.contains("disableFields"));
 			op.clickElement(InvestmentGoal, driver1);
 			//String InvestmentGoal = rowData.get("InvestmentGoal");
 			op.setText(driver1, ProjectRegistrationConstants.INVESTMENT_GOAL, rowData.get("InvestmentGoal"));
-			String a_text_29 = op.getElementTextValueByActions(driver1, InvestmentGoal);
+			//String a_text_29 = op.getElementTextValueByActions(driver1, InvestmentGoal);
 			try {
 				Assert.assertEquals(a_text_29.contains(rowData.get("InvestmentGoal")), "Failed to fill Investment Goal Field.");
 				op.waitImplicitely(driver1, 10);
@@ -1061,12 +1133,13 @@ public class NewProjectsPage extends TestBase{
 		readonly = null;
 		readonly = GoToMarketPlan.getAttribute("class");
 		if (!readonly.contains("disableFields")) {
+			String a_text_30 = rowData.get("GoToMarketPlan");
 			System.out.println("\n******************** " + rowData.get("GoToMarketPlan"));
 			logInfo(rowData.get("GoToMarketPlan") + " Field is editable " + readonly + " With Property : " + readonly.contains("disableFields"));
 			op.clickElement(GoToMarketPlan, driver1);
 			//String GoToMarketPlan = rowData.get("GoToMarketPlan");
 			op.setText(driver1, ProjectRegistrationConstants.GO_TO_MARKET_PLAN, rowData.get("GoToMarketPlan"));;
-			String a_text_30 = op.getElementTextValueByActions(driver1, GoToMarketPlan);
+			//String a_text_30 = op.getElementTextValueByActions(driver1, GoToMarketPlan);
 			try {
 				Assert.assertEquals(a_text_30.contains(rowData.get("GoToMarketPlan")), "Failed to fill GoTo Market Plan Field.");
 				op.waitImplicitely(driver1, 10);
@@ -1178,17 +1251,17 @@ public class NewProjectsPage extends TestBase{
 		{
 			op.clickElement(ProjectSponsor, driver1);
 			String a_text_52 = op.setManagerDetailsText(driver1, ProjectSponsorSearchDlg, rowData.get("ProjectSponsor"),"PROJECT_SPONSOR");
-			Assert.assertEquals(rowData.get("ProjectSponsor"), a_text_52, "Failed to entered  Projct Sponsor Field.");
+			Assert.assertEquals(rowData.get("ProjectSponsor"), a_text_52, "Failed to entered  Project Sponsor Field.");
 			threadsleep(260);
-			System.out.println("Projct Sponsor Field is filled successfully") ;
-			System.out.println("Projct Sponsor is editable " + readonly.contains("disableFields") ) ;
-			System.out.println("Projct Sponsor is editable " + readonly ) ;
+			System.out.println("Project Sponsor is editable " + readonly.contains("disableFields") ) ;
+			System.out.println("Project Sponsor is editable with properties: " + readonly ) ;
+			System.out.println("Project Sponsor Field is filled successfully") ;
 		}
 		else
 		{
 			logInfo("Projct Sponsor Field is readonly and not editable") ;
-			System.out.println("Projct Sponsor Field is readonly and not editable " + readonly.contains("disableFields") ) ;
-			System.out.println("Projct Sponsor Field is readonly and not editable" + readonly ) ;
+			System.out.println("Project Sponsor Field is readonly and not editable " + readonly.contains("disableFields") ) ;
+			System.out.println("Project Sponsor Field is readonly with properties: " + readonly ) ;
 		}
 	
 		System.out.println("\n******************** " + rowData.get("Salesperson"));
@@ -1210,6 +1283,33 @@ public class NewProjectsPage extends TestBase{
 		Assert.assertEquals(rowData.get("DeliveryHead"), a_text_55, "Failed to entered Delivery Head Field.");
 		threadsleep(260);
 		
+//		System.out.println("\n******************** " + rowData.get("SubverticalHead"));
+//		op.clickElement(SubverticalHead, driver1);
+//		String a_text_551 = op.setManagerDetailsText(driver1, SubverticalHeadSearchDlg, rowData.get("SubverticalHead"),"SUBVERTICAL_HEAD");
+//		//String a_text_23 = (String) ((JavascriptExecutor)driver1).executeScript("return arguments[0].value", SubverticalHeadSearchDlg);  
+//		Assert.assertEquals(rowData.get("SubverticalHead"), a_text_551, "Failed to entered Subvertical Head Field.");
+//		threadsleep(260);
+		
+		System.out.println("\n******************** " + rowData.get("SubverticalHead"));
+		readonly = null;
+		readonly = SubverticalHead.getAttribute("class");
+		if(!readonly.contains("disableFields"))
+		{
+			op.clickElement(SubverticalHead, driver1);
+			String a_text_551 = op.setManagerDetailsText(driver1, SubverticalHeadSearchDlg, rowData.get("SubverticalHead"),"SUBVERTICAL_HEAD");
+			Assert.assertEquals(rowData.get("SubverticalHead"), a_text_551, "Failed to entered  Project Sponsor Field.");
+			threadsleep(260);
+			System.out.println("Subvertical Head is editable " + readonly.contains("disableFields") ) ;
+			System.out.println("Subvertical Head is editable with properties: " + readonly ) ;
+			System.out.println("Subvertical Head Field is filled successfully") ;
+		}
+		else
+		{
+			logInfo("Subvertical Head Field is readonly and not editable") ;
+			System.out.println("Subvertical Head Field is readonly and not editable " + readonly.contains("disableFields") ) ;
+			System.out.println("Subvertical Head Field is readonly with properties: " + readonly ) ;
+		}
+		
 		System.out.println("\n******************** " + rowData.get("ProgramManager"));
 		op.clickElement(ProgramManager, driver1);
 		String a_text_56 = op.setManagerDetailsText(driver1, ProgramManagerSearchDlg, rowData.get("ProgramManager"),"PROGRAM_MANAGER");
@@ -1227,7 +1327,6 @@ public class NewProjectsPage extends TestBase{
 		System.out.println("\n******************** " + rowData.get("SubManager"));
 		//58
 		System.out.println("\n******************** " + rowData.get("FinanceRepresentative"));
-		//59
 		readonly = null;
 		readonly = FinanceRepresentative.getAttribute("class");
 		if(!readonly.contains("disableFields"))
@@ -1247,18 +1346,54 @@ public class NewProjectsPage extends TestBase{
 			System.out.println("Finance Representative Field is readonly and not editable" + readonly ) ;
 		}
 		
+		System.out.println("\n******************** " + rowData.get("ParentProject"));
+		//op.scrollPageTo(HistoryHeadings, driver1);
+		threadsleep(1000);
+		boolean isEnabled = op.checkElementPresent(driver1,ProjectRegistrationConstants.PARENT_PROJECT);
+		System.out.println("\nParent Project Field is Enabled " + isEnabled);
+		if(isEnabled)
+		{
+			//op.clickElement(ParentProject, driver1);
+			op.setText(driver1, ProjectRegistrationConstants.PARENT_PROJECT, rowData.get("ParentProject"));
+			threadsleep(260);
+			System.out.println("Parent Project is editable? " + isEnabled) ;
+			System.out.println("Parent Project Field is filled successfully") ;
+		}
+		else
+		{
+			logInfo("Parent Project Field is readonly and not editable") ;
+			System.out.println("Project Number Field is editable? " + isEnabled) ;
+		}
+		
+		String projectnum ="TEST" + String.format("%04d", random.nextInt(10000));; 
+		System.out.println("\n******************** " +projectnum);
+		isEnabled = op.checkElementPresent(ProjectNumberField);
+		System.out.println("\nProject Number Field is Enabled? " + isEnabled);
+		if(isEnabled)
+		{
+			op.setText(driver1, ProjectRegistrationConstants.PROJECT_NUMBER_FIELD, projectnum);
+			threadsleep(260);
+			System.out.println("Project Number Field is editable? " + isEnabled) ;
+			System.out.println("Project Number Field is filled successfully") ;
+		}
+		else
+		{
+			logInfo("Project Number Field is readonly and not editable") ;
+			System.out.println("Project Number Field is editable? " + isEnabled) ;
+		}
+		
 		op.scrollPageTo(NewProjectPageHeadings, driver1);
-		op.sleepInMiliSeconds(1000);
+		//op.sleepInMiliSeconds(100000);
+		op.waitImplicitely(driver1, 5);
 		if (projectState.equals("DRAFT"))
 		{
 			NewProjectPageSaveBtn.click();
-			logInfo("Project Save as Draft Option Selected") ;
+			logInfo("Save as Draft Option Selected for Project Type: "+ projectModetxt) ;
 			wait.until(ExpectedConditions.visibilityOf(SaveProjectAlertMsg));
 			if(controlActions.isElementDisplayedOnPage(SaveProjectAlertMsg))
 			{
 				logInfo("Draft Project Saved Successfully") ;
 				op.scrollPageTo(RequestIDText, driver1);
-				
 			}
 			else
 			{
@@ -1267,9 +1402,34 @@ public class NewProjectsPage extends TestBase{
 		}
 		else if(projectState.equals("SUBMIT"))
 		{
-			NewProjectPageSubmitBtn.click();
-			logInfo("Project Submit Option Selected") ;
+			logInfo("Submit Option Selected for Project Type :" + projectModetxt) ;
+			threadsleep(2000);
+			//NewProjectPageSubmitBtn.click();
+			op.clickElement(NewProjectPageSubmitBtn,driver1);
+			threadsleep(2000);
+			if(projectModetxt.equals("Internal") || projectModetxt.equals("internal"))
+			{
+				wait.until(ExpectedConditions.visibilityOf(Alert)); 
+				if(Alert.isDisplayed())
+				{
+					logInfo("Internal Project Saved Successfully");
+					alertMsg= Alert.getText().trim();
+					logInfo("Alert Message text is: " + alertMsg);
+					threadsleep(2000);
+					op.clickElement(NewProjectLink);
+					//return alertMsg;
+				}
+				else
+				{
+					logError("Fail to save the Internal project");
+					//return alertMsg;
+				}
+				threadsleep(2000);
+			}
+			else
+			{
 			wait.until(ExpectedConditions.visibilityOf(ProjectSaveAlertMsg));
+			//threadsleep(2000);
 			if(controlActions.isElementDisplayedOnPage(ProjectSaveAlertMsg))
 			{
 				logInfo("Test Case: Validate failur on Submit Project if No document uploded is passed successfully");
@@ -1278,17 +1438,46 @@ public class NewProjectsPage extends TestBase{
 			op.clickElement(wb,driver1);
 			if(performFileUpload(driver1))
 			{
+				logInfo("File upload Opration done successfully");
 				NewProjectPageSubmitBtn.click();
-				wait.until(ExpectedConditions.visibilityOf(PmoApprovalAlertMsg));
-				if(controlActions.isElementDisplayedOnPage(PmoApprovalAlertMsg))
-				{
-					logInfo("Project Saved Successfully");
-					op.clickElement(NewProjectLink);
-				}
-				else
-				{
-					logError("Fail to save the project");
-				}
+				threadsleep(2000);
+				//cp.waitTillSpinnerDisable();
+					try
+					{
+							wait.until(ExpectedConditions.visibilityOf(Alert)); 
+							if(Alert.isDisplayed())
+							{
+								logInfo("External Project Saved Successfully after documents upload");
+								alertMsg= Alert.getText().trim();
+								logInfo("Alert Message text is: " + alertMsg);
+								threadsleep(2000);
+								op.clickElement(NewProjectLink);
+								//return alertMsg;
+							}
+							else
+							{
+								logError("Fail to save the External Project after documents upload");
+								//return alertMsg;
+							}
+					}
+					catch (TimeoutException e) {
+						wait.until(ExpectedConditions.visibilityOf(Alert)); 
+						if(Alert.isDisplayed())
+						{
+							logInfo("External Project Saved Successfully after documents upload");
+							alertMsg= Alert.getText().trim();
+							logInfo("Alert Message text is: " + alertMsg);
+							threadsleep(2000);
+							op.clickElement(NewProjectLink);
+							//return alertMsg;
+						}
+					}
+					catch(Exception e) 
+					{
+						logError("Fail to save the External Project after documents upload -> "+ e.getMessage());
+					}
+					threadsleep(2000);
+			 }
 			}
 		}
 		else
@@ -1299,14 +1488,13 @@ public class NewProjectsPage extends TestBase{
 		// *[@class='t-Alert-title'and contains(text(),'Changes Saved')]
 		//controlActions.isElementDisplayedOnPage(SaveProjectAlertMsg);
 		//wait.until(ExpectedConditions.visibilityOf(SaveProjectAlertMsg));
-		
+
 		// Validate for Request ID 
 //		wait.until(ExpectedConditions.visibilityOf(RequestIDText));
 //		op.scrollPageTo(RequestIDText, driver1);
-		threadsleep(9000);
-		
+		threadsleep(2000);
 	}
-	
+
 	//get RequestID on Submitting or Saving the Project
 	public String getRequestID()
 	{
@@ -1322,7 +1510,8 @@ public class NewProjectsPage extends TestBase{
 		}
 		return RequestID;
 	}
-	
+
+
 	public boolean performFileUpload(WebDriver driver1) throws AWTException {
 		logInfo("Performing File Upload Operation");
 		String workspace = System.getProperty("user.dir");
@@ -1381,14 +1570,15 @@ public class NewProjectsPage extends TestBase{
 			wait.until(ExpectedConditions.visibilityOf(CreateProjectLink)); 
 			if(controlActions.isElementDisplayedOnPage(CreateProjectLink))
 			{
-				logInfo("New Project Tab Opened Successfully clicked");
-				op.clickElement(CreateProjectLink);
-				op.clickElement(CreateNewProjectLink);
-				op.waitImplicitely(driver1, 20);
-				((JavascriptExecutor)driver1).executeScript("arguments[0].scrollIntoView(true);", ProjectDetailsHeadings);
+				logInfo("New Project Tab Opened Successfully");
+				op.clickOnElement(CreateProjectLink);
+				op.clickOnElement(CreateNewProjectLink);
+				//threadsleep(2000);
+				//op.waitImplicitely(driver1, 10);
+				//((JavascriptExecutor)driver1).executeScript("arguments[0].scrollIntoView(true);", ProjectDetailsHeadings);
 				//op.clickElement(ProjectDetailsHeadings, driver1);
 				//controlActions.moveToElementAction(NewProjectPageHeadings);
-				op.waitImplicitely(driver1, 20);
+				//op.waitImplicitely(driver1, 20);
 				if(controlActions.isElementDisplayedOnPage(ProjectDetailsHeadings))
 				{
 					logInfo("Create New Project Page opened successfully") ;
@@ -1445,12 +1635,14 @@ public class NewProjectsPage extends TestBase{
 				// controlActions.clickElement(CreateFromExitingProjectLink);
 				op.clickElement(CreateProjectLink, driver1);
 				op.clickElement(CreateFromExitingProjectLink, driver1);
-
-				logInfo("Dialog Select From Existing Project displayed on the page: " + controlActions.isElementDisplayedOnPage(SelectFromExistingDlg));
-				if (controlActions.isElementDisplayedOnPage(SelectFromExistingDlg)) {
+				threadsleep(2000);
+				driver1.switchTo().frame(driver1.findElement(By.xpath("//*[@id='apex_dialog_1']/iframe")));
+				//wait.until(ExpectedConditions.visibilityOf(SelectFromExistingDlg));
+				logInfo("Dialog Select From Existing Project displayed on the page: " + controlActions.isElementDisplayedOnPage(ExistingProjectLbl));
+				if (controlActions.isElementDisplayedOnPage(ExistingProjectLbl)) {
 					threadsleep(1000);
-					driver1.switchTo().frame(driver1.findElement(By.xpath("//*[@id='apex_dialog_1']/iframe")));
-					logInfo("Lable Existing Project is displayed on the page: " + controlActions.isElementDisplayedOnPage(ExistingProjectLbl));
+//					driver1.switchTo().frame(driver1.findElement(By.xpath("//*[@id='apex_dialog_1']/iframe")));
+//					logInfo("Lable Existing Project is displayed on the page: " + controlActions.isElementDisplayedOnPage(ExistingProjectLbl));
 					op.clickElement(SelectProjectLst, driver1);
 					driver1.switchTo().defaultContent();
 
@@ -1469,11 +1661,11 @@ public class NewProjectsPage extends TestBase{
 						// *[@class='t-AVPList-value' and contains(text(),'Test0006')]
 						if (isProjectSelected) {
 							logInfo("Project " + projectName + " is selected succesfully");
-							
 							// Clicking on Add button after selecting the project
 							op.clickElement(AddProjectBtn, driver1);
-							threadsleep(5000);
+							threadsleep(2000);
 							op.scrollPageTo(NewProjectPageHeadings, driver1);
+							threadsleep(2000);
 							//NewProjectPageSaveBtn.click();
 							//*[@class='t-Alert-title'and contains(text(),'Changes Saved')]
 							wait.until(ExpectedConditions.visibilityOf(NewProjectPageHeadings));
@@ -1485,7 +1677,6 @@ public class NewProjectsPage extends TestBase{
 						}
 					} else {
 						logInfo("Failed to Open Search from Exiting Project Popup");
-						threadsleep(5000);
 						return false;
 					}
 				} else {
@@ -1501,6 +1692,7 @@ public class NewProjectsPage extends TestBase{
 			return false;
 		}*/
 	}
+	
 	
 
 	

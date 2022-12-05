@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 
 import com.project.pageobjects.pTracker.PTrackerLoginPage;
 import com.project.pTracker.Utils.ExcelUtils;
+import com.project.pTracker.Utils.Operations;
 import com.project.pageobjects.pTracker.NewProjectsPage;
 import com.project.testbase.TestBase;
 import com.project.utilities.ControlActions;
@@ -27,19 +28,24 @@ public class TCG_DraftNewStaffingProject extends TestBase {
 	PTrackerLoginPage LoginPage;
 	NewProjectsPage NewProject;
 	ControlActions controlActions;
-	private String uName = "abc";
-	private String uPassword = "xyz";
+	Operations op ;
+	private String uName = "admin";
+	private String uPassword = "admin";
 	private static final int DELAY = 20;
 	String eName = "Mahajan, Milind";
 
-	@BeforeClass
+	@BeforeClass(alwaysRun = true)
 	public void groupInit() throws Exception {
 		// setting up property to suppress the warning
 		System.setProperty("webdriver.chrome.silentOutput","true");
 		driver = launchbrowser();
-		driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);
+        String currentWindow = driver.getWindowHandle();
+        driver.switchTo().window(currentWindow);
+        driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);		
+        driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
+		driver.manage().timeouts().setScriptTimeout(DELAY, TimeUnit.SECONDS);
 		controlActions = new ControlActions(driver);
-		controlActions = new ControlActions(driver);
+		op = new Operations(driver);
 		controlActions.getUrl(prop.getProperty("appl_url_dev"));
 		LoginPage = new PTrackerLoginPage(driver);
 		NewProject = new NewProjectsPage(driver);
@@ -50,18 +56,21 @@ public class TCG_DraftNewStaffingProject extends TestBase {
 
 	@Test(groups = { "sanity", "regression" }, description = "Create Staffing New Project")
 	public void CreateStaffingNewProject() throws Exception {
+		String tcID = "TC_DRAFT_NEW_STAFFING_PROJECT";
+		logInfo("Starting of Test Case : " + tcID );
+		String sheetName = "Automation";
 		int tcRowNum; 
 		String projectState = "DRAFT"; //SUBMIT
 	    // Prepare the path of excel file
 	    String workspace = System.getProperty("user.dir");
 		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateFixedPriceNewProject.xls";
 		//tcRowNum = 1;
-		tcRowNum = ExcelUtils.getRowNum(datapoolPath,"Automation","testCase","TC_DRAFT_NEW_STAFFING_PROJECT");
+		tcRowNum = ExcelUtils.getRowNum(datapoolPath,"Automation","testCase",tcID);
 		logInfo("Test Case Row No Is: " + tcRowNum);
 		logInfo("Reading Excel:   "+datapoolPath);
 		 if (NewProject.createNewProject()) 
 		 {
-			 NewProject.fillProjectCreation(datapoolPath,projectState,tcRowNum); 
+			 NewProject.fillProjectCreation(datapoolPath,sheetName,projectState,tcRowNum); 
 			 String RequestID = NewProject.getRequestID(); 
 			 if (RequestID != null &&
 			 !RequestID.trim().isEmpty()) {
@@ -75,11 +84,12 @@ public class TCG_DraftNewStaffingProject extends TestBase {
 			 ExcelUtils.setCellData(datapoolPath, "Status", tcRowNum, "FAIL", "RED");
 			 } 
 		 }
+		 logInfo("End of Test Case : " + tcID );
 	}
 
 
-	@AfterClass
-	public void closeBrowser() throws InterruptedException {
-		driver.close();
+	@AfterClass(alwaysRun = true)
+	public void closeBrowser() throws InterruptedException, IOException {
+		op.closeBrowser(driver);
 	}
 }

@@ -35,6 +35,7 @@ public class IAutomateGoogleDemoTest extends TestBase {
 	public void TestCase_Search(String searchword,String expectedTitle) throws Exception {
 
 		boolean setSearchText = iAutomateDemoPage.enterTextToGoogleSearch(searchword);
+		//TestValidation.IsTrue(boolean,"Pas", "Fail");
 		Assert.assertTrue(setSearchText, "SUCCESSFULLY added text to Google search as '"+searchword+"'");
 
 		boolean clickLink = iAutomateDemoPage.clickTestNGLinkOnGoogle();

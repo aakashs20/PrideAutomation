@@ -37,13 +37,12 @@ public class TCG_ValidateProjectActionsTab_SubManger extends TestBase {
 
 	WebDriverWait wait;
 	PTrackerLoginPage LoginPage;
-	
 	NewProjectsPage NewProject;
 	Operations op ;
 	ExcelUtils ExcelUtils;
 	ControlActions controlActions;
-	private String uName = "abc";
-	private String uPassword = "xyz";
+	private String uName = "admin";
+	private String uPassword = "admin";
 	private String xpath;
 	private static final int DELAY = 20;
 	NewProjectsPage newProject;
@@ -54,16 +53,18 @@ public class TCG_ValidateProjectActionsTab_SubManger extends TestBase {
     String tcStatus;
 	
 
-	@BeforeClass
+	@BeforeClass(alwaysRun = true)
 	public void groupInit() throws Exception {
+		// setting up property to suppress the warning
+		System.setProperty("webdriver.chrome.silentOutput","true");
 		driver = launchbrowser();
-		
+        String currentWindow = driver.getWindowHandle();
+        driver.switchTo().window(currentWindow);
 		driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
 		driver.manage().timeouts().setScriptTimeout(DELAY, TimeUnit.SECONDS);
 		driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);
 		wait = new WebDriverWait(driver, DELAY);
 		controlActions = new ControlActions(driver);
-		//wait = new WebDriverWait(driver, 20000);
 		controlActions.getUrl(prop.getProperty("appl_url_dev"));
 		op = new Operations(driver);
 		newProject = new NewProjectsPage(driver);
@@ -74,17 +75,15 @@ public class TCG_ValidateProjectActionsTab_SubManger extends TestBase {
 		LoginPage.TC_Login(driver,uName, uPassword);
 		LoginPage.changeUser(driver, "Thakur, Monika");
 	}
-
 		
-	@Test(priority = 1,groups = { "sanity", "regression" }, description = "Verify the access on Project Actions Tab")
+	@Test(priority = 1,groups = { "sanity", "UI" }, description = "Verify the access on Project Actions Tab")
 	public void TC_ValidateProjectCardTitleOnProjectActionsTab() throws Exception 
 	{
 		threadsleep(1000);
 		int counter=0;
-		String[] strCloProType = {"Extension Actions", "Closure Actions","New Project Actions","Modification Actions"};  
+		String[] strCloProType = {"All Actions","Extension Actions", "Closure Actions","New Project Actions","Modification Actions"};  
 		op.clickElement(NewProject.ProjectActionTabTxt);
 		wait.until(ExpectedConditions.visibilityOf(NewProject.ProjectActionTabFocused)); 
-		
 		if(NewProject.ProjectActionTabFocused.isDisplayed())
 		{
 			logInfo("Project Action Tab is focused on P-Tracker page");
@@ -139,8 +138,18 @@ public class TCG_ValidateProjectActionsTab_SubManger extends TestBase {
 		}
 	}
 	
-	@AfterClass
-	public void closeBrowser() throws InterruptedException {
-		driver.close();
+	@AfterClass(alwaysRun = true)
+	public void closeBrowser() throws InterruptedException,IOException {
+		try
+		{
+			driver.close();
+		}
+		catch(Exception e)
+		{
+			logError("Failed to Select the element " + xpath + e.getMessage());
+		}
+		Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe /T");
+		//Runtime rt = Runtime.getRuntime();
+		//Process proc = rt.exec("taskkill /im firefox.exe /f /t");
 	}
 }

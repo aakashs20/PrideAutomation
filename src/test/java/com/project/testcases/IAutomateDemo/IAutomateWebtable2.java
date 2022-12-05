@@ -73,7 +73,7 @@ public class IAutomateWebtable2 extends TestBase {
 		w5.setAction("click");
 		actual.add(w5);
 		ArrayList <HashMap<Integer,String> > coldata=new ArrayList<HashMap<Integer,String>>();
-		HashMap<Integer,String> row=controlActions.getTablerecordsbyRow("//table[@id='table01']/tbody/tr",actual);
+		HashMap<Integer,String> row=controlActions.getTableRecordsByRow("//table[@id='table01']/tbody/tr",actual);
 Thread.sleep(4000);
   
   

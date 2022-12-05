@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+  
+<suite name="TestNG Parallel Threads Demo" verbose="1" parallel="classes" thread-count="1">
+  <test name="The Tests" >
+	<packages>
+		<package name="com.project.testcases.IAutomateDemo.demo" />
+	</packages>
+  </test>
+</suite>

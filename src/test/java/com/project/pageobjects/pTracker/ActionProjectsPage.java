@@ -32,10 +32,12 @@ public class ActionProjectsPage extends TestBase{
 	@FindBy(css = ActionProjectsConstants.SEARCH_TEXT_BOX)
 	public WebElement SearchProjectTxt;
 	
-	@FindBy(css = ActionProjectsConstants.GO_BTN)
+	@FindBy(xpath = ActionProjectsConstants.GO_BTN)
 	public WebElement GoBtn;
 	
 	@FindBy(xpath = ActionProjectsConstants.PROJECT_TABLE_ROWS)
 	public List<WebElement> ProjectTableRows;
 	
+	@FindBy(xpath = ActionProjectsConstants.PROJECT_ACTION_PAGINATION)
+	public List<WebElement> ProjectActionPagination;
 }

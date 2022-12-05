@@ -39,7 +39,7 @@ public class IAutomateGoogleDemoPage extends TestBase {
 	
 	public boolean enterTextToGoogleSearch(String inputString) {
 		try {
-			controlActions.WaitforelementToBeClickable(GoogleSearchTxt);
+			controlActions.waitForElementToBeClickable(GoogleSearchTxt);
 			controlActions.sendKeys(GoogleSearchTxt, inputString);
 			controlActions.actionEnter();
 			log4jInfo("Entered text '"+inputString+"' in Google search");
@@ -54,7 +54,7 @@ public class IAutomateGoogleDemoPage extends TestBase {
 	
 	public boolean clickTestNGLinkOnGoogle() {
 		try {
-			controlActions.WaitforelementToBeClickable(GoogleTestngLnk);
+			controlActions.waitForElementToBeClickable(GoogleTestngLnk);
 			controlActions.click(GoogleTestngLnk);
 			log4jInfo("Clicked on the first link found");
 			return true;

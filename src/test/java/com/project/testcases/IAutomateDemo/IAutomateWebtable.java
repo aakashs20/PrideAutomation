@@ -50,7 +50,7 @@ public class IAutomateWebtable extends TestBase {
 		public void webtable() throws Exception {
 
 		List<String> actual=new ArrayList<String>();
-  		actual=controlActions.getTablerecordsbyColumn("//table[@id='customers']//tr/td[1]","//table[@id='customers']//tr/td[1]","text");
+  		actual=controlActions.getTableRecordsByColumn("//table[@id='customers']//tr/td[1]","//table[@id='customers']//tr/td[1]","text");
 	    System.out.println("list is:"+actual);
   	}
   	
@@ -71,7 +71,7 @@ public class IAutomateWebtable extends TestBase {
 		w3.setAction("text");
 		actual.add(w3);
 		ArrayList <HashMap<Integer,String> > coldata=new ArrayList<HashMap<Integer,String>>();
-		HashMap<Integer,String> row=controlActions.getTablerecordsbyRow("//table[@id='customers']//td[1]",actual);
+		HashMap<Integer,String> row=controlActions.getTableRecordsByRow("//table[@id='customers']//td[1]",actual);
 
   
   

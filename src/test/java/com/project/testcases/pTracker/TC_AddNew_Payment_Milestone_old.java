@@ -30,7 +30,7 @@ import com.project.utilities.ControlActions;
 
 import com.project.utilities.ExcelReader;
 
-public class TC_AddNew_Payment_Milestone extends TestBase {
+public class TC_AddNew_Payment_Milestone_old extends TestBase {
 
 	WebDriverWait wait;
 	PTrackerLoginPage loginPage;
@@ -38,8 +38,8 @@ public class TC_AddNew_Payment_Milestone extends TestBase {
 	ControlActions controlActions;
 	Operations op ;
 	CommonPages cp;
-	private String uName = "abc";
-	private String uPassword = "xyz";
+	private String uName = "admin";
+	private String uPassword = "admin";
 	private static final int DELAY = 20;
 	String eName = "Mahajan, Milind";
 
@@ -50,7 +50,6 @@ public class TC_AddNew_Payment_Milestone extends TestBase {
         driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
 		controlActions = new ControlActions(driver);
 		op = new Operations(driver);
-		//controlActions = new ControlActions(driver);
 		controlActions.getUrl(prop.getProperty("appl_url_dev"));
 		loginPage = new PTrackerLoginPage(driver);
 		newProject = new NewProjectsPage(driver);

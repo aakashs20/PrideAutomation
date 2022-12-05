@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -31,18 +32,23 @@ public class TCG_DraftSaveSupportFromExistingProject extends TestBase {
 	NewProjectsPage newProject;
 	ControlActions controlActions;
 	Operations op ;
-	private String uName = "abc";
-	private String uPassword = "xyz";
+	private String uName = "admin";
+	private String uPassword = "admin";
 	private static final int DELAY = 20;
 	String eName = "Mahajan, Milind";
 
-	@BeforeClass
+	@BeforeClass(alwaysRun = true)
 	public void groupInit() throws Exception {
+		// setting up property to suppress the warning
+		System.setProperty("webdriver.chrome.silentOutput","true");
 		driver = launchbrowser();
-		driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);
+        String currentWindow = driver.getWindowHandle();
+        driver.switchTo().window(currentWindow);
+        driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);		
+        driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
+		driver.manage().timeouts().setScriptTimeout(DELAY, TimeUnit.SECONDS);
+		controlActions = new ControlActions(driver);
 		op = new Operations(driver);
-		controlActions = new ControlActions(driver);
-		controlActions = new ControlActions(driver);
 		controlActions.getUrl(prop.getProperty("appl_url_dev"));
 		loginPage = new PTrackerLoginPage(driver);
 		newProject = new NewProjectsPage(driver);
@@ -54,18 +60,25 @@ public class TCG_DraftSaveSupportFromExistingProject extends TestBase {
 	  
 	@Test 
 	public void draftSaveSupportProjectFromExiting() throws Exception {
+		String tcID = "TC_DRAFT_SAVE_FROM_SUPPORT_PROJECT";
+		logInfo("Starting of Test Case : " + tcID );
 		int tcRowNum; 	
 		// Prepare the path of excel file
 	    String workspace = System.getProperty("user.dir");
 		String datapoolPath = workspace+"\\test-data-files\\UI-TestData\\TC_CreateFixedPriceNewProject.xls";
-		tcRowNum = ExcelUtils.getRowNum(datapoolPath,"Automation","testCase","TC_DRAFT_SAVE_FROM_SUPPORT_PROJECT");
+		tcRowNum = ExcelUtils.getRowNum(datapoolPath,"Automation","testCase",tcID);
 		logInfo("Test Case Row No Is: " + tcRowNum);
 		logInfo("Reading Excel:   "+datapoolPath);
 		String projectName = "Test319";
 		  if(newProject.createProjectFromExiting(projectName)) { 
-			  	 threadsleep(2000);
-			     newProject.NewProjectPageSaveBtn.click();
-			     threadsleep(2000);
+			  	 threadsleep(3000);
+			     op.waitUntilElementIsClickable(newProject.NewProjectPageSaveBtn);
+			     //newProject.NewProjectPageSaveBtn.click();
+				 JavascriptExecutor executor = (JavascriptExecutor)driver; 
+				 executor.executeScript("arguments[0].click();",newProject.NewProjectPageSaveBtn);
+			     threadsleep(3000);
+			     op.scrollPageTo(newProject.NewProjectPageHeadings, driver);
+			     op.waitUntilElementIsClickable(newProject.NewProjectPageSaveBtn);
 				 String RequestID = newProject.getRequestID(); 
 				 if (RequestID != null &&
 				 !RequestID.trim().isEmpty()) {
@@ -80,6 +93,7 @@ public class TCG_DraftSaveSupportFromExistingProject extends TestBase {
 				 ExcelUtils.setCellData(datapoolPath, "Status",tcRowNum, "FAIL", "RED");
 				 } 
 		}
+		logInfo("End of Test Case : " + tcID );
 	}
 	
 	@DataProvider
@@ -102,8 +116,8 @@ public class TCG_DraftSaveSupportFromExistingProject extends TestBase {
 		}
 	}
 
-	@AfterClass
-	public void closeBrowser() throws InterruptedException {
-		driver.close();
+	@AfterClass(alwaysRun = true)
+	public void closeBrowser() throws InterruptedException, IOException {
+		op.closeBrowser(driver);
 	}
 }

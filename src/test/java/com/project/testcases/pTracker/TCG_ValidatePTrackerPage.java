@@ -32,16 +32,20 @@ public class TCG_ValidatePTrackerPage extends TestBase {
 	ControlActions controlActions;
 	ExcelUtils ExcelUtils;
 	Operations op ;
-	private String uName = "abc";
-	private String uPassword = "xyz";
+	private String uName = "admin";
+	private String uPassword = "admin";
 	private static final int DELAY = 20;
 	String eName = "Mahajan, Milind";
     String tcStatus;
     boolean isAlertPresent;
 
-	@BeforeClass
+	@BeforeClass(alwaysRun = true)
 	public void groupInit() throws Exception {
+		// setting up property to suppress the warning
+		System.setProperty("webdriver.chrome.silentOutput","true");
 		driver = launchbrowser();
+        String currentWindow = driver.getWindowHandle();
+        driver.switchTo().window(currentWindow);
         driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);		
         driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
 		driver.manage().timeouts().setScriptTimeout(DELAY, TimeUnit.SECONDS);
@@ -52,16 +56,18 @@ public class TCG_ValidatePTrackerPage extends TestBase {
 		op = new Operations(driver);
 		loginPage = new PTrackerLoginPage(driver);
 		newProject = new NewProjectsPage(driver);
+		ExcelUtils = new ExcelUtils();
 		loginPage.waitForPageLoaded(driver);
 		loginPage.TC_Login(driver,uName, uPassword);
 		loginPage.TC_ChangeUser(driver,eName);
-		ExcelUtils = new ExcelUtils();
+
 		//LoginPage.TC_OpenPTrackPage();
 	}
 
 	@Test (priority=1, groups = { "sanity", "regression" }, description = "For New Project Creation an Alert Message is shown if mandatory fields are not filled") 
 	 public void ValidateAlertONCreateNewProject() throws Exception {
-		String tcID = "TC_VALIDATE_ALERT_ON_NEW_PROJECT_CREATION";
+	 String tcID = "TC_VALIDATE_ALERT_ON_NEW_PROJECT_CREATION";
+	 logInfo("Starting of Test Case : " + tcID );
 	  //NewProject.createProjectFromExisting();
 	  if(newProject.createNewProject()) { 
 		  isAlertPresent = newProject.validateAlert();
@@ -80,12 +86,14 @@ public class TCG_ValidatePTrackerPage extends TestBase {
 					ExcelUtils.logTestResult(tcID,tcStatus);
 				}
 		  }
+	  logInfo("End of Test Case : " + tcID );
 	 }
 	 
 	 @Test (priority=2, groups = { "sanity", "regression" }, description = "For Creating a Project by Copy from Existing Project an Alert Message is shown if mandatory fields are not filled") 
 	 public void ValidateAlertONCreateProjectFromExisting() throws Exception {
 	 String projectName = "Test0006";
 	 String tcID = "TC_VALIDATE_ALERT_ON_COPY_PROJECT_FROM_FROM_EXISTING_CREATION";
+	 logInfo("Starting of Test Case : " + tcID );
 	 if(newProject.createProjectFromExiting(projectName)) { 
 		  isAlertPresent = newProject.validateAlert();
 			 // NewProject.fillProjectCreation(); 
@@ -102,12 +110,17 @@ public class TCG_ValidatePTrackerPage extends TestBase {
 				ExcelUtils.logTestResult(tcID,tcStatus);
 			}
 		  }
+	 logInfo("End of Test Case : " + tcID );
 	 }
 
 
-	@AfterClass
-	public void closeBrowser() throws InterruptedException {
-		driver.close();
-	}
+		@AfterClass (alwaysRun = true)
+		public void tearDown() {
+			try {
+				op.closeBrowser(driver);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 }
 

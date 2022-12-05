@@ -108,10 +108,7 @@ public class TCG_SMK_ManageLocation extends TestBase{
 	public void TestCase_32566() {
 
 		ManageLocationPage mlp = mainPage.clickLocationsMenu();
-		TestValidation.Equals(mlp.error, 
-				false, 
-				"Opened Manage Location", 
-				"Could Not Open Manage Location"); 
+		TestValidation.Equals(mlp.error,false,"Opened Manage Location","Could Not Open Manage Location"); 
 
 		boolean addNewLocation = locations.addLocationInstance(locationCategoryValue);
 		TestValidation.IsTrue(addNewLocation,

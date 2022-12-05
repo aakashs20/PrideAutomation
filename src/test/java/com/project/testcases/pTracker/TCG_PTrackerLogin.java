@@ -1,7 +1,15 @@
 package com.project.testcases.pTracker;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -9,6 +17,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import com.project.pageobjects.pTracker.PTrackerLoginPage;
 import com.project.pTracker.Utils.ExcelUtils;
+import com.project.pTracker.Utils.Operations;
 import com.project.pageobjects.pTracker.NewProjectsPage;
 import com.project.testbase.TestBase;
 import com.project.utilities.ControlActions;
@@ -16,20 +25,24 @@ import com.project.utilities.ControlActions;
 
 
 public class TCG_PTrackerLogin extends TestBase {
+	//WebDriver driver;
 	WebDriverWait wait;
 	PTrackerLoginPage loginPage;
 	NewProjectsPage newProject;
 	ControlActions controlActions;
+	Operations op ;
 	ExcelUtils ExcelUtils;
-	private String uName = "abc";
-	private String uPassword = "xyz";
+	private String uName = "admin";
+	private String uPassword = "admin";
 	private static final int DELAY = 20;
     String tcStatus;
 
-	@BeforeClass
+	@BeforeClass(alwaysRun = true)
 	public void launchBrowser() throws InterruptedException {
 		System.setProperty("webdriver.chrome.silentOutput","true");
 		driver = launchbrowser();
+        String currentWindow = driver.getWindowHandle();
+        driver.switchTo().window(currentWindow);
         driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);		
         driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
 		driver.manage().timeouts().setScriptTimeout(DELAY, TimeUnit.SECONDS);
@@ -37,21 +50,29 @@ public class TCG_PTrackerLogin extends TestBase {
 		try 
 		{
 			controlActions = new ControlActions(driver);
+			ExcelUtils = new ExcelUtils();
+			op = new Operations(driver);
+			loginPage = new PTrackerLoginPage(driver);
+			newProject = new NewProjectsPage(driver);
 		}catch(Exception e) 
 		{
 			logError("Message " + e.getMessage());
 		}
-		ExcelUtils = new ExcelUtils();
 		controlActions.getUrl(prop.getProperty("appl_url_dev"));
-		loginPage = new PTrackerLoginPage(driver);
-		newProject = new NewProjectsPage(driver);
 		loginPage.waitForPageLoaded(driver);
-		
+		threadsleep(9000);
 	}
 
-	@Test(priority = 1,groups = {"sanity","regression"}, description="Perfrom Login Operation")
+	@Test(priority = 1,groups = {"sanity","UI"}, description="Perfrom Login Operation")
 	public void TC_Login() throws Exception {
+		String tcID = "TC_LOGIN";
+		logInfo("Starting of Test Case : " + tcID );
 		String expectedTitle = "PRIDE - Sign In";
+		prop.getProperty("executeOnUAT");
+		if(prop.getProperty("executeOnUAT").trim().equalsIgnoreCase("true"))
+		{
+			loginPage.handleSSLError(driver);
+		}
 		String title = loginPage.TitleOfPage(driver);
 		Equals(title, expectedTitle,"Title of the page Matched Successfully","Fail to Match the Title of the page");
 		boolean isUserNameSet = loginPage.enterTextToUserName(uName);
@@ -67,18 +88,21 @@ public class TCG_PTrackerLogin extends TestBase {
         {
     		logInfo("Testcase is pass");
 			tcStatus = "PASS";
-			ExcelUtils.logTestResult("TC_LOGIN",tcStatus);
+			ExcelUtils.logTestResult(tcID,tcStatus);
 		}
 		else 
 		{ 
 			logError("Testcase is failed"); 
 			tcStatus = "FAIL";
-			ExcelUtils.logTestResult("TC_LOGIN",tcStatus);
+			ExcelUtils.logTestResult(tcID,tcStatus);
 		}
+		logInfo("End of Test Case : " + tcID );
 	}
 
-	@Test(priority = 2,groups = {"sanity","regression"}, description="Perfrom Change User Operation")
+	@Test(priority = 2,dependsOnMethods = { "TC_Login" }, groups = {"sanity","regression"},testName = "TC_CHANGE_USER",  description="Perfrom Change User Operation")
 	public void TC_ChangeUser() throws Exception {
+		String tcID = "TC_CHANGE_USER";
+		logInfo("Starting of Test Case : " + tcID );
 		boolean isclkNavigationBarIcon = loginPage.clkNavigationBarIcon();
 		IsTrue(isclkNavigationBarIcon, "Successfully clicked on Navigation Icon", "Failed to click Navigation Icon");
 		boolean isCancelButtonClicked = loginPage.clkCancelButton();
@@ -90,25 +114,28 @@ public class TCG_PTrackerLogin extends TestBase {
 		IsTrue(isEmployeeSelected, "Employee " + eName + "Successfully selected from List", "Failed to add text to select Employee search as '" + eName + "'");
 		threadsleep(2000);
 		controlActions.waitForAnElementToBeClickable(loginPage.SubmitBtn);
-		boolean isSubmitButtonClicked = loginPage.clkSubmitButtonNew(driver);
+		boolean isSubmitButtonClicked = loginPage.clkSubmitButtonNew(driver,eName);
 		IsTrue(isSubmitButtonClicked, "Submit Button on login page clicked successfully", "Failed to click Submit Button on login page");
 		threadsleep(1000);
 	    if(isSubmitButtonClicked)
         {
     		logInfo("Testcase is pass");
 			tcStatus = "PASS";
-			ExcelUtils.logTestResult("TC_CHANGE_USER",tcStatus);
+			ExcelUtils.logTestResult(tcID,tcStatus);
 		}
 		else 
 		{ 
 			logError("Testcase is failed"); 
 			tcStatus = "FAIL";
-			ExcelUtils.logTestResult("TC_CHANGE_USER",tcStatus);
+			ExcelUtils.logTestResult(tcID,tcStatus);
 		}
+		logInfo("End of Test Case : " + tcID );
 	}
 
-	@Test(priority = 3,groups = {"sanity","regression"}, description="Navigate to pTrack home page")
+	@Test(priority = 3,dependsOnMethods = { "TC_ChangeUser" }, groups = {"sanity","regression"}, description="Navigate to pTrack home page")
 	public void TC_OpenPTrackPage() throws Exception {
+		String tcID = "TC_OPEN_PTRACK_HOME_PAGE";
+		logInfo("Starting of Test Case : " + tcID );
 		boolean ispTrackPageOpend = loginPage.goToPTrack();
 		IsTrue(ispTrackPageOpend,"Successfully Opened P-Tracker Home page","Failed to open P-Tracker Home page");
 		threadsleep(1000);
@@ -116,14 +143,15 @@ public class TCG_PTrackerLogin extends TestBase {
         {
     		logInfo("Testcase is pass");
 			tcStatus = "PASS";
-			ExcelUtils.logTestResult("TC_OPEN_PTRACK_HOME_PAGE",tcStatus);
+			ExcelUtils.logTestResult(tcID,tcStatus);
 		}
 		else 
 		{ 
 			logError("Testcase is failed"); 
 			tcStatus = "FAIL";
-			ExcelUtils.logTestResult("TC_OPEN_PTRACK_HOME_PAGE",tcStatus);
+			ExcelUtils.logTestResult(tcID,tcStatus);
 		}
+		logInfo("End of Test Case : " + tcID );
 	}
 
 	/*
@@ -137,8 +165,12 @@ public class TCG_PTrackerLogin extends TestBase {
 	 * }
 	 */
 
-	@AfterClass
-	public void closeBrowser() throws InterruptedException {
-		driver.close();
+	@AfterClass (alwaysRun = true)
+	public void tearDown() {
+		try {
+			op.closeBrowser(driver);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -41,8 +41,8 @@ public class TCG_ValidateNewProjectsTab_SubManager extends TestBase {
 	NewProjectsPage NewProject;
 	Operations op ;
 	ControlActions controlActions;
-	private String uName = "abc";
-	private String uPassword = "xyz";
+	private String uName = "admin";
+	private String uPassword = "admin";
 	private String xpath;
 	private static final int DELAY = 20;
 	NewProjectsPage newProject;
@@ -53,16 +53,18 @@ public class TCG_ValidateNewProjectsTab_SubManager extends TestBase {
     String tcStatus;
 	
 
-	@BeforeClass
+	@BeforeClass(alwaysRun = true)
 	public void groupInit() throws Exception {
+		// setting up property to suppress the warning
+		System.setProperty("webdriver.chrome.silentOutput","true");
 		driver = launchbrowser();
-		
+        String currentWindow = driver.getWindowHandle();
+        driver.switchTo().window(currentWindow);
 		driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
 		driver.manage().timeouts().setScriptTimeout(DELAY, TimeUnit.SECONDS);
 		driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);
 		wait = new WebDriverWait(driver, DELAY);
 		controlActions = new ControlActions(driver);
-		//wait = new WebDriverWait(driver, 20000);
 		controlActions.getUrl(prop.getProperty("appl_url_dev"));
 		op = new Operations(driver);
 		newProject = new NewProjectsPage(driver);
@@ -70,13 +72,12 @@ public class TCG_ValidateNewProjectsTab_SubManager extends TestBase {
 		NewProject = new NewProjectsPage(driver);
 		ExcelUtils = new ExcelUtils();
 		LoginPage.waitForPageLoaded(driver);
-		
 		LoginPage.TC_Login(driver,uName, uPassword);
 		LoginPage.changeUser(driver, "Thakur, Monika");
 	}
 
 	
-	@Test(priority = 1,groups = { "sanity", "regression" }, description = "Verify the access on New Project Tab")
+	@Test(priority = 1,groups = { "sanity", "UI" }, description = "Verify the access on New Project Tab")
 	public void TC_ValidateProjectCardTitleOnNewProjectsTab() throws Exception 
 	{
 		threadsleep(1000);
@@ -139,10 +140,13 @@ public class TCG_ValidateNewProjectsTab_SubManager extends TestBase {
 		
 	}
 	
-	
 
-	@AfterClass
-	public void closeBrowser() throws InterruptedException {
-		driver.close();
+	@AfterClass (alwaysRun = true)
+	public void tearDown() {
+		try {
+			op.closeBrowser(driver);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
