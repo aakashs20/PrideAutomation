@@ -54,6 +54,6 @@ public class NewProjectsPageConstants {
 	public static final String TABLE_SPINNER= "//div[contains(@id,'report_')]/span[@class='u-Processing']";
 	public static final String NEW_PROJECT_PAGINATION= "//div[@id='New-Project-Request']//*[@class='t-Report-paginationText']/a";
 	
-
+	public static final String ACTIVE_PROJECT_LIST="//table[contains(@aria-label,'Active Projects')]//tr//td[2][contains(@headers,'NAME')]";
 
 }

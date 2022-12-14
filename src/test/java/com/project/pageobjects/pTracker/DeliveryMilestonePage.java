@@ -540,7 +540,7 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean switchToAddFrame() {
 		try {
-			Thread.sleep(3000);
+			threadsleep(3000);
 			// op.switchToDefault();
 //			op.waitForFrameToAvailable(addReleaseFrame);
 //			op.switchToFrameByLocators(addReleaseFrame);
@@ -2681,7 +2681,7 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean switchToAddTaskFrame() {
 		try {
-			Thread.sleep(3000);
+			threadsleep(3000);
 			// op.switchToDefault();
 //			op.waitForFrameToAvailable(addReleaseFrame);
 //			op.switchToFrameByLocators(addReleaseFrame);

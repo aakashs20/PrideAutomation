@@ -477,6 +477,10 @@ public class NewProjectsPage extends TestBase{
 	@FindBy(xpath = ProjectRegistrationConstants.PROJECT_NUMBER_FIELD)
 	public WebElement ProjectNumberField;
 	
+	@FindBy(xpath = NewProjectsPageConstants.ACTIVE_PROJECT_LIST)
+    public List<WebElement> ActiveProjectNameList;
+
+	
 
 
 	public void fillProjectCreation(String datapoolPath,String sheetName,String projectState,int tcRowNum) throws Exception{

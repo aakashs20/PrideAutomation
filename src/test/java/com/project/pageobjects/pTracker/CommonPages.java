@@ -534,18 +534,12 @@ public class CommonPages extends TestBase {
 	    while (System.currentTimeMillis() < end) {
 	        try {
 	            renderedWebElement = driver.findElement(by);
-	        } catch (NoSuchElementException nsee) {
-	        	logError("ERROR: "+ nsee.getMessage());
+	        } catch (NoSuchElementException e) {
+	        	logError("ERROR: "+ e.getMessage());
 	        }
 
 	        if (renderedWebElement != null && renderedWebElement.isEnabled() && renderedWebElement.isDisplayed()) {
 	            return renderedWebElement;
-	        }
-
-	        try {
-	            Thread.sleep(1000);
-	        } catch (InterruptedException ie) {
-	        	 logError("ERROR: "+ ie.getMessage());
 	        }
 	    }
 

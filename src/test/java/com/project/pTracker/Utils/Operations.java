@@ -49,7 +49,7 @@ public class Operations extends ControlActions {
 	public void waitTillSpinnerDisable() throws InterruptedException {
 		int count = 0;
 		while (cp.spinner.size() != 0 && count < 90) {
-			Thread.sleep(5000);
+			threadsleep(5000);
 			count++;
 		}
 	}
@@ -71,9 +71,9 @@ public class Operations extends ControlActions {
 	public void sleepInMiliSeconds(int duration)
 	{
 		try {
-			Thread.sleep(duration);
-		} catch (InterruptedException e) {
-			logWarn("[DriverBotWarn]warning got InterruptedException exception(sleepInSeconds)."+ e.getMessage());
+			threadsleep(duration);
+		} catch (Exception e) {
+			logWarn("[ERRROR] InterruptedException -> "+ e.getMessage());
 			//e.printStackTrace();
 		}
 	}
@@ -617,20 +617,15 @@ public class Operations extends ControlActions {
 
         long currentTimeMillis = System.currentTimeMillis();
         long maxRequestTimeout = waitTime;
-
         long endTime = currentTimeMillis + maxRequestTimeout;
-
         while (System.currentTimeMillis() < endTime) {
-
             try {
                 if (locator.isDisplayed())
+                	threadsleep(2000);
                     return;
-                Thread.sleep(500);
-            } catch (InterruptedException e1) {
-                throw new Exception("The request has timed out" + locator);
-            } catch (Exception e) {
+             } catch (Exception e) {
                 // ignore any other type of Exception and continue
-                logInfo(" Exception while waiting. "  + e );
+                logInfo(" Exception while waiting for element  " + locator + " -> "+ e );
             }
         }
 

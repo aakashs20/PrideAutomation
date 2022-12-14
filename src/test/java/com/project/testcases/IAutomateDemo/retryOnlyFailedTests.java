@@ -27,7 +27,7 @@ import static org.testng.Assert.fail;
 		    public void testStep_3() {
 		        System.out.println("Test 3 starting.");
 		        System.out.println("Test 3 failed.");
-		        Assert.assertEquals(true, false);
+		        //Assert.assertEquals(true, false);
 		        //Assert.fail("Test 3 failed.");
 		    }
 	}

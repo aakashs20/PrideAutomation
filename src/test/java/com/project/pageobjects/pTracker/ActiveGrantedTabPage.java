@@ -77,7 +77,7 @@ public class ActiveGrantedTabPage extends TestBase {
 	}
 
 	public boolean validateIconUnderProjectTab(WebDriver driver) throws InterruptedException {
-		Thread.sleep(3000);
+		threadsleep(3000);
 		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//ul[@id='R505691641167493060_cards']"))));
 		WebElement findElement = driver.findElement(By.xpath("//ul[@id='R505691641167493060_cards']"));
 		List<WebElement> findElements = findElement.findElements(By.tagName("li"));
@@ -98,16 +98,12 @@ public class ActiveGrantedTabPage extends TestBase {
 			for (int i = 0; i <= expt.size(); i++) {
 
 				String tabName = expt.get(i);
-				Thread.sleep(2000);
+				threadsleep(3000);
 				WebElement findElement = driver.findElement(By.xpath("//*[text()='" + tabName + "']"));
 				findElement.click();
-				Thread.sleep(3000);
+				threadsleep(3000);
 
 				// find icon under specific Porject tab
-				
-				
-				Thread.sleep(3000);
-
 				String tag = (String) testCase.get(i);
 				WebElement findEle = driver
 						.findElement(By.xpath("//h2[text()='" + tag + "']/following-sibling::div/ul"));
@@ -133,9 +129,8 @@ public class ActiveGrantedTabPage extends TestBase {
 	public boolean clickHomeButton(WebDriver driver) throws InterruptedException {
 		WebElement findElement = driver.findElement(By.xpath("//*[@id='481561109094491094']//li[2]/a"));
 		findElement.click();
-		Thread.sleep(13000);
+		threadsleep(13000);
 		return true;
-		
 	}
 
 }

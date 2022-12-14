@@ -76,16 +76,16 @@ public class TCG_ValidateFiltersAndCheckBoxsForActiveProject extends TestBase {
 
 		op.clickElement(newProject.ActiveProjectTabLink);
 		wait.until(ExpectedConditions.visibilityOf(newProject.ActiveProjectTabFocused));
-		Thread.sleep(3000);
+		threadsleep(3000);
 
 		for (int i = 0; i < plActiveProjectPage.AppliedProjectTypeFilters.size(); i++) {
 			logInfo("Searching for the ActiveProjectFilters : "+ plActiveProjectPage.AppliedProjectTypeFilters.get(i).getText());
-			Thread.sleep(3000);
+			threadsleep(3000);
 		}
 		IsTrue(plActiveProjectPage.AppliedProjectTypeFilters.get(1).isDisplayed(), "Support Project is present","Support Project is not Displayed");
 		logInfo("Searching for the Support Project : "+ plActiveProjectPage.AppliedProjectTypeFilters.get(1).getText());
 		plActiveProjectPage.AppliedProjectTypeFilters.get(1).click();
-		Thread.sleep(3000);
+		threadsleep(3000);
 		for (int i = 0; i < plActiveProjectPage.AppliedCustomerTypeFilterCol.size(); i++) 
 		{
 			logInfo("Searching for the ActiveCustomerFilters : " + plActiveProjectPage.AppliedCustomerTypeFilterCol.get(i).getText());

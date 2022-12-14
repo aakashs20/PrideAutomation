@@ -74,13 +74,9 @@ public class IAutomateWebtable2 extends TestBase {
 		actual.add(w5);
 		ArrayList <HashMap<Integer,String> > coldata=new ArrayList<HashMap<Integer,String>>();
 		HashMap<Integer,String> row=controlActions.getTableRecordsByRow("//table[@id='table01']/tbody/tr",actual);
-Thread.sleep(4000);
-  
-  
+		threadsleep(3000);
         for (Map.Entry<Integer,String> entry : row.entrySet())
-        {  System.out.println("Row = " + entry.getKey() +
-                             ", Value = " + entry.getValue());
-    
+        {  System.out.println("Row = " + entry.getKey() + ", Value = " + entry.getValue());
 	}
   	}
 	@AfterMethod
