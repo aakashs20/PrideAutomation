@@ -52,7 +52,7 @@
 			<scope>system</scope>
 			<!--<systemPath>${project.basedir}\src\test\resources\Jars\iAutomate.jar</systemPath>-->
 			<!--systemPath>D:\Ketan Tank\PrideAutomation\src\test\resources\Jars\iAutomate.jar</systemPath-->
-			<systemPath>${pom.basedir}/src/test/resources/Jars/iAutomate.jar</systemPath
+			<systemPath>${pom.basedir}/src/test/resources/Jars/iAutomate.jar</systemPath>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
 		<dependency>
