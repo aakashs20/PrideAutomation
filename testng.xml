@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"><!-- parallel="classes,tests false"-->
+<suite name="Smoke Test" preserve-order="true" parallel="false" thread-count="1" verbose="1">
+    <parameter name="browser" value="chrome" />
+    <parameter name="printToFile" value="false" />
+	<parameter name="env" value="QA" />
+	<listeners>
+		<listener class-name="com.project.pTracker.Utils.Listener" />
+		<listener class-name="com.project.utilities.Listener" />
+		<listener class-name="com.project.utilities.AnnotationTransformer"/>
+		<!-- listener class-name="com.project.pTracker.Utils.RetryListener"/ -->
+		<!--listener class-name="listeners.TestNGCustomReportListener" /-->
+	</listeners>
+
+ 	<test name="UITest">
+ 		<!--packages>
+			<package name="com.project.testcases.pTracker" /> 
+		</packages -->
+		<classes>			
+			<class name="com.project.testcases.pTracker.TCG_PTrackerLogin" />
+			<class name="com.project.testcases.pTracker.TCG_DownloadFunctionalityPTracker" />
+			<class name="com.project.testcases.pTracker.TCG_ValidatePTrackerPage" />
+			<class name="com.project.testcases.pTracker.TCG_ValidateActiveProjectsTab_SubManager" />	
+			<class name="com.project.testcases.pTracker.TCG_ValidateClosedProjectsTab_SubManager" />
+			<class name="com.project.testcases.pTracker.TCG_ValidateNewProjectsTab_SubManager" />
+			<class name="com.project.testcases.pTracker.TCG_ValidateProjectActionsTab_SubManger" />	
+			<class name="com.project.testcases.pTracker.TCG_SearchFunctionalityActiveProject" />	
+			<class name="com.project.testcases.pTracker.TCG_SearchFunctionalityClosedProject" />		
+			<class name="com.project.testcases.pTracker.TCG_SearchFunctionalityNewProject" />
+			<class name="com.project.testcases.pTracker.TCG_SearchFunctionalityProjectAction"/>	
+		
+			<class name="com.project.testcases.pTracker.TCG_DraftNewFixedPriceProject" />
+			<class name="com.project.testcases.pTracker.TCG_DraftSaveFixedPriceFromExistingProject" />	
+			<class name="com.project.testcases.pTracker.TCG_SubmitNewFixedPriceProject" />						
+		
+			<class name="com.project.testcases.pTracker.TCG_DraftNewStaffingProject" />
+			<class name="com.project.testcases.pTracker.TCG_DraftSaveStaffingFromExistingProject" />	
+			<class name="com.project.testcases.pTracker.TCG_SubmitNewStaffingProject" />		
+		
+			<class name="com.project.testcases.pTracker.TCG_DraftNewSupportProject" />
+			<class name="com.project.testcases.pTracker.TCG_DraftSaveSupportFromExistingProject" />	
+			<class name="com.project.testcases.pTracker.TCG_SubmitNewSupportProject" />						
+			
+			<class name="com.project.testcases.pTracker.TCG_DraftNewTimeAndMaterialProject" />
+			<class name="com.project.testcases.pTracker.TCG_DraftSaveTimeAndMaterialFromExistingProject" />	
+			<class name="com.project.testcases.pTracker.TCG_SubmitNewTimeAndMaterialProject" />	
+			<class name="com.project.testcases.pTracker.TCG_NewProjectSubmitByPM" />							
+		
+			<class name="com.project.testcases.pTracker.TCG_CreateNewFixedPriceProjectByFR" />	
+			<class name="com.project.testcases.pTracker.TCG_CreateNewStaffingProjectByFR" />	
+			<class name="com.project.testcases.pTracker.TCG_CreateNewSupportProjectByFR" />		
+			
+			<class name="com.project.testcases.pTracker.proSubDetails.TCG_AddNewSubManager" />
+			<class name="com.project.testcases.pTracker.proSubDetails.TCG_AddUpdateDeletePaymentMilestone" />
+			<class name="com.project.testcases.pTracker.proSubDetails.TCG_AddMilestoneThroughCR" />	
+			<class name="com.project.testcases.pTracker.proSubDetails.TCG_AddUpdateDeletePaymentMilestone"/>					
+		</classes>
+	</test >
+	
+
+</suite> <!-- Suite -->
