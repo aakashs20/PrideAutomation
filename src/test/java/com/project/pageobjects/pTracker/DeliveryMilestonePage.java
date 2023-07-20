@@ -4,13 +4,17 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -19,9 +23,9 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 
+import com.project.pTracker.Utils.Constants;
 import com.project.pTracker.Utils.ExcelUtils;
 import com.project.pTracker.Utils.Operations;
 //import com.project.pageobjects.pTracker.NewProjectsPageConstants;
@@ -35,28 +39,24 @@ public class DeliveryMilestonePage extends TestBase {
 	Operations op;
 	Actions actions1;
 	ExcelUtils excel;
-	PL_ActiveProjectsPage activeProject;
-
+	Properties prop;
+	PropertiesConfiguration config;
 	private static final int DELAY = 20;
 	public static int rowNum = 0;
 	private static int index = 0;
 	int indexOfReqNum = -1;
 	String valueAtList = "";
 
-	// String datapoolPath =
-	// workspace+"\\test-data-files\\UI-TestData\\TC_CreateFixedPriceNewProject.xls";
-
-	public DeliveryMilestonePage(WebDriver driver) {
-		// driver1 = driver;
+	public DeliveryMilestonePage(WebDriver driver) throws Exception {
 		actions1 = new Actions(driver);
 		PageFactory.initElements(driver, this);
 		wait = new WebDriverWait(driver, DELAY);
 		controlActions = new ControlActions(driver);
 		op = new Operations(driver);
-		activeProject = new PL_ActiveProjectsPage(driver);
 		driver.manage().timeouts().pageLoadTimeout(DELAY, TimeUnit.SECONDS);
-		driver.manage().timeouts().setScriptTimeout(DELAY, TimeUnit.SECONDS);
-		driver.manage().timeouts().implicitlyWait(DELAY, TimeUnit.SECONDS);
+		config = new PropertiesConfiguration(Constants.deliveryMilestonePropertyFile);
+		prop = new Properties();
+		prop.load(new FileInputStream(Constants.deliveryMilestonePropertyFile));
 	}
 
 	// ACTIVE PROJECT TAB OBJECTS
@@ -148,38 +148,46 @@ public class DeliveryMilestonePage extends TestBase {
 
 	@FindBy(xpath = DeliveryMilestoneConstants.ADD_MILESTONE_PAGE_ADD_BUTTON)
 	public WebElement addMilestonePageButton;
-	
+
 	@FindBy(xpath = DeliveryMilestoneConstants.ADD_MILESTONE_PAGE_ERROR_TITLE)
 	public WebElement addMilestoneErrorTitle;
-	
+
 	@FindBy(xpath = DeliveryMilestoneConstants.ADD_MILESTONE_PAGE_ERROR_MESSAGE)
 	public WebElement addMilestoneErrorMsg;
-	
+
 	// h2[contains(@class,'aErrMsgTitle')]
 	@FindBy(xpath = DeliveryMilestoneConstants.CLOSE_ERROR_NOTIFICATION_MESSAGE)
 	public WebElement closeErrorNotificationMsg;
-	
+
 	@FindBy(xpath = DeliveryMilestoneConstants.CANCEL_MILESTONE_BUTTON)
 	public WebElement cancelMilestone;
-	
+
 	@FindBy(xpath = DeliveryMilestoneConstants.ADDED_MILESTONE_ID)
 	public WebElement addedMilestoneIDList;
-	
+
 	@FindBy(xpath = DeliveryMilestoneConstants.STATUS_UPDATE)
 	public WebElement statusUpdateField;
-	
+
 	@FindBy(xpath = DeliveryMilestoneConstants.DM_FIRST_PAGE_TXT)
 	public WebElement dmFirstPageTxt;
-	
+
 	@FindBy(xpath = DeliveryMilestoneConstants.DM_PAGINATION_NEXT_BTN)
 	public WebElement dmPaginationNextBtn;
-	
+
 	@FindBy(xpath = DeliveryMilestoneConstants.DM_PAGINATION_PREVIOUS_BTN)
 	public WebElement dmPaginationPreviousBtn;
-	
+
+	@FindBy(xpath = DeliveryMilestoneConstants.OK_SPRINT_BUTTON)
+	public WebElement okButton;
+
 	@FindBy(xpath = DeliveryMilestoneConstants.DM_CANCEL_BTN)
 	public WebElement dmCancelBtn;
-	
+
+	@FindBy(xpath = DeliveryMilestoneConstants.MILESTONEIDS_LIST_WITH_OPENSTATUS)
+	public List<WebElement> milestoneStatusList;
+
+	@FindBy(xpath = DeliveryMilestoneConstants.MILESTONEIDSLIST)
+	public List<WebElement> milestoneIdsList;
 
 	public WebElement getStatusUpdateField() {
 		return statusUpdateField;
@@ -201,6 +209,8 @@ public class DeliveryMilestonePage extends TestBase {
 	public WebElement percentCompletion;
 	@FindBy(xpath = DeliveryMilestoneConstants.SAVE_CHANGES_BUTTON)
 	public WebElement saveChangesButton;
+	@FindBy(xpath = DeliveryMilestoneConstants.SAVE_CHANGES_BUTTON_CR)
+	public WebElement saveChangesButtonCR;
 	@FindBy(xpath = DeliveryMilestoneConstants.DELETE_MILESTONE_FRAME)
 	public WebElement deleteMilestoneFrame;
 	@FindBy(xpath = DeliveryMilestoneConstants.OBSOLETE_BUTTON)
@@ -259,7 +269,7 @@ public class DeliveryMilestonePage extends TestBase {
 	@FindBy(xpath = DeliveryMilestoneConstants.UPDATE_FRAME)
 	private WebElement updateReleaseFrame;
 	@FindBy(xpath = DeliveryMilestoneConstants.STATUS)
-	private WebElement statusDrpDown;
+	public WebElement statusDrpDown;
 	@FindBy(xpath = DeliveryMilestoneConstants.RELEASE_PERC_COMPLETION)
 	public WebElement releasePercCompletion;
 	@FindBy(xpath = DeliveryMilestoneConstants.CANCEL_BUTTON)
@@ -287,6 +297,23 @@ public class DeliveryMilestonePage extends TestBase {
 	public WebElement p3Defect;
 	@FindBy(xpath = DeliveryMilestoneConstants.P4_DEFECT)
 	public WebElement p4Defect;
+	@FindBy(xpath = DeliveryMilestoneConstants.ADDMILESTONE_POPUP_ERRORMSG)
+	public List<WebElement> addMileStonePopupErrorMsgs;
+	@FindBy(xpath = DeliveryMilestoneConstants.MILESTONE_NAME_ERRORMSG)
+	public WebElement mileStoneNameErrorMsg;
+	@FindBy(xpath = DeliveryMilestoneConstants.CLOSE_NOTIFICATION)
+	public WebElement closeNotification;
+	@FindBy(xpath = DeliveryMilestoneConstants.REASON_CODE_DRPDOWN_OPTLIst)
+	public List<WebElement> reasonCodeList;
+	@FindBy(xpath = DeliveryMilestoneConstants.UPDATE_MILESTONE_OPTLIst)
+	public List<WebElement> updateMilestoneStatusOptList;
+	@FindBy(xpath = DeliveryMilestoneConstants.PERC_COMPLETION_TXTBOX)
+	public WebElement percCompletionTxtbox;
+	@FindBy(xpath = DeliveryMilestoneConstants.STATUS_UPDATE_TXTBOX)
+	public WebElement statusUpdateTxtbox;
+
+	@FindBy(xpath = DeliveryMilestoneConstants.CANCELMILESTONEPOPUP)
+	public WebElement cnclMilestonePopUp;
 
 	public WebElement getPerCpmlErrorPopup() {
 		return perCpmlErrorPopup;
@@ -300,7 +327,7 @@ public class DeliveryMilestonePage extends TestBase {
 	private WebElement OKButton;
 	// Task locators
 	@FindBy(xpath = DeliveryMilestoneConstants.POPUP_OK_BUTTON)
-	private WebElement popUpOKButton;
+	public WebElement popUpOKButton;
 
 	public WebElement getOKButton() {
 		return OKButton;
@@ -326,7 +353,6 @@ public class DeliveryMilestonePage extends TestBase {
 	private WebElement phaseIDField;
 	@FindBy(xpath = DeliveryMilestoneConstants.PHASE_NAME)
 	private WebElement phaseNameField;
-	
 	@FindBy(xpath = DeliveryMilestoneConstants.NO_PAYMENT_MILESTONE_ERROR)
 	public WebElement noPaymentMilestoneError;
 
@@ -342,7 +368,6 @@ public class DeliveryMilestonePage extends TestBase {
 		try {
 			op.waitForElementToBeClickable(searchProject);
 			op.sendKeys(searchProject, searchProjectNumber);
-			// op.actionEnter();
 			logInfo("Entered text '" + searchProjectNumber + "' in Search Project Field");
 			return true;
 		} catch (Exception e) {
@@ -359,23 +384,10 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean clkAttachmentsTab() {
 		try {
-				//threadsleep(2000);
-				boolean isAttachmentsTabDisplayed = controlActions.isElementDisplayedOnPage(attachmentsTab);
-				if(isAttachmentsTabDisplayed)
-				{
-					op.clickElement(attachmentsTab);
-					logInfo("Successfully clicked on Attachments Tab -> " + attachmentsTab);
-					return true;
-				}
-				else
-				{
-					logError("Failed to click on Attachments Tab " + attachmentsTab );
-					return false;
-				}
-//			op.waitForElementToBeClickable(attachmentsTab);
-//			//op.waitForAnElementToBeClickable(attachmentsTab);
-//			
-
+			op.waitForElementToBeClickable(attachmentsTab);
+			op.clickElement(attachmentsTab);
+			logInfo("Successfully clicked on Attachments Tab");
+			return true;
 		} catch (Exception e) {
 			logError("Failed to click on Attachments Tab " + e.getMessage());
 			return false;
@@ -391,26 +403,10 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean clkDeliveryMilestonesTab() {
 		try {
-			//threadsleep(2000);
-			boolean isDeliveryMilestoneTabDisplayed = controlActions.isElementDisplayedOnPage(deliveryMilestoneTab);
-			if(isDeliveryMilestoneTabDisplayed)
-			{
-				op.clickElement(deliveryMilestoneTab);
-				logInfo("Successfully clicked on Delivery Milestone Tab -> " + deliveryMilestoneTab);
-				return true;
-			}
-			else
-			{
-				logError("Failed to click on Delivery Milestone Tab " + deliveryMilestoneTab );
-				return false;
-			}
-			
-			
-//			
-//			op.waitForAnElementToBeClickable(deliveryMilestoneTab);
-//			op.clickElement(deliveryMilestoneTab);
-//			logInfo("Successfully clicked on Delivery Milestones Tab");
-//			return true;
+			op.waitForAnElementToBeClickable(deliveryMilestoneTab);
+			op.clickElement(deliveryMilestoneTab);
+			logInfo("Successfully clicked on Delivery Milestones Tab");
+			return true;
 		} catch (Exception e) {
 			logError("Failed to click on Delivery Milestones Tab " + e.getMessage());
 			return false;
@@ -540,10 +536,7 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean switchToAddFrame() {
 		try {
-			threadsleep(3000);
-			// op.switchToDefault();
-//			op.waitForFrameToAvailable(addReleaseFrame);
-//			op.switchToFrameByLocators(addReleaseFrame);
+			Thread.sleep(3000);
 			op.switchToFrameByIFrameElement(addReleaseFrame);
 			logInfo("Successfully switched to add release frame");
 			return true;
@@ -562,7 +555,6 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean switchToUpdateFrame() {
 		try {
-			// op.waitForFrameToAvailable(updateReleaseFrame);
 			op.switchToFrameByIFrameElement(updateReleaseFrame);
 			logInfo("Successfully switched to update release frame");
 			return true;
@@ -610,8 +602,6 @@ public class DeliveryMilestonePage extends TestBase {
 		}
 	}
 
-	// iframe[@title='Edit Milestone']
-
 	public boolean isElementDisplayed(WebElement webElement) {
 		try {
 			webElement.isDisplayed();
@@ -641,7 +631,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(milestoneIdField);
 			op.clear(milestoneIdField);
 			op.sendKeys(milestoneIdField, milestoneID);
-			// op.actionEnter();
 			logInfo("Entered text '" + milestoneID + "' in Milestone ID Field");
 			return true;
 		} catch (Exception e) {
@@ -662,7 +651,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(milestoneNameField);
 			op.clear(milestoneNameField);
 			op.sendKeys(milestoneNameField, milestoneName);
-			// op.actionEnter();
 			logInfo("Entered text '" + milestoneName + "' in milestone name Field");
 			return true;
 		} catch (Exception e) {
@@ -683,7 +671,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(releaseIDField);
 			op.clear(releaseIDField);
 			op.sendKeys(releaseIDField, releaseID);
-			// op.actionEnter();
 			logInfo("Entered text '" + releaseID + "' in Release ID Field");
 			return true;
 		} catch (Exception e) {
@@ -712,27 +699,6 @@ public class DeliveryMilestonePage extends TestBase {
 			return false;
 		}
 	}
-
-//	/**
-//	 * This method is used to enter reason code
-//	 * 
-//	 * @param inputString [String]
-//	 * @return boolean true if action successful else false
-//	 */
-//
-//	public boolean enterTextToReasonCodeField(String reasonCode) {
-//		try {
-//			op.waitForElementToBeClickable(reasonCodeDrpDown);
-//			op.clear(reasonCodeField);
-//			op.sendKeys(reasonCodeField, reasonCode);
-//			// op.actionEnter();
-//			logInfo("Entered text '" + reasonCode + "' in reason code Field");
-//			return true;
-//		} catch (Exception e) {
-//			logError("Failed to enter text '" + reasonCode + "' in reason code Field" + e.getMessage());
-//			return false;
-//		}
-//	}
 
 	/**
 	 * This method is used to enter Milestone Name
@@ -797,7 +763,6 @@ public class DeliveryMilestonePage extends TestBase {
 				}
 			}
 		} catch (Exception e) {
-			// logError("Failed to select " + expectedReasonCode);
 			return false;
 		}
 		return false;
@@ -957,12 +922,12 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean verifyActiveProject(WebDriver driver, String searchProjectNumber) {
 		try {
-//		op.clickOnElement(activeProjectList); // User clicks on Active project
-//		op.clickOnElement(fixedPrice); // User clicks on Fixed price project
-			boolean isProjectNumberSet = enterTextInSearchProjectField(searchProjectNumber); // User enters project no
-			IsTrue(isProjectNumberSet, "Project " + searchProjectNumber + " found successfully", "Failed to add text to project search as '" + searchProjectNumber + "'");
+			boolean isProjectNumberSet = enterTextInSearchProjectField(searchProjectNumber);
+			IsTrue(isProjectNumberSet, "Project " + searchProjectNumber + " found successfully",
+					"Failed to add text to project search as '" + searchProjectNumber + "'");
 			op.click(goButton);
-			WebElement projectNumber1 = op.perform_getElementByXPath(DeliveryMilestoneConstants.PROJECT_NUMBER1.replace("PROJ_NUM", searchProjectNumber));
+			WebElement projectNumber1 = op.perform_getElementByXPath(
+					DeliveryMilestoneConstants.PROJECT_NUMBER1.replace("PROJ_NUM", searchProjectNumber));
 			op.isElementDisplayed(projectNumber1);
 			op.click(projectNumber1);
 			return true;
@@ -979,44 +944,35 @@ public class DeliveryMilestonePage extends TestBase {
 	 * @return void
 	 */
 	public void TC_AddMilestone(WebDriver driver, String milestoneID, String milestoneName) throws Exception {
-
-//		boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton(); // User clicks on Add Delivery
-//																						// Milestone button
-//		Assert.assertTrue(isAddDeliveryMilestoneButtonClicked, "Failed to click on Add Delivery Milestone button.");
-
-		boolean isDeliveryMilestoneOptionClicked = clkMilestoneOption(); // User clicks on Milestone option under Add
-																			// Delivery Milestone
+		boolean isDeliveryMilestoneOptionClicked = clkMilestoneOption();
 		Assert.assertTrue(isDeliveryMilestoneOptionClicked, "Failed to click on Delivery Milestone option.");
-		boolean isSwitchedToAddMilestoneFrame = switchToAddMilestoneFrame(); // Switches the control to Add Milestone
-																				// frame
-		boolean isMilestoneIDSet = enterTextToMilestoneID(milestoneID); // Add Milestone window-> Enter milestoneID
+		boolean isSwitchedToAddMilestoneFrame = switchToAddMilestoneFrame();
+		boolean isMilestoneIDSet = enterTextToMilestoneID(milestoneID);
 		Assert.assertTrue(isMilestoneIDSet, "Failed to add text to Milestone ID as '" + milestoneID + "'");
 
-		boolean isMilestoneNameSet = enterTextTomilestoneNameField(milestoneName); // Add Milestone window-> Enter
-																					// milestone Name
+		boolean isMilestoneNameSet = enterTextTomilestoneNameField(milestoneName);
 		Assert.assertTrue(isMilestoneNameSet, "Failed to add text to Milestone Name as '" + milestoneName + "'");
 
-		boolean isStartDateCalendarClicked = clkStartDateCalendar(); // Add Milestone window->Click on Start Date
-																		// Calendar icon
+		boolean isStartDateCalendarClicked = clkStartDateCalendar();
 		Assert.assertTrue(isStartDateCalendarClicked, "Failed to click on Start Date Calendar.");
 
-		boolean isStartDateClicked = clkStartDate(); // Add Milestone window->Click on Start Date
+		boolean isStartDateClicked = clkStartDate();
 		Assert.assertTrue(isStartDateClicked, "Failed to click on Start Date.");
 
-		boolean isEndDateCalendarClicked = clkEndDateCalendar(); // Add Milestone window->Click on End Date Calendar
-																	// icon
+		boolean isEndDateCalendarClicked = clkEndDateCalendar();
 		Assert.assertTrue(isEndDateCalendarClicked, "Failed to click on End Date Calendar.");
 
-		boolean isEndDateClicked = clkEndDate(); // Add Milestone window->Click on End Date
+		boolean isEndDateClicked = clkEndDate();
 		Assert.assertTrue(isEndDateClicked, "Failed to click on End Date.");
 
-		boolean isAddButtonOnAddMilestonePageClicked = clkAddButtonOnAddMilestoneFrame(); // Add Milestone window->Click
+		boolean isAddButtonOnAddMilestonePageClicked = clkAddButtonOnAddMilestoneFrame();
 		Assert.assertTrue(isAddButtonOnAddMilestonePageClicked, "Failed to click on Add button on Add Milestone page.");
-		op.switchToDefault(); // After adding a milestone, the control switches back to main page
-		// Thread.sleep(3000);
+		op.switchToDefault();
 	}
 
-//Negative scenarios for Add delivery milestone
+	/*
+	 * Negative scenarios for Add delivery milestone
+	 */
 	public void verifyNegativeScenarios(WebDriver driver, String milestoneID, String milestoneName, String startDate,
 			String endDate) throws Exception {
 
@@ -1051,9 +1007,9 @@ public class DeliveryMilestonePage extends TestBase {
 		logInfo("Successfully entered valid milestone name: " + milestoneName);
 		Assert.assertTrue(isMilestoneNameSet, "Failed to add text to Milestone Name as '" + milestoneName + "'");
 		if (!startDate.equals("")) {
-			boolean isStartDateCalendarClicked = clkStartDateCalendar(); // Add Milestone window->Click on Start Date
+			boolean isStartDateCalendarClicked = clkStartDateCalendar();
 			Assert.assertTrue(isStartDateCalendarClicked, "Failed to click on Start Date Calendar.");
-			boolean isStartDateClicked = clkStartDate(); // Add Milestone window->Click on Start Date
+			boolean isStartDateClicked = clkStartDate();
 			Assert.assertTrue(isStartDateClicked, "Failed to click on Start Date.");
 		} else {
 			expectedErrorMsg[errorCnt] = "Please select Start Date.";
@@ -1062,9 +1018,9 @@ public class DeliveryMilestonePage extends TestBase {
 
 		}
 		if (!endDate.equals("")) {
-			boolean isEndDateCalendarClicked = clkEndDateCalendar(); // Add Milestone window->Click on End Date Calendar
+			boolean isEndDateCalendarClicked = clkEndDateCalendar();
 			Assert.assertTrue(isEndDateCalendarClicked, "Failed to click on End Date Calendar.");
-			boolean isEndDateClicked = clkEndDate(); // Add Milestone window->Click on End Date
+			boolean isEndDateClicked = clkEndDate();
 			Assert.assertTrue(isEndDateClicked, "Failed to click on End Date.");
 		} else {
 			expectedErrorMsg[errorCnt] = "Please select End Date.";
@@ -1072,14 +1028,15 @@ public class DeliveryMilestonePage extends TestBase {
 			errorCnt++;
 		}
 		logInfo("Expected error count is " + errorCnt);
-		boolean isAddButtonOnAddMilestonePageClicked = clkAddButtonOnAddMilestoneFrame(); // Add Milestone window->Click
+		boolean isAddButtonOnAddMilestonePageClicked = clkAddButtonOnAddMilestoneFrame();
 		Assert.assertTrue(isAddButtonOnAddMilestonePageClicked, "Failed to click on Add button on Add Milestone page.");
 		verifyErrorMessage(driver, errorCnt, expectedErrorMsg);
 		addMilestone(driver);
-		// return driver;
 	}
 
-	// Negative scenarios for Add delivery milestone
+	/*
+	 * Negative scenarios for Add delivery milestone
+	 */
 	public boolean verify_negScenarios_deleteMilestone(WebDriver driver, String milestoneID, String reasonCode,
 			String statusUpdate) {
 
@@ -1130,11 +1087,9 @@ public class DeliveryMilestonePage extends TestBase {
 				Equals(errorTitle, +errorCnt + " errors have occurred",
 						"Error notification is displayed as expected: " + errorTitle,
 						"Error notification is not displayed as expected: " + errorTitle);
-				// verifyErrorMessageDetails(driver, errorCnt, expectedErrorMsg);
 			} else {
 				Equals(errorTitle, +errorCnt + " error has occurred", "Error notification is displayed as expected",
 						"Error notification is not displayed as expected");
-				// verifyErrorMessageDetails(driver, errorCnt, expectedErrorMsg);
 			}
 			boolean status = verifyErrorDetails(driver, errorCnt, expectedErrorMsg);
 			if (status)
@@ -1143,10 +1098,6 @@ public class DeliveryMilestonePage extends TestBase {
 				return false;
 
 		} catch (Exception e) {
-//				logError("Error notification is not displayed as expected");
-//				ExcelUtils.setCellData("TC_AddDeliveryMilestoneNegativeScenarios", "milestone negative scenarios",
-//						rowNum, "Status", "FAIL", "RED");
-//				clkCancelButtonOnAddMilestoneFrame();
 			logError(e.getMessage());
 			return false;
 		}
@@ -1173,47 +1124,12 @@ public class DeliveryMilestonePage extends TestBase {
 		}
 		clkCancelButtonOnObsoleteMilestoneFrame();
 		op.switchToDefault();
-//			addMilestone(driver);
-//			throw (e);
-//		}}ExcelUtils.setCellData("TC_AddDeliveryMilestoneNegativeScenarios","milestone negative scenarios",rowNum,"Status","PASS","GREEN");
-//
-//	clkCancelButtonOnAddMilestoneFrame();return driver;}
-//
-//	boolean isMilestoneNameSet = enterTextTomilestoneNameField(milestoneName);
-//
-//	logInfo("Successfully entered valid milestone name: " + milestoneName);
-//		Assert.assertTrue(isMilestoneNameSet, "Failed to add text to Milestone Name as '" + milestoneName + "'");
-//		if (!startDate.equals("")) {
-//			boolean isStartDateCalendarClicked = clkStartDateCalendar(); // Add Milestone window->Click on Start Date
-//			Assert.assertTrue(isStartDateCalendarClicked, "Failed to click on Start Date Calendar.");
-//			boolean isStartDateClicked = clkStartDate(); // Add Milestone window->Click on Start Date
-//			Assert.assertTrue(isStartDateClicked, "Failed to click on Start Date.");
-//		} else {
-//			expectedErrorMsg[errorCnt] = "Please select Start Date.";
-//			logInfo("Expected error message: Please select Start Date.");
-//			errorCnt++;
-//
-//		}
-//		if (!endDate.equals("")) {
-//			boolean isEndDateCalendarClicked = clkEndDateCalendar(); // Add Milestone window->Click on End Date Calendar
-//			Assert.assertTrue(isEndDateCalendarClicked, "Failed to click on End Date Calendar.");
-//			boolean isEndDateClicked = clkEndDate(); // Add Milestone window->Click on End Date
-//			Assert.assertTrue(isEndDateClicked, "Failed to click on End Date.");
-//		} else {
-//			expectedErrorMsg[errorCnt] = "Please select End Date.";
-//			logInfo("Expected error message: Please select End Date.");
-//			errorCnt++;
-//		}
-//		logInfo("Expected error count is " + errorCnt);
-//		boolean isAddButtonOnAddMilestonePageClicked = clkAddButtonOnAddMilestoneFrame(); // Add Milestone window->Click
-//		Assert.assertTrue(isAddButtonOnAddMilestonePageClicked, "Failed to click on Add button on Add Milestone page.");
-//		verifyErrorMessage(driver, errorCnt, expectedErrorMsg);
-//		addMilestone(driver);
-		// return driver;
 		return true;
 	}
 
-//Verify error notification messages for negative scenarios
+	/*
+	 * Verify error notification messages for negative scenarios
+	 */
 	private void verifyErrorMessage(WebDriver driver, int errorCnt, String[] expectedErrorMsg) throws Exception {
 		try {
 			op.perform_waitUntilVisibility(addMilestoneErrorTitle);
@@ -1256,27 +1172,22 @@ public class DeliveryMilestonePage extends TestBase {
 				}
 			} catch (AssertionError e1) {
 				logError("Error notification is not displayed as expected");
-//				ExcelUtils.setCellData("TC_AddDeliveryMilestoneNegativeScenarios", "milestone negative scenarios",
-//						rowNum, "Status", "FAIL", "RED");
 				clkCancelButtonOnAddMilestoneFrame();
 				op.switchToDefault();
 				return false;
 			}
 
 		} catch (NoSuchElementException e) {
-//			WebElement msg = 
-//					op.perform_waitUntilVisibility(By.xpath("//*[contains(text(),'successfully')]"));
-//			if (msg.isDisplayed())
 			logError("Error notification is not displayed as expected");
-//			ExcelUtils.setCellData("TC_AddDeliveryMilestoneNegativeScenarios", "milestone negative scenarios", rowNum,
-//					"Status", "FAIL", "RED");
 			return false;
 		}
 		return true;
 
 	}
 
-//Verify  the displayed error messages for respective fields
+	/*
+	 * Verify the displayed error messages for respective fields
+	 */
 	private WebDriver verifyErrorMessageDetails(WebDriver driver, int errorCnt, String[] expectedErrorMsg)
 			throws InterruptedException {
 		op.perform_waitUntilVisibility(addMilestoneErrorMsg);
@@ -1323,139 +1234,119 @@ public class DeliveryMilestonePage extends TestBase {
 
 	}
 
-//Verify Add delivery milestone screen is displayed
+	/*
+	 * Verify Add delivery milestone screen is displayed
+	 */
 	public void verifyDeliveryMilestonePage(WebDriver driver) {
-		boolean isAttachmentsTabClicked = clkAttachmentsTab(); // User clicks on Attachments tab
+		boolean isAttachmentsTabClicked = clkAttachmentsTab();
 		Assert.assertTrue(isAttachmentsTabClicked, "Failed to click on Attachment Tab.");
 
-		boolean isDeliveryMilestonesTabClicked = clkDeliveryMilestonesTab(); // User clicks on Delivery Milestone tab
+		boolean isDeliveryMilestonesTabClicked = clkDeliveryMilestonesTab();
 		Assert.assertTrue(isDeliveryMilestonesTabClicked, "Failed to click on Delivery Milestone Tab.");
 
-		boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton(); // User clicks on Add Delivery
-																						// Milestone button
+		boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton();
 		Assert.assertTrue(isAddDeliveryMilestoneButtonClicked, "Failed to click on Add Delivery Milestone button.");
 
-		boolean isDeliveryMilestoneOptionClicked = clkMilestoneOption(); // User clicks on Milestone option under Add
-																			// Delivery Milestone
+		boolean isDeliveryMilestoneOptionClicked = clkMilestoneOption();
 		Assert.assertTrue(isDeliveryMilestoneOptionClicked, "Failed to click on Delivery Milestone option.");
 
 		boolean isSwitchedToAddMilestoneFrame = switchToAddMilestoneFrame();
 		logInfo("Add milestone screen is displayed");
 	}
 
-	// Navigate till add delivery milestone button and click on it
+	/*
+	 * Navigate till add delivery milestone button and click on it
+	 */
 	public boolean verifyDeliveryMilestoneButton(WebDriver driver) {
 		try {
-			// Mouse Hover Code
-			op.mouseHoverScript(driver,activeProject.ActiveProMouseHover);
-			logInfo("Mouse Over Action performed "+activeProject.ActiveProMouseHover);
-			op.waitUntilElementIsClickable(deliveryMilestoneTab);
-			op.clickElement(deliveryMilestoneTab);
-			boolean isAddDeliveryMilestoneBtnVisible = op.isElementDisplayedOnPage(openAddDeliveryMilestone);
-			if(isAddDeliveryMilestoneBtnVisible) {
-				logInfo("Delivery Milestone Page Opened Successfully");
-				return true;
-			}
-			else
-			{
-				logInfo(" Failed to open Delivery Milestone Page");
-				return false;
-			}
-//			boolean isAttachmentsTabClicked = clkAttachmentsTab(); // User clicks on Attachments tab
-//			IsTrue(isAttachmentsTabClicked, "Successfully clicked on Attachment Tab.","Failed to click on Attachment Tab.");
-//			boolean isDeliveryMilestonesTabClicked = clkDeliveryMilestonesTab(); // User clicks on Delivery Milestone
-//			IsTrue(isDeliveryMilestonesTabClicked, "Successfully clicked on Delivery Milestone Tab.","Failed to click on Delivery Milestone Tab.");
-			
-//			boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton(); // User clicks on Add Delivery Milestone Button
-//			IsTrue(isAddDeliveryMilestoneButtonClicked, "Successfully clicked on Add Delivery Milestone buttons","Failed to click on Add Delivery Milestone button.");
-			
+			boolean isAttachmentsTabClicked = clkAttachmentsTab();
+			IsTrue(isAttachmentsTabClicked, "Successfully clicked on Attachment Tab.",
+					"Failed to click on Attachment Tab.");
+			boolean isDeliveryMilestonesTabClicked = clkDeliveryMilestonesTab();
+			IsTrue(isDeliveryMilestonesTabClicked, "Successfully clicked on Delivery Milestone Tab.",
+					"Failed to click on Delivery Milestone Tab.");
+			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
-//After error message is displayed,click on cancel button and again navigate to add milestone screen to enter next set of test data
 	public WebDriver addMilestone(WebDriver driver) throws InterruptedException {
 
 		op.switchToDefault();
-//		boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton(); // User clicks on Add Delivery
-//		// Milestone button
-//		Assert.assertTrue(isAddDeliveryMilestoneButtonClicked, "Failed to click on Add Delivery Milestone button.");
-		boolean isDeliveryMilestoneOptionClicked = clkMilestoneOption(); // User clicks on Milestone option under Add
-		// Delivery Milestone
+		boolean isDeliveryMilestoneOptionClicked = clkMilestoneOption();
 		Assert.assertTrue(isDeliveryMilestoneOptionClicked, "Failed to click on Delivery Milestone option.");
 		boolean isSwitchedToAddMilestoneFrame = switchToAddMilestoneFrame();
 		threadsleep(3000);
 		return driver;
 	}
-	
+
 	/*
 	 * This method is used to verify milestone ID and name after adding or update
+	 * 
 	 * @return boolean
 	 */
-	public boolean searchMilestone(WebDriver driver, String expectedMilestoneID, String expectedStatus) throws Exception {
+	public boolean searchMilestone(WebDriver driver, String expectedMilestoneID, String expectedStatus)
+			throws Exception {
 		boolean hasPagination = true;
 		boolean isMilestoneFound = false;
-		while(!isMilestoneFound)
-		{
-				threadsleep(2000);
-				int i;
-				List<WebElement> addedMilestoneIDs = controlActions.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.ADDED_MILESTONE_ID);
-				try {
-					logInfo("Size of Milestone ID Web Table is : " + addedMilestoneIDs.size());
-					if(op.isElementDisplayedOnPage(dmPaginationNextBtn))
-					{
-						logInfo("Delivery Milestone has Pagination? " + op.isElementDisplayedOnPage(dmPaginationNextBtn));
-						op.clickOnElement(dmPaginationNextBtn);
-						((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", dmCancelBtn);
-						Actions actions = new Actions(driver);
-						actions.moveToElement(dmCancelBtn);
-						isMilestoneFound = false;
-						threadsleep(2000);
-					}
-					if (addedMilestoneIDs.size() == 0) {
-						logError("Added milestone is not displayed in the table.");
-						isMilestoneFound = false;
-						//fail("Added milestone is not displayed in the table.");
-					}
-					for (i = 0; i < addedMilestoneIDs.size(); i++) {
-						//logInfo("Milestone id is --> " + addedMilestoneIDs.get(i).getText());
-						if (addedMilestoneIDs.get(i).getText().equalsIgnoreCase(expectedMilestoneID)) {
-							logInfo("Added milestone id is correctly displayed in the table.");
-							WebElement actualStatus = op.perform_getElementByXPath("(" + DeliveryMilestoneConstants.ADDED_MILESTONE_STATUS + ")[" + (i + 1) + "]");
-							Equals(op.getText(actualStatus).trim(), expectedStatus.trim(),
-									"Milestone status verification successfull", "Milestone status verification failed");
-							logInfo("Added milestone status is correctly displayed in the table.");
-							isMilestoneFound = true;
-							break;
-						}
-					}
-				} catch (Exception e) {
-					logError(e.getMessage());
-					return false;
+		while (!isMilestoneFound) {
+			threadsleep(2000);
+			int i;
+			List<WebElement> addedMilestoneIDs = controlActions
+					.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.ADDED_MILESTONE_ID);
+			try {
+				logInfo("Size of Milestone ID Web Table is : " + addedMilestoneIDs.size());
+				if (op.isElementDisplayedOnPage(dmPaginationNextBtn)) {
+					logInfo("Delivery Milestone has Pagination? " + op.isElementDisplayedOnPage(dmPaginationNextBtn));
+					op.clickOnElement(dmPaginationNextBtn);
+					((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", dmCancelBtn);
+					Actions actions = new Actions(driver);
+					actions.moveToElement(dmCancelBtn);
+					isMilestoneFound = false;
+					threadsleep(2000);
 				}
-				if (i == addedMilestoneIDs.size()) {
-					logError("Milestone id : " + expectedMilestoneID + " is not displayed in the table.");
-					//fail("Milestone id : " + expectedMilestoneID + " is not displayed in the table.");
-					return false;
-				} else {
-					return true;
+				if (addedMilestoneIDs.size() == 0) {
+					logError("Added milestone is not displayed in the table.");
+					isMilestoneFound = false;
 				}
-	  }
+				for (i = 0; i < addedMilestoneIDs.size(); i++) {
+					if (addedMilestoneIDs.get(i).getText().equalsIgnoreCase(expectedMilestoneID)) {
+						logInfo("Added milestone id is correctly displayed in the table.");
+						WebElement actualStatus = op.perform_getElementByXPath(
+								"(" + DeliveryMilestoneConstants.ADDED_MILESTONE_STATUS + ")[" + (i + 1) + "]");
+						Equals(op.getText(actualStatus).trim(), expectedStatus.trim(),
+								"Milestone status verification successfull", "Milestone status verification failed");
+						logInfo("Added milestone status is correctly displayed in the table.");
+						isMilestoneFound = true;
+						break;
+					}
+				}
+			} catch (Exception e) {
+				logError(e.getMessage());
+				return false;
+			}
+			if (i == addedMilestoneIDs.size()) {
+				logError("Milestone id : " + expectedMilestoneID + " is not displayed in the table.");
+				return false;
+			} else {
+				return true;
+			}
+		}
 		return isMilestoneFound;
 	}
 
-
 	/*
 	 * This method is used to verify milestone ID and name after adding or update
+	 * 
 	 * @return boolean
 	 */
-	public boolean verifyMilestoneDetails(WebDriver driver, String expectedMilestoneID, String expectedMilestoneName,String expectedPercCompletion, String expectedStatus) throws Exception {
-	//public boolean verifyMilestoneDetails(WebDriver driver, String expectedMilestoneID,String expectedStatus) throws Exception {	
-	//verifySuccessMsg();
+	public boolean verifyMilestoneDetails(WebDriver driver, String expectedMilestoneID, String expectedMilestoneName,
+			String expectedPercCompletion, String expectedStatus) throws Exception {
 		threadsleep(3000);
 		int i;
-		List<WebElement> addedMilestoneIDs = controlActions.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.ADDED_MILESTONE_ID);
+		List<WebElement> addedMilestoneIDs = controlActions
+				.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.ADDED_MILESTONE_ID);
 		try {
 			logInfo("Milestone id Web Table Size is : " + addedMilestoneIDs.size());
 			if (addedMilestoneIDs.size() == 0) {
@@ -1466,23 +1357,6 @@ public class DeliveryMilestonePage extends TestBase {
 				logInfo("Milestone id is --> " + addedMilestoneIDs.get(i).getText());
 				if (addedMilestoneIDs.get(i).getText().equalsIgnoreCase(expectedMilestoneID)) {
 					logInfo("Added milestone id is correctly displayed in the table.");
-//					WebElement actualMilestoneName = op.perform_getElementByXPath(
-//							"(" + DeliveryMilestoneConstants.ADDED_MILESTONE_NAME + ")[" + (i + 1) + "]");
-//					Equals(op.getText(actualMilestoneName).trim(), expectedMilestoneName.trim(),
-//							"Added milestone name is correctly displayed in the table.",
-//							"Added milestone name is incorrectly displayed in the table.");
-//					logInfo("Added milestone name is correctly displayed in the table.");
-//					WebElement actualPercCompetion = op.perform_getElementByXPath(
-//							"(" + DeliveryMilestoneConstants.ADDED_MILESTONE_PERC_COMPLETION + ")[" + (i + 1) + "]");
-//					Equals(op.getText(actualPercCompetion).trim(), expectedPercCompletion.trim(),
-//							"Added milestone % completion is correctly displayed in the table.",
-//							"% completion verification failed");
-//					logInfo("Added milestone % completion is correctly displayed in the table.");
-//					WebElement actualStatus = op.perform_getElementByXPath(
-//							"(" + DeliveryMilestoneConstants.ADDED_MILESTONE_STATUS + ")[" + (i + 1) + "]");
-//					Equals(op.getText(actualStatus).trim(), expectedStatus.trim(),
-//							"Milestone status verification successfull", "Milestone status verification failed");
-//					logInfo("Added milestone status is correctly displayed in the table.");
 					break;
 				}
 			}
@@ -1492,23 +1366,23 @@ public class DeliveryMilestonePage extends TestBase {
 		}
 		if (i == addedMilestoneIDs.size()) {
 			logError("Milestone id : " + expectedMilestoneID + " is not displayed in the table.");
-			//fail("Milestone id : " + expectedMilestoneID + " is not displayed in the table.");
 			return false;
 		} else {
 			return true;
 		}
 	}
-	
-	
+
 	/*
 	 * This method is used to verify milestone ID and name after adding or update
+	 * 
 	 * @return boolean
 	 */
-	public boolean verifyPayemtMilestoneDetails(WebDriver driver, String expPaymentMilestoneID, String expStatus) throws Exception {
-	//verifySuccessMsg();
+	public boolean verifyPayemtMilestoneDetails(WebDriver driver, String expPaymentMilestoneID, String expStatus)
+			throws Exception {
 		threadsleep(2000);
 		int i;
-		List<WebElement> payemtMilestoneIDs = controlActions.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.PAYMENT_MILESTONE_TABLE);
+		List<WebElement> payemtMilestoneIDs = controlActions
+				.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.PAYMENT_MILESTONE_TABLE);
 		logInfo("Web Element -> " + payemtMilestoneIDs);
 		try {
 			logInfo("Milestone id Web Table Size is : " + payemtMilestoneIDs.size());
@@ -1517,12 +1391,13 @@ public class DeliveryMilestonePage extends TestBase {
 				fail("Added Payment Milestone is not displayed in the table.");
 			}
 			for (i = 0; i < payemtMilestoneIDs.size(); i++) {
-				//logInfo("Payement Milestone id is --> " + payemtMilestoneIDs.get(i).getText());
 				if (payemtMilestoneIDs.get(i).getText().equalsIgnoreCase(expPaymentMilestoneID)) {
 					logInfo("Added Payment milestone id is correctly displayed in the table.");
-					WebElement actualStatus = op.perform_getElementByXPath(DeliveryMilestoneConstants.PAYMENT_MILESTONE_STATUS );
+					WebElement actualStatus = op
+							.perform_getElementByXPath(DeliveryMilestoneConstants.PAYMENT_MILESTONE_STATUS);
 					logInfo("Web Element -> " + actualStatus);
-					Equals(op.getText(actualStatus).trim(), expStatus.trim(),"Milestone status verification successfull", "Milestone status verification failed");
+					Equals(op.getText(actualStatus).trim(), expStatus.trim(),
+							"Milestone status verification successfull", "Milestone status verification failed");
 					logInfo("Added milestone status is correctly displayed in the table.");
 					break;
 				}
@@ -1533,7 +1408,6 @@ public class DeliveryMilestonePage extends TestBase {
 		}
 		if (i == payemtMilestoneIDs.size()) {
 			logError("Milestone id : " + expPaymentMilestoneID + " is not displayed in the table.");
-			//fail("Milestone id : " + expectedMilestoneID + " is not displayed in the table.");
 			return false;
 		} else {
 			return true;
@@ -1542,13 +1416,15 @@ public class DeliveryMilestonePage extends TestBase {
 
 	/*
 	 * This method is used to verify milestone ID and name after adding or update
+	 * 
 	 * @return boolean
 	 */
-	public boolean searchAndEditPayemtMilestone(WebDriver driver, String expPaymentMilestoneID, String action) throws Exception {
+	public boolean searchAndEditPayemtMilestone(WebDriver driver, String expPaymentMilestoneID, String action)
+			throws Exception {
 		threadsleep(2000);
 		int i;
-		WebElement actualStatus;
-		List<WebElement> payemtMilestoneIDs = controlActions.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.PAYMENT_MILESTONE_TABLE);
+		List<WebElement> payemtMilestoneIDs = controlActions
+				.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.PAYMENT_MILESTONE_TABLE);
 		logInfo("Web Element -> " + payemtMilestoneIDs);
 		try {
 			logInfo("Milestone id Web Table Size is : " + payemtMilestoneIDs.size());
@@ -1557,42 +1433,26 @@ public class DeliveryMilestonePage extends TestBase {
 				fail("Payment Milestone is not displayed in the table.");
 			}
 			for (i = 0; i < payemtMilestoneIDs.size(); i++) {
-				//logInfo("Payment Milestone id is --> " + payemtMilestoneIDs.get(i).getText());
 				if (payemtMilestoneIDs.get(i).getText().equalsIgnoreCase(expPaymentMilestoneID)) {
-					//logInfo(i + "------------------------------ -> " + payemtMilestoneIDs.get(i));
-					logInfo("Payment milestone id is correctly displayed in the table."); 
-					switch(action){    
-					case "edit": 
-						i = i+1;
-						logInfo("//*[@id='report_table_payrpt']/tbody/tr["+i+"]/td/button[1]");
-						actualStatus = op.perform_getElementByXPath("//*[@id='report_table_payrpt']/tbody/tr["+i+"]/td/button[1]");//(CommonPagesConstants.MILESTONE_MIDIFY_BTN);
-						logInfo("Editing Payment Milestone -> " + actualStatus);
+					logInfo(i + "------------------------------ -> " + payemtMilestoneIDs.get(i));
+					logInfo("Payment milestone id is correctly displayed in the table.");
+					i = i - 1;
+					if (action.equalsIgnoreCase("edit")) {
+						WebElement actualStatus = op.perform_getElementByXPath(
+								"//*[@id='report_table_payrpt']/tbody/tr[" + i + "]/td/button[1]");
+						logInfo("------------------------------ -> " + actualStatus);
 						op.clickElement(actualStatus, driver);
+						logInfo("Clicked on Web Element -> " + actualStatus);
 						break;
-					case "delete": 
-						i = i+1;
-						logInfo("//*[@id='report_table_payrpt']/tbody/tr["+i+"]/td/button[2]");
-						actualStatus = op.perform_getElementByXPath("//*[@id='report_table_payrpt']/tbody/tr["+i+"]/td/button[2]");//(CommonPagesConstants.MILESTONE_MIDIFY_BTN);
-						logInfo("Deleteing Payment Milestone -> " + actualStatus);
-						op.clickElement(actualStatus, driver);
-						break;
-					default:
-						logInfo("Payment Milestone status not match");  
 					}
-//					if(action.equalsIgnoreCase("edit"))
-//					{
-//						actualStatus = op.perform_getElementByXPath("//*[@id='report_table_payrpt']/tbody/tr["+i+"]/td/button[1]");//(CommonPagesConstants.MILESTONE_MIDIFY_BTN);
-//						logInfo("Editing Payment Milestone -> " + actualStatus);
-//						op.clickElement(actualStatus, driver);
-//						break;
-//					}
-//					if(action.equalsIgnoreCase("delete"))
-//					{
-//						actualStatus = op.perform_getElementByXPath("//*[@id='report_table_payrpt']/tbody/tr["+i+"]/td/button[2]");//(CommonPagesConstants.MILESTONE_MIDIFY_BTN);
-//						logInfo("Deleteing Payment Milestone -> " + actualStatus);
-//						op.clickElement(actualStatus, driver);
-//						break;
-//					}
+					if (action.equalsIgnoreCase("delete")) {
+						WebElement actualStatus = op.perform_getElementByXPath(
+								"//*[@id='report_table_payrpt']/tbody/tr[" + i + "]/td/button[2]");
+						logInfo("------------------------------ -> " + actualStatus);
+						op.clickElement(actualStatus, driver);
+						logInfo("Clicked on Web Element -> " + actualStatus);
+						break;
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -1606,8 +1466,6 @@ public class DeliveryMilestonePage extends TestBase {
 			return true;
 		}
 	}
-
-
 
 	/*
 	 * This method is used to update milestone ID and name
@@ -1627,7 +1485,6 @@ public class DeliveryMilestonePage extends TestBase {
 			Assert.fail("Added milestone is not displayed in the table.");
 		}
 		for (int i = 0; i < addedMilestoneIDs.size(); i++) {
-			// for (WebElement id : addedMilestoneIDs)
 			if (addedMilestoneIDs.get(i).getText().equalsIgnoreCase(milestoneID))
 
 				op.perform_clickElement_ByElement(editButtons.get(i));
@@ -1657,7 +1514,8 @@ public class DeliveryMilestonePage extends TestBase {
 	public boolean verifySuccessMsg() {
 		try {
 			op.switchToDefault();
-			WebElement successMessage = op.perform_waitUntilVisibility(By.xpath("//*[contains(text(),'Row') or contains(text(),'successfully')]"));
+			WebElement successMessage = op.perform_waitUntilVisibility(
+					By.xpath("//*[contains(text(),'Row') or contains(text(),'successfully')]"));
 			if (successMessage.isDisplayed()) {
 				logInfo("Operation is done successfully -> " + successMessage.getText());
 			}
@@ -1699,9 +1557,6 @@ public class DeliveryMilestonePage extends TestBase {
 				WebElement deleteButton = op.perform_getElementByXPath(
 						"(" + DeliveryMilestoneConstants.DELETE_BUTTON + ")[" + (i + 1) + "]");
 				op.click(deleteButton);
-//				boolean isSwitchedToDeleteMilestoneFrame = switchToDeleteMilestoneFrame();
-//				IsTrue(isSwitchedToDeleteMilestoneFrame, "SWitched to delete frame successfully",
-//						"Failed to switch to delete frame");
 				break;
 			}
 		}
@@ -1726,44 +1581,35 @@ public class DeliveryMilestonePage extends TestBase {
 	}
 
 	public void addSprint(WebDriver driver, String milestoneID) {
-		boolean isAttachmentsTabClicked = clkAttachmentsTab(); // User clicks on Attachments tab
+		boolean isAttachmentsTabClicked = clkAttachmentsTab();
 		Assert.assertTrue(isAttachmentsTabClicked, "Failed to click on Attachment Tab.");
 
-		boolean isDeliveryMilestonesTabClicked = clkDeliveryMilestonesTab(); // User clicks on Delivery Milestone tab
+		boolean isDeliveryMilestonesTabClicked = clkDeliveryMilestonesTab();
 		Assert.assertTrue(isDeliveryMilestonesTabClicked, "Failed to click on Delivery Milestone Tab.");
-		boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton(); // User clicks on Add Delivery
-																						// Milestone button
+		boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton();
 		Assert.assertTrue(isAddDeliveryMilestoneButtonClicked, "Failed to click on Add Delivery Milestone button.");
-		boolean isSprintOptionClicked = clkSprintOption(); // User clicks on Milestone option under Add
-		// Delivery Milestone
+		boolean isSprintOptionClicked = clkSprintOption();
 		Assert.assertTrue(isSprintOptionClicked, "Failed to click on Sprint option.");
-		boolean isSwitchedToAddSprintFrame = switchToAddSprintFrame(); // Switches the control to Add Milestone
-		// frame
-
-		boolean isMilestoneIDSet = enterTextToMilestoneID(milestoneID); // Add Milestone window-> Enter milestoneID
+		boolean isSwitchedToAddSprintFrame = switchToAddSprintFrame();
+		boolean isMilestoneIDSet = enterTextToMilestoneID(milestoneID);
 		Assert.assertTrue(isMilestoneIDSet, "Failed to add text to Milestone ID as '" + milestoneID + "'");
-
-		// milestone Name
-
-		boolean isStartDateCalendarClicked = clkStartDateCalendar(); // Add Milestone window->Click on Start Date
-// Calendar icon
+		boolean isStartDateCalendarClicked = clkStartDateCalendar();
 		Assert.assertTrue(isStartDateCalendarClicked, "Failed to click on Start Date Calendar.");
 
-		boolean isStartDateClicked = clkStartDate(); // Add Milestone window->Click on Start Date
+		boolean isStartDateClicked = clkStartDate();
 		Assert.assertTrue(isStartDateClicked, "Failed to click on Start Date.");
 
-		boolean isEndDateCalendarClicked = clkEndDateCalendar(); // Add Milestone window->Click on End Date Calendar
-// icon
+		boolean isEndDateCalendarClicked = clkEndDateCalendar();
+
 		Assert.assertTrue(isEndDateCalendarClicked, "Failed to click on End Date Calendar.");
 
-		boolean isEndDateClicked = clkEndDate(); // Add Milestone window->Click on End Date
+		boolean isEndDateClicked = clkEndDate();
 		Assert.assertTrue(isEndDateClicked, "Failed to click on End Date.");
 
-		boolean isAddButtonOnAddMilestonePageClicked = clkAddButtonOnAddMilestoneFrame(); // Add Milestone window->Click
-		// on Add button
+		boolean isAddButtonOnAddMilestonePageClicked = clkAddButtonOnAddMilestoneFrame();
 		Assert.assertTrue(isAddButtonOnAddMilestonePageClicked, "Failed to click on Add button on Add Milestone page.");
 
-		op.switchToDefault(); // After adding a milestone, the control switches back to main page
+		op.switchToDefault();
 
 	}
 
@@ -1779,7 +1625,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(sprintID);
 			op.clear(sprintID);
 			op.sendKeys(sprintID, expectedSprintID);
-			// op.actionEnter();
 			logInfo("Entered text '" + expectedSprintID + "' in Sprint ID Field");
 			return true;
 		} catch (Exception e) {
@@ -1800,7 +1645,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(sprintName);
 			op.clear(sprintName);
 			op.sendKeys(sprintName, expectedSprintName);
-			// op.actionEnter();
 			logInfo("Entered text '" + expectedSprintName + "' in Sprint name Field");
 			return true;
 		} catch (Exception e) {
@@ -1912,7 +1756,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(sprintStories);
 			op.clear(sprintStories);
 			op.sendKeys(sprintStories, value);
-			// op.actionEnter();
 			logInfo("Entered text '" + sprintStories + "' in Sprint stories Field");
 			return true;
 		} catch (Exception e) {
@@ -1934,7 +1777,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(sprintPlannedCapacity);
 			op.clear(sprintPlannedCapacity);
 			op.sendKeys(sprintPlannedCapacity, value);
-			// op.actionEnter();
 			logInfo("Entered text '" + value + "' in Sprint Planned capacity Field");
 			return true;
 		} catch (Exception e) {
@@ -1945,35 +1787,30 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public void enterReleaseDetails(WebDriver driver, String milestoneID, String releaseID, String releaseName) {
 		boolean isSprintOptionClicked = clkReleaseOption();
-		// Delivery Milestone
 		Assert.assertTrue(isSprintOptionClicked, "Failed to click on Release option.");
-		boolean isSwitchedToAddReleaseFrame = switchToAddFrame(); // Switches the control to Add Milestone
-		// frame
+		boolean isSwitchedToAddReleaseFrame = switchToAddFrame();
 		enterParentMilestone(driver, milestoneID);
 		boolean isMilestoneIDSet = enterTextReleaseID(releaseID);
 		Assert.assertTrue(isMilestoneIDSet, "Failed to add text to release ID as '" + releaseID + "'");
 		boolean isReleaseNameSet = enterTextReleaseName(releaseName);
 		Assert.assertTrue(isReleaseNameSet, "Failed to add text to release name as '" + releaseName + "'");
 
-		boolean isStartDateCalendarClicked = clkStartDateCalendar(); // Add Milestone window->Click on Start Date
-		// Calendar icon
+		boolean isStartDateCalendarClicked = clkStartDateCalendar();
 		Assert.assertTrue(isStartDateCalendarClicked, "Failed to click on Start Date Calendar.");
 
-		boolean isStartDateClicked = clkStartDate(); // Add Milestone window->Click on Start Date
+		boolean isStartDateClicked = clkStartDate();
 		Assert.assertTrue(isStartDateClicked, "Failed to click on Start Date.");
 
-		boolean isEndDateCalendarClicked = clkEndDateCalendar(); // Add Milestone window->Click on End Date Calendar
-		// icon
+		boolean isEndDateCalendarClicked = clkEndDateCalendar();
 		Assert.assertTrue(isEndDateCalendarClicked, "Failed to click on End Date Calendar.");
 
-		boolean isEndDateClicked = clkEndDate(); // Add Milestone window->Click on End Date
+		boolean isEndDateClicked = clkEndDate();
 		Assert.assertTrue(isEndDateClicked, "Failed to click on End Date.");
 
-		boolean isAddButtonOnAddMilestonePageClicked = clkAddButton(); // Add Milestone window->Click
-		// on Add button
+		boolean isAddButtonOnAddMilestonePageClicked = clkAddButton();
 		Assert.assertTrue(isAddButtonOnAddMilestonePageClicked, "Failed to click on Add button on Add Milestone page.");
 
-		op.switchToDefault(); // After adding a milestone, the control switches back to main page
+		op.switchToDefault();
 
 	}
 
@@ -1991,9 +1828,7 @@ public class DeliveryMilestonePage extends TestBase {
 			while (i < parentMilestones.size()) {
 				if (parentMilestones.get(i).getText().trim().equalsIgnoreCase(milestoneID.trim())) {
 					parentMilestones.get(i).click();
-					// driver.switchTo().alert().accept();
 					try {
-						// op.waitForElementToBeDisplayed(popUpOKButton);
 						if (popUpOKButton.isDisplayed())
 							op.click(popUpOKButton);
 					} catch (Exception e) {
@@ -2013,7 +1848,6 @@ public class DeliveryMilestonePage extends TestBase {
 			return false;
 		}
 		switchToAddFrame();
-		// op.click(popUpOKButton);
 		return true;
 	}
 
@@ -2035,7 +1869,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(releaseIDField);
 			op.clear(releaseIDField);
 			op.sendKeys(releaseIDField, releaseID);
-			// op.actionEnter();
 			logInfo("Entered text '" + releaseID + "' in release ID Field");
 			return true;
 		} catch (Exception e) {
@@ -2050,7 +1883,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(releaseNameField);
 			op.clear(releaseNameField);
 			op.sendKeys(releaseNameField, releaseName);
-			// op.actionEnter();
 			logInfo("Entered text '" + releaseName + "' in release Name Field");
 			return true;
 		} catch (Exception e) {
@@ -2059,13 +1891,16 @@ public class DeliveryMilestonePage extends TestBase {
 		}
 	}
 
-//To update status for "update release"
+	/*
+	 * To update status for "update release"
+	 */
 	public boolean updateStatus(String expectedStatus) {
 		try {
 			op.waitForAnElementToBeClickable(statusDrpDown);
 			op.click(statusDrpDown);
 			op.switchToDefault();
-			List<WebElement> statusFields = controlActions.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.REASON_CODES);
+			List<WebElement> statusFields = controlActions
+					.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.REASON_CODES);
 			int i;
 			logInfo("Selecting -> " + expectedStatus + " Status code from List");
 			for (i = 0; i < statusFields.size(); i++) {
@@ -2083,7 +1918,7 @@ public class DeliveryMilestonePage extends TestBase {
 			}
 
 		} catch (Exception e) {
-			logError("Failed to select " + expectedStatus);
+			logError("Failed to select from the list " + expectedStatus);
 			logError(e.getMessage());
 			switchToUpdateFrame();
 			clkCancelButton();
@@ -2095,7 +1930,6 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean verify_negScenarios_UpdateRelease(WebDriver driver, String status, String statusUpdate,
 			String percentCompletion) throws Exception {
-		// rowNum++;
 		logInfo("Checking for status: " + status);
 		logInfo("Status update: " + statusUpdate);
 		logInfo("Percent completion " + percentCompletion);
@@ -2127,12 +1961,6 @@ public class DeliveryMilestonePage extends TestBase {
 			enterTextToReleasePercCompletion(percentCompletion);
 			op.sendKey(releasePercCompletion, Keys.TAB);
 			op.switchToDefault();
-			// actions.waitForAlertToBeDisplayed();
-//			Alert alert = driver.switchTo().alert();
-//			String alertText = alert.getText();
-//			Equals(alertText, "% Completion cannot be greater than 100.", "Error message on alert is as expected",
-//					"Error message on alert is not as expected");
-//			alert.accept();
 
 			String alertText = op.getText(perCpmlErrorPopup);
 			Equals(alertText, "% Completion cannot be greater than 100.", "Error message on alert is as expected",
@@ -2147,13 +1975,11 @@ public class DeliveryMilestonePage extends TestBase {
 		logInfo("Expected error count is " + errorCnt);
 		boolean isSaveButtonClicked = clkSaveChangesButton(); // Add Milestone window->Click
 		IsTrue(isSaveButtonClicked, "Clicked on Save changes button", "Failed to click on save changes button");
-		// verifyErrorMessage(driver, errorCnt, expectedErrorMsg);
 		op.perform_waitUntilVisibility(addMilestoneErrorTitle);
 		String errorTitle = op.getText(addMilestoneErrorTitle);
 		if (errorCnt > 1) {
 			assertEquals(errorTitle, +errorCnt + " errors have occurred",
 					"Error notification is displayed as expected: " + errorTitle);
-			// verifyErrorMessageDetails(driver, errorCnt, expectedErrorMsg);
 		} else {
 			try {
 				assertEquals(errorTitle, +errorCnt + " error has occurred",
@@ -2166,7 +1992,6 @@ public class DeliveryMilestonePage extends TestBase {
 				;
 				IsTrue(false, "", "");
 			}
-			// verifyErrorMessageDetails(driver, errorCnt, expectedErrorMsg);
 		}
 		op.perform_waitUntilVisibility(addMilestoneErrorMsg);
 		List<WebElement> actualErrorMsg = controlActions
@@ -2197,7 +2022,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(releasePercCompletion);
 			op.clear(releasePercCompletion);
 			op.sendKeys(releasePercCompletion, percentCompletion);
-			// op.actionEnter();
 			logInfo("Entered text '" + percentCompletion + "' in percent completion Field");
 			return true;
 		} catch (Exception e) {
@@ -2224,12 +2048,22 @@ public class DeliveryMilestonePage extends TestBase {
 		}
 	}
 
+	public Boolean validateTextBoxScenarios(WebElement element) {
+		if (element.getText().isEmpty() == true || element == null) {
+			op.clickElement(addMilestonePageButton);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public String createMilestone() throws Exception {
 		try {
 			int randomNum = op.generateRandomNum();
 			String milestoneID = "MILEID" + randomNum;
 			String milestoneName = "MILENAME" + randomNum;
-			logInfo("Creating Milestone with Name -> " + milestoneName + " and Milestone ID" +milestoneID );
+			logInfo("Creating Milestone with Name -> " + milestoneName + " and Milestone ID" + milestoneID);
+
 			boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton();
 			IsTrue(isAddDeliveryMilestoneButtonClicked, "Successfully clicked on Add Delivery Milestone buttons",
 					"Failed to click on Add Delivery Milestone button.");
@@ -2239,6 +2073,7 @@ public class DeliveryMilestonePage extends TestBase {
 			boolean isSwitchedToAddMilestoneFrame = switchToAddMilestoneFrame();
 			IsTrue(isSwitchedToAddMilestoneFrame, "Switched to add milestone frame.",
 					"Failed to switch to add milestone frame.");
+
 			boolean isMilestoneIDSet = enterTextToMilestoneID(milestoneID);
 			IsTrue(isMilestoneIDSet, "Added text to milestone ID: " + milestoneID,
 					"Failed to add text to Milestone ID as '" + milestoneID + "'");
@@ -2255,7 +2090,8 @@ public class DeliveryMilestonePage extends TestBase {
 			boolean isEndDateClicked = clkEndDate();
 			IsTrue(isEndDateClicked, "Clicked on end date", "Failed to click on End Date.");
 			boolean isAddButtonOnAddMilestonePageClicked = clkAddButtonOnAddMilestoneFrame();
-			IsTrue(isAddButtonOnAddMilestonePageClicked, "Clicked on Add button on Add Milestone page.","Failed to click on Add button on Add Milestone page.");
+			IsTrue(isAddButtonOnAddMilestonePageClicked, "Clicked on Add button on Add Milestone page.",
+					"Failed to click on Add button on Add Milestone page.");
 			op.switchToDefault();
 			return milestoneID;
 		} catch (Exception e) {
@@ -2269,22 +2105,25 @@ public class DeliveryMilestonePage extends TestBase {
 			int randomNum = op.generateRandomNum();
 			String releaseID = "RELEASEID" + randomNum;
 			String releaseName = "RELEASENAME" + randomNum;
-//			controlActions = new ControlActions(driver);
 			boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton();
-			IsTrue(isAddDeliveryMilestoneButtonClicked, "Successfully clicked on Add Delivery Milestone buttons","Failed to click on Add Delivery Milestone button.");
+			IsTrue(isAddDeliveryMilestoneButtonClicked, "Successfully clicked on Add Delivery Milestone buttons",
+					"Failed to click on Add Delivery Milestone button.");
 			boolean isSprintOptionClicked = clkReleaseOption();
 			IsTrue(isSprintOptionClicked, "Release option selected", "Failed to click on Release option.");
-			// threadsleep(2000);
 			boolean isSwitchedToAddReleaseFrame = switchToAddFrame();
-			IsTrue(isSwitchedToAddReleaseFrame, "Switched to add release frame.","Failed to switch to add release frame.");
+			IsTrue(isSwitchedToAddReleaseFrame, "Switched to add release frame.",
+					"Failed to switch to add release frame.");
 			boolean isMilestoneIDSet = enterTextReleaseID(releaseID);
-			IsTrue(isMilestoneIDSet, "Entered release ID: " + releaseID,"Failed to add text to release ID as '" + releaseID + "'");
+			IsTrue(isMilestoneIDSet, "Entered release ID: " + releaseID,
+					"Failed to add text to release ID as '" + releaseID + "'");
 			boolean isParentSelected = enterParentMilestone(driver, milestoneId);
 			IsTrue(isParentSelected, "Successfully selected parent milestone", "Failed to select parent milestone.");
 			boolean isReleaseNameSet = enterTextReleaseName(releaseName);
-			IsTrue(isReleaseNameSet, "Entered release Name: " + releaseName,"Failed to add text to release name as '" + releaseName + "'");
+			IsTrue(isReleaseNameSet, "Entered release Name: " + releaseName,
+					"Failed to add text to release name as '" + releaseName + "'");
 			boolean isStartDateCalendarClicked = clkStartDateCalendar();
-			IsTrue(isStartDateCalendarClicked, "Clicked on start date calender","Failed to click on Start Date Calendar.");
+			IsTrue(isStartDateCalendarClicked, "Clicked on start date calender",
+					"Failed to click on Start Date Calendar.");
 			boolean isStartDateClicked = clkStartDate();
 			IsTrue(isStartDateClicked, "Clicked on start date", "Failed to click on Start Date.");
 			boolean isEndDateCalendarClicked = clkEndDateCalendar();
@@ -2338,11 +2177,9 @@ public class DeliveryMilestonePage extends TestBase {
 			op.switchToDefault();
 			logInfo("Milestone Id: : " + milestoneId);
 			boolean foundMilestoneId = false;
-
-			// ************
-			// verifySuccessMsg();
 			int i;
-			List<WebElement> addedMilestoneIDs = controlActions.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.ADDED_MILESTONE_ID);
+			List<WebElement> addedMilestoneIDs = controlActions
+					.perform_getListOfElementsByXPath(DeliveryMilestoneConstants.ADDED_MILESTONE_ID);
 
 			if (addedMilestoneIDs.size() == 0) {
 				logError("Added milestone is not displayed in the table.");
@@ -2355,48 +2192,8 @@ public class DeliveryMilestonePage extends TestBase {
 					foundMilestoneId = true;
 					break;
 				}
-				// **************
 
-//			List<WebElement> elementList = driver
-//					.findElements(By.xpath(DeliveryMilestoneConstants.CHANGE_REQUEST_NUMBER_COLUMN));
-//			System.out.println(elementList.size());
-//			List<String> strList = new ArrayList<String>();
-//			strList = op.perform_convertListOfWebElements_ToListOfStrings(elementList);
-//			// List<String> strList = new ArrayList<String>();
-////			for (WebElement webElement : elementList) {
-////				op.perform_convertListOfWebElements_ToListOfStrings(elementList);
-////				strList.add(webElement.getText());
-////			}
-//			
-//			for (String str : strList) {
-//				if (str.equalsIgnoreCase(milestoneId)) {
-//					logInfo("Milestone found at index: " + strList.indexOf(milestoneId));
-//					foundMilestoneId = true;
-//					break;
-//				}
-//			if (strList.contains(milestoneId)) {
-//				indexOfReqNum = strList.indexOf(milestoneId);
-//
-//				threadsleep(600);
-//				valueAtList = strList.get(indexOfReqNum);
-//				logInfo("valu at list: " + valueAtList);
-//			} 
-
-//			for (int i = 0; i < elementList.size(); i++) {
-//				if (elementList.get(i).getText().equalsIgnoreCase(milestoneId)) {
-//					logInfo("Milestone found at index: " + i + 1);
-//					foundMilestoneId = true;
-//					break;
-//
-//				}
 			}
-//			if (foundMilestoneId == false)
-//				return index;
-//			else
-//			{
-//				controlActions.click(nextPaginationButton);
-//				checkListMilestone(milestoneId, driver);
-//			}
 		} catch (Exception e) {
 			return false;
 		}
@@ -2422,21 +2219,21 @@ public class DeliveryMilestonePage extends TestBase {
 	}
 
 	public String verifyName(String Id) {
-//		String actualName = op.getText(op.performGetElementByXPath(
-//				DeliveryMilestoneConstants.ADDED_RELEASE_NAME.replace("MilestoneIDToBeReplaced", milestoneID)));
-//		return actualName;
-		String actualName = op.getText(op.performGetElementByXPath(DeliveryMilestoneConstants.ADDED_NAME.replace("IDToBeReplaced", Id)));
+		String actualName = op.getText(
+				op.performGetElementByXPath(DeliveryMilestoneConstants.ADDED_NAME.replace("IDToBeReplaced", Id)));
 		return actualName;
 
 	}
 
 	public String verifyMilestoneType(String Id) {
-		String milestoneType = op.getText(op.performGetElementByXPath(DeliveryMilestoneConstants.ADDED_TYPE.replace("IDToBeReplaced", Id)));
+		String milestoneType = op.getText(
+				op.performGetElementByXPath(DeliveryMilestoneConstants.ADDED_TYPE.replace("IDToBeReplaced", Id)));
 		return milestoneType;
 	}
 
 	public String verifyStatus(String Id) {
-		String status = op.getText(op.performGetElementByXPath(DeliveryMilestoneConstants.ADDED_STATUS.replace("IDToBeReplaced", Id)));
+		String status = op.getText(
+				op.performGetElementByXPath(DeliveryMilestoneConstants.ADDED_STATUS.replace("IDToBeReplaced", Id)));
 		return status;
 	}
 
@@ -2508,7 +2305,6 @@ public class DeliveryMilestonePage extends TestBase {
 				"Failed to click on Add button on Add Milestone page.");
 
 		boolean status;
-//		try {
 		status = verifyErrorTitle(errorCnt, expectedErrorMsg);
 		if (status == true) {
 			status = verifyErrorMessages(errorCnt, expectedErrorMsg);
@@ -2681,10 +2477,7 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean switchToAddTaskFrame() {
 		try {
-			threadsleep(3000);
-			// op.switchToDefault();
-//			op.waitForFrameToAvailable(addReleaseFrame);
-//			op.switchToFrameByLocators(addReleaseFrame);
+			Thread.sleep(3000);
 			op.switchToFrameByIFrameElement(addReleaseFrame);
 			logInfo("Successfully switched to add release frame");
 			return true;
@@ -2714,7 +2507,6 @@ public class DeliveryMilestonePage extends TestBase {
 			op.waitForElementToBeClickable(taskNameField);
 			op.clear(taskNameField);
 			op.sendKeys(taskNameField, taskName);
-			// op.actionEnter();
 			logInfo("Entered text '" + taskName + "' in release Name Field");
 			return true;
 		} catch (Exception e) {
@@ -2733,23 +2525,21 @@ public class DeliveryMilestonePage extends TestBase {
 			if (msg.isDisplayed())
 				logError("Record added with incorrect data.");
 			op.Fail("Record added with incorrect data.");
-			// return false;
 		}
 		String errorTitle = op.getText(addMilestoneErrorTitle);
 		return errorTitle;
 	}
-	// Create new Task
 
+	/*
+	 * Create new Task
+	 */
 	public String createNewTask(String milestoneId) {
 		try {
-			// String milestoneId = createMilestone();
-			// String milestoneId = "MILEID478";
 			int randomNum = op.generateRandomNum();
 			String taskID = "TASKID" + randomNum;
 			String taskName = "TASKNAME" + randomNum;
-//				controlActions = new ControlActions(driver);
 			threadsleep(2000);
-			logInfo("Creating Task with Task ID -> " + taskID + " and Task Name ->" + taskName );
+			logInfo("Creating Task with Task ID -> " + taskID + " and Task Name ->" + taskName);
 			boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton();
 			IsTrue(isAddDeliveryMilestoneButtonClicked, "Successfully clicked on Add Delivery Milestone buttons",
 					"Failed to click on Add Delivery Milestone button.");
@@ -2778,18 +2568,24 @@ public class DeliveryMilestonePage extends TestBase {
 			op.switchToDefault();
 			verifySuccessMsg();
 			op.refreshPage();
-			WebElement releaseIcon = op.perform_waitUntilVisibility(By.xpath(DeliveryMilestoneConstants.VIEW_RELEASE_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
+			WebElement releaseIcon = op.perform_waitUntilVisibility(By.xpath(
+					DeliveryMilestoneConstants.VIEW_RELEASE_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
 			op.click(releaseIcon);
 			String actualTaskID = verifyId(milestoneId, taskID);
 			Equals(actualTaskID, taskID, "Task ID is correctly displayed", "Task ID is not displayed correctly");
 			String actualTaskName = verifyName(taskID);
-			Equals(actualTaskName, taskName, "Task name is correctly displayed","Task name is not displayed correctly");
+			Equals(actualTaskName, taskName, "Task name is correctly displayed",
+					"Task name is not displayed correctly");
 			String milestoneType = verifyMilestoneType(taskID);
-			Equals(milestoneType, "Tasks", "Milestone type is correctly displayed","Milestone type is not displayed correctly");
+			Equals(milestoneType, "Tasks", "Milestone type is correctly displayed",
+					"Milestone type is not displayed correctly");
 			String status = verifyStatus(taskID);
-			IsTrue(status.contains("Open"), "Task status is correctly displayed","Task status is not displayed correctly");
-			logInfo("New Task Created with Task ID -> " + taskID + " Task Name -> " + taskName+ " and Task Status -> : " + status);
-			op.perform_waitUntilVisibility(By.xpath(DeliveryMilestoneConstants.MINUS_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
+			IsTrue(status.contains("Open"), "Task status is correctly displayed",
+					"Task status is not displayed correctly");
+			logInfo("New Task Created with Task ID -> " + taskID + " Task Name -> " + taskName
+					+ " and Task Status -> : " + status);
+			op.perform_waitUntilVisibility(
+					By.xpath(DeliveryMilestoneConstants.MINUS_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
 			return taskID;
 		} catch (AssertionError e) {
 			logError(e.getMessage());
@@ -2799,20 +2595,81 @@ public class DeliveryMilestonePage extends TestBase {
 			return null;
 		}
 	}
-	// Create new Phase
 
+	public String createNewRelease(String milestoneId) {
+		try {
+			int randomNum = op.generateRandomNum();
+			String releaseID = "RELEASEID" + randomNum;
+			String releaseName = "RELEASENAME" + randomNum;
+			boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton();
+			IsTrue(isAddDeliveryMilestoneButtonClicked, "Successfully clicked on Add Delivery Milestone buttons",
+					"Failed to click on Add Delivery Milestone button.");
+			boolean isSprintOptionClicked = clkReleaseOption();
+			IsTrue(isSprintOptionClicked, "Release option selected", "Failed to click on Release option.");
+			boolean isSwitchedToAddReleaseFrame = switchToAddFrame();
+			IsTrue(isSwitchedToAddReleaseFrame, "Switched to add release frame.",
+					"Failed to switch to add release frame.");
+			boolean isMilestoneIDSet = enterTextReleaseID(releaseID);
+			IsTrue(isMilestoneIDSet, "Entered release ID: " + releaseID,
+					"Failed to add text to release ID as '" + releaseID + "'");
+			boolean isParentSelected = enterParentMilestone(driver, milestoneId);
+			IsTrue(isParentSelected, "Successfully selected parent milestone", "Failed to select parent milestone.");
+			boolean isReleaseNameSet = enterTextReleaseName(releaseName);
+			IsTrue(isReleaseNameSet, "Entered release Name: " + releaseName,
+					"Failed to add text to release name as '" + releaseName + "'");
+			boolean isStartDateCalendarClicked = clkStartDateCalendar();
+			IsTrue(isStartDateCalendarClicked, "Clicked on start date calender",
+					"Failed to click on Start Date Calendar.");
+			boolean isStartDateClicked = clkStartDate();
+			IsTrue(isStartDateClicked, "Clicked on start date", "Failed to click on Start Date.");
+			boolean isEndDateCalendarClicked = clkEndDateCalendar();
+			IsTrue(isEndDateCalendarClicked, "Clicked on end date calender", "Failed to click on End Date Calendar.");
+			boolean isEndDateClicked = clkEndDate();
+			IsTrue(isEndDateClicked, "Clicked on end date", "Failed to click on End Date.");
+			boolean isAddButtonOnAddMilestonePageClicked = clkAddButton();
+			IsTrue(isAddButtonOnAddMilestonePageClicked, "", "Failed to click on Add button on Add Milestone page.");
+			op.switchToDefault();
+			verifySuccessMsg();
+			op.refreshPage();
+			WebElement releaseIcon = op.perform_waitUntilVisibility(By.xpath(
+					DeliveryMilestoneConstants.VIEW_RELEASE_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
+			op.click(releaseIcon);
+			String actualReleaseID = verifyId(milestoneId, releaseID);
+			Equals(actualReleaseID, releaseID, "Release ID is correctly displayed",
+					"Release ID is not displayed correctly");
+			String actualReleaseName = verifyName(releaseID);
+			Equals(actualReleaseName, releaseName, "Release name is correctly displayed",
+					"Release name is not displayed correctly");
+			String milestoneType = verifyMilestoneType(releaseID);
+			Equals(milestoneType, "Release", "Milestone type is correctly displayed",
+					"Milestone type is not displayed correctly");
+			String status = verifyStatus(releaseID);
+			IsTrue(status.contains("Open"), "Phase status is correctly displayed",
+					"Phase status is not displayed correctly");
+			logInfo("New Release Created with Release ID -> " + releaseID + " Task Name -> " + releaseName
+					+ " and release Status -> : " + status);
+			op.perform_waitUntilVisibility(
+					By.xpath(DeliveryMilestoneConstants.MINUS_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
+			return releaseID;
+		} catch (Exception e) {
+			logError(e.getMessage());
+			return null;
+		}
+	}
+
+	/*
+	 * Create new Phase
+	 */
 	public String createNewPhase(String milestoneId) {
 		try {
-			//String milestoneId = createMilestone();
-			//String milestoneId = "MILEID478";
 			int randomNum = op.generateRandomNum();
 			String phaseID = "PHASEID" + randomNum;
 			String phaseName = "PHASENAME" + randomNum;
-//			controlActions = new ControlActions(driver);
 			threadsleep(2000);
 			op.waitForAnElementToBeClickable(openAddDeliveryMilestone);
 			boolean isAddDeliveryMilestoneButtonClicked = clkAddDeliveryMilestoneButton();
-			IsTrue(isAddDeliveryMilestoneButtonClicked, "Successfully clicked on Add Delivery Milestone buttons","Failed to click on Add Delivery Milestone button.");
+			IsTrue(isAddDeliveryMilestoneButtonClicked, "Successfully clicked on Add Delivery Milestone buttons",
+					"Failed to click on Add Delivery Milestone button.");
 			boolean isPhaseOptionClicked = clkPhaseOption();
 			IsTrue(isPhaseOptionClicked, "Task option selected", "Failed to click on task option.");
 			boolean isSwitchedToAddPhaseFrame = switchToAddFrame();
@@ -2822,9 +2679,11 @@ public class DeliveryMilestonePage extends TestBase {
 			boolean isParentSelected = enterParentMilestone(driver, milestoneId);
 			IsTrue(isParentSelected, "Successfully selected parent milestone", "Failed to select parent milestone.");
 			boolean isPhaseNameSet = enterTextPhaseName(phaseName);
-			IsTrue(isPhaseNameSet, "Entered phase Name: " + phaseName,"Failed to add text to phase name as '" + phaseName + "'");
+			IsTrue(isPhaseNameSet, "Entered phase Name: " + phaseName,
+					"Failed to add text to phase name as '" + phaseName + "'");
 			boolean isStartDateCalendarClicked = clkStartDateCalendar();
-			IsTrue(isStartDateCalendarClicked, "Clicked on start date calender","Failed to click on Start Date Calendar.");
+			IsTrue(isStartDateCalendarClicked, "Clicked on start date calender",
+					"Failed to click on Start Date Calendar.");
 			boolean isStartDateClicked = clkStartDate();
 			IsTrue(isStartDateClicked, "Clicked on start date", "Failed to click on Start Date.");
 			boolean isEndDateCalendarClicked = clkEndDateCalendar();
@@ -2832,21 +2691,24 @@ public class DeliveryMilestonePage extends TestBase {
 			boolean isEndDateClicked = clkEndDate();
 			IsTrue(isEndDateClicked, "Clicked on end date", "Failed to click on End Date.");
 			boolean isAddButtonOnAddMilestonePageClicked = clkAddButton();
-			IsTrue(isAddButtonOnAddMilestonePageClicked, "Add button clicked","Failed to click on Add button on Add Milestone page.");
+			IsTrue(isAddButtonOnAddMilestonePageClicked, "Add button clicked",
+					"Failed to click on Add button on Add Milestone page.");
 			op.switchToDefault();
 			op.refreshPage();
-			WebElement releaseIcon = op.perform_waitUntilVisibility(By.xpath(DeliveryMilestoneConstants.VIEW_RELEASE_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
+			WebElement releaseIcon = op.perform_waitUntilVisibility(By.xpath(
+					DeliveryMilestoneConstants.VIEW_RELEASE_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
 			op.click(releaseIcon);
 			String actualPhaseID = verifyId(milestoneId, phaseID);
 			Equals(actualPhaseID, phaseID, "Phase ID is correctly displayed", "Phase ID is not displayed correctly");
 			String actualPhaseName = verifyName(phaseID);
-			Equals(actualPhaseName, phaseName, "Phase name is correctly displayed","Phase name is not displayed correctly");
+			Equals(actualPhaseName, phaseName, "Phase name is correctly displayed",
+					"Phase name is not displayed correctly");
 			String milestoneType = verifyMilestoneType(phaseID);
-			Equals(milestoneType, "Phase", "Milestone type is correctly displayed","Milestone type is not displayed correctly");
+			Equals(milestoneType, "Phase", "Milestone type is correctly displayed",
+					"Milestone type is not displayed correctly");
 			String status = verifyStatus(phaseID);
-			IsTrue(status.contains("Open"), "Phase status is correctly displayed","Phase status is not displayed correctly");
-//			op.perform_waitUntilVisibility(
-//					By.xpath(DeliveryMilestoneConstants.MINUS_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
+			IsTrue(status.contains("Open"), "Phase status is correctly displayed",
+					"Phase status is not displayed correctly");
 			return phaseID;
 		} catch (AssertionError e) {
 			logError(e.getMessage());
@@ -2866,12 +2728,33 @@ public class DeliveryMilestonePage extends TestBase {
 
 	public boolean clkPhaseOption() {
 		try {
+			threadsleep(2000);
 			op.waitForAnElementToBeClickable(phaseOption);
 			op.clickElement(phaseOption);
 			logInfo("Successfully clicked on phase option");
 			return true;
 		} catch (Exception e) {
 			logError("Failed to click on phase option " + e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * This method is used to click on change request option under "Add Delivery
+	 * Milestone"
+	 * 
+	 * @return boolean This returns true if Successfully clicked on change request
+	 *         option
+	 */
+	public boolean clkChangeRequestOption() {
+		try {
+			threadsleep(2000);
+			op.waitForAnElementToBeClickable(changeRequest);
+			op.clickElement(changeRequest);
+			logInfo("Successfully clicked on change request option");
+			return true;
+		} catch (Exception e) {
+			logError("Failed to click on change request option " + e.getMessage());
 			return false;
 		}
 	}
@@ -2905,16 +2788,19 @@ public class DeliveryMilestonePage extends TestBase {
 		}
 	}
 
-	//Click on "+" icon after add or update
+	/*
+	 * Click on "+" icon after add or update
+	 */
 	public boolean clickExpandIcon(String milestoneId) {
 		try {
-			threadsleep(2000);
+			//threadsleep(3000);
 			WebElement releaseIcon = op.perform_waitUntilVisibility(By.xpath(DeliveryMilestoneConstants.VIEW_RELEASE_ICON.replace("MilestoneIDToBeReplaced", milestoneId)));
+			logInfo("Milestone expand button(+) is clickable ? " + op.waitUntilElementIsClickable(releaseIcon));
 			op.click(releaseIcon);
 			threadsleep(2000);
 			return true;
 		} catch (Exception e) {
-			logError("Filed to click on Mileston expand button(+) "+ e.getMessage());
+			logError("Failed to click on Milestone expand button(+) " + e.getMessage());
 			return false;
 		}
 	}
@@ -2931,12 +2817,16 @@ public class DeliveryMilestonePage extends TestBase {
 		return expectedErrorMsg;
 	}
 
-//Click on update icon
+	/*
+	 * Click on update icon
+	 */
 	public boolean clickUpdateIcon(String phaseID) {
 		try {
 			threadsleep(2000);
-			op.perform_waitUntilVisibility(By.xpath(DeliveryMilestoneConstants.UPDATE_BUTTON.replace("releaseIDToBeUpdated", phaseID)));
-			op.click(op.performGetElementByXPath(DeliveryMilestoneConstants.UPDATE_BUTTON.replace("releaseIDToBeUpdated", phaseID)));
+			op.perform_waitUntilVisibility(
+					By.xpath(DeliveryMilestoneConstants.UPDATE_BUTTON.replace("releaseIDToBeUpdated", phaseID)));
+			op.click(op.performGetElementByXPath(
+					DeliveryMilestoneConstants.UPDATE_BUTTON.replace("releaseIDToBeUpdated", phaseID)));
 			threadsleep(2000);
 			return true;
 		} catch (Exception e) {
@@ -2946,9 +2836,12 @@ public class DeliveryMilestonePage extends TestBase {
 
 	}
 
-	// Click on delete icon
+	/*
+	 * Click on delete icon
+	 */
 	public boolean clickDeleteIcon(String phaseID) {
 		try {
+			threadsleep(2000);
 			WebElement releaseIcon;
 			controlActions.click(controlActions.performGetElementByXPath(
 					DeliveryMilestoneConstants.DELETE_RELEASE_BUTTON.replace("releaseIDToBeUpdated", phaseID)));
@@ -2960,7 +2853,9 @@ public class DeliveryMilestonePage extends TestBase {
 
 	}
 
-	// Click on reason code dropdown
+	/*
+	 * Click on reason code dropdown
+	 */
 	public boolean clkReasonCodeDropDown() {
 		try {
 			op.waitForAnElementToBeClickable(reasonCodeDrpDown);
@@ -2998,14 +2893,15 @@ public class DeliveryMilestonePage extends TestBase {
 		return expectedErrorMsg;
 	}
 
-//Enter sprint scope change
+	/*
+	 * Enter sprint scope change
+	 */
 	public boolean enterTextToScopeChange(String scopeChange) {
 		try {
 			isElementDisplayed(this.scopeChange);
 			op.waitForElementToBeClickable(this.scopeChange);
 			op.clear(this.scopeChange);
 			op.sendKeys(this.scopeChange, scopeChange);
-			// op.actionEnter();
 			logInfo("Entered text '" + scopeChange + "' in scope change field");
 		} catch (Exception e) {
 			logError("Failed to enter text '" + scopeChange + "' in scope change field" + e.getMessage());
@@ -3014,7 +2910,9 @@ public class DeliveryMilestonePage extends TestBase {
 		return true;
 	}
 
-	// Enter sprint in progress stories
+	/*
+	 * Enter sprint in progress stories
+	 */
 	public boolean enterTextToInProgressField(String inProgressStories) {
 		try {
 			isElementDisplayed(inProgress);
@@ -3029,7 +2927,9 @@ public class DeliveryMilestonePage extends TestBase {
 		return true;
 	}
 
-	// Enter sprint blocked stories
+	/*
+	 * Enter sprint blocked stories
+	 */
 	public boolean enterTextToBlockedField(String blockedStories) {
 		try {
 			isElementDisplayed(this.blocked);
@@ -3044,7 +2944,9 @@ public class DeliveryMilestonePage extends TestBase {
 		return true;
 	}
 
-	// Enter sprint blocked stories
+	/*
+	 * Enter sprint blocked stories
+	 */
 	public boolean enterTextToCompletedField(String completedStories) {
 		try {
 			isElementDisplayed(completed);
@@ -3059,20 +2961,16 @@ public class DeliveryMilestonePage extends TestBase {
 		return true;
 	}
 
-//Select sprint RAG status
+	/*
+	 * Select sprint RAG status
+	 */
 	public boolean selectRAGStatus(String ragStatus) {
 		try {
 			WebElement ragStatusButton = op.perform_getElementByXPath(
 					DeliveryMilestoneConstants.RAG_STATUS.replace("ValueToBeReplaced", ragStatus));
 			op.waitForElementToBeClickable(ragStatusButton);
-			// op.clickRadiobutton(driver,
-			// DeliveryMilestoneConstants.RAG_STATUS.replace("ValueToBeReplaced",
-			// ragStatus));
-//			WebElement ragStatusButton = op.perform_waitUntilClickable(
-//					By.xpath(DeliveryMilestoneConstants.RAG_STATUS.replace("ValueToBeReplaced", ragStatus)));
-			if(!ragStatusButton.isSelected())
+			if (!ragStatusButton.isSelected())
 				op.clickOnElement(ragStatusButton);
-			//op.click(ragStatusButton);
 			logInfo("Successfully selected RAG status");
 			return true;
 		} catch (Exception e) {
@@ -3081,7 +2979,9 @@ public class DeliveryMilestonePage extends TestBase {
 		}
 	}
 
-//Enter text in P1 defect field
+	/*
+	 * Enter text in P1 defect field
+	 */
 	public boolean enterTextToP1DefectField(String p1DefectCount) {
 		try {
 			isElementDisplayed(p1Defect);
@@ -3096,7 +2996,9 @@ public class DeliveryMilestonePage extends TestBase {
 		return true;
 	}
 
-	// Enter text in P2 defect field
+	/*
+	 * Enter text in P2 defect field
+	 */
 	public boolean enterTextToP2DefectField(String p2DefectCount) {
 		try {
 			isElementDisplayed(p2Defect);
@@ -3111,7 +3013,9 @@ public class DeliveryMilestonePage extends TestBase {
 		return true;
 	}
 
-	// Enter text in P3 defect field
+	/*
+	 * Enter text in P3 defect field
+	 */
 	public boolean enterTextToP3DefectField(String p3DefectCount) {
 		try {
 			isElementDisplayed(p3Defect);
@@ -3126,7 +3030,9 @@ public class DeliveryMilestonePage extends TestBase {
 		return true;
 	}
 
-	// Enter text in P4 defect field
+	/*
+	 * Enter text in P4 defect field
+	 */
 	public boolean enterTextToP4DefectField(String p4DefectCount) {
 		try {
 			isElementDisplayed(p4Defect);
@@ -3138,6 +3044,187 @@ public class DeliveryMilestonePage extends TestBase {
 			logError("Failed to enter text '" + p4DefectCount + "' in P4 defect field" + e.getMessage());
 			return false;
 		}
+		return true;
+	}
+
+	/*
+	 * This method is used to validate the Add Milestone fields.
+	 */
+	public void validateAndAddMilestone(WebDriver driver, String milestoneID, String milestoneName) throws Exception {
+		Equals(addMileStonePopupErrorMsgs.get(0).getText(), prop.getProperty("milestoneId_Error"),
+				"Milestone ID error message is displayed as expected.",
+				"Milestone ID error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(1).getText(), prop.getProperty("milestoneName_Error"),
+				"Milestone Name error message is displayed as expected.",
+				"Milestone Name error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(2).getText(), prop.getProperty("milestoneStartDate_Error"),
+				"Start Date error message is displayed as expected.",
+				"Start Date error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(3).getText(), prop.getProperty("milestoneEndDate_Error"),
+				"End Date error message is displayed as expected.",
+				"End Date error message is NOT displayed as expected.");
+
+		op.sendKeys(milestoneIdField, milestoneID);
+
+		if (op.checkSpecialChar(milestoneID)) {
+			Equals(addMileStonePopupErrorMsgs.get(0).getText(), prop.getProperty("milestoneId_Error"),
+					"Milestone ID error message is displayed as expected.",
+					"Milestone ID error message is displayed as expected.");
+			logInfo("Expected error message: Please enter valid Milestone ID.");
+			op.clear(milestoneIdField);
+		}
+		op.sendKeys(milestoneNameField, milestoneName);
+		op.clickElement(addMilestonePageButton);
+		Thread.sleep(1000);
+		op.waitForAnElementToBeClickable(closeNotification);
+		Thread.sleep(1000);
+		op.click(closeNotification);
+		String mileStoneNameAlphanumericErrorMsg = mileStoneNameErrorMsg.getText().trim();
+		if (op.checkSpecialChar(milestoneName)) {
+			IsTrue(mileStoneNameAlphanumericErrorMsg.contains("For Delivery Milestone name only alphanumeric characters"),
+					"Milestone Name error message is displayed as expected.",
+					"Milestone Name error message is NOT displayed as expected.");
+			logInfo("Expected error message: For Delivery Milestone name only alphanumeric characters, hyphen and underscore are allowed");
+			op.clear(milestoneNameField);
+		}
+	}
+
+	/*
+	 * This method is to validate all the error messages reflected on "Add Release",
+	 * "Add Phase" and "Add Task" popups
+	 */
+	public void validateAddRelease_Task_Phase_Popup(WebDriver driver, String id_Label) throws Exception {
+
+		config = new PropertiesConfiguration(Constants.deliveryMilestonePropertyFile);
+		prop = new Properties();
+		prop.load(new FileInputStream(Constants.deliveryMilestonePropertyFile));
+
+		switch (id_Label) {
+		case "Release":
+			Equals(addMileStonePopupErrorMsgs.get(0).getText(), prop.getProperty("parentMilestone_Error"),
+					"Parent Milestone error message is displayed as expected.",
+					"Parent Milestone error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(1).getText(), prop.getProperty("releaseId_Error"),
+					"Release ID error message is displayed as expected.",
+					"Release ID error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(2).getText(), prop.getProperty("releaseName_Error"),
+					"Release Name error message is displayed as expected.",
+					"Release Name error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(3).getText(), prop.getProperty("startDate_Error"),
+					"Start Date error message is displayed as expected.",
+					"Start Date error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(4).getText(), prop.getProperty("endDate_Error"),
+					"End Date error message is displayed as expected.",
+					"End Date error message is NOT displayed as expected.");
+			break;
+
+		case "Task":
+			Equals(addMileStonePopupErrorMsgs.get(0).getText(), prop.getProperty("parentMilestone_Error"),
+					"Parent Milestone error message is displayed as expected.",
+					"Parent Milestone error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(1).getText(), prop.getProperty("taskId_Error"),
+					"Release ID error message is displayed as expected.",
+					"Release ID error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(2).getText(), prop.getProperty("taskName_Error"),
+					"Release Name error message is displayed as expected.",
+					"Release Name error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(3).getText(), prop.getProperty("startDate_Error"),
+					"Start Date error message is displayed as expected.",
+					"Start Date error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(4).getText(), prop.getProperty("endDate_Error"),
+					"End Date error message is displayed as expected.",
+					"End Date error message is NOT displayed as expected.");
+			break;
+
+		case "Phase":
+			Equals(addMileStonePopupErrorMsgs.get(0).getText(), prop.getProperty("parentMilestone_Error"),
+					"Parent Milestone error message is displayed as expected.",
+					"Parent Milestone error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(1).getText(), prop.getProperty("phaseId_Error"),
+					"Release ID error message is displayed as expected.",
+					"Release ID error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(2).getText(), prop.getProperty("phaseName_Error"),
+					"Release Name error message is displayed as expected.",
+					"Release Name error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(3).getText(), prop.getProperty("startDate_Error"),
+					"Start Date error message is displayed as expected.",
+					"Start Date error message is NOT displayed as expected.");
+			Equals(addMileStonePopupErrorMsgs.get(4).getText(), prop.getProperty("endDate_Error"),
+					"End Date error message is displayed as expected.",
+					"End Date error message is NOT displayed as expected.");
+			break;
+
+		default:
+			System.out.println("Elective courses : Optimization");
+		}
+
+	}
+
+	/*
+	 * This method is used to validate the Add Sprint popup fields.
+	 */
+	public boolean validateAddSprint() throws Exception {
+		Equals(addMileStonePopupErrorMsgs.get(0).getText(), prop.getProperty("sprintId_Error"),
+				"Sprint Id error message is displayed as expected.",
+				"Sprint Id error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(1).getText(), prop.getProperty("sprintName_Error"),
+				"Sprint Name error message is displayed as expected.",
+				"Sprint Name error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(2).getText(), prop.getProperty("sprintTeam_Error"),
+				"Sprint Team error message is displayed as expected.",
+				"Sprint Team error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(3).getText(), prop.getProperty("sprintCycle_Error"),
+				"Sprint Cycle error message is displayed as expected.",
+				"Sprint Cycle error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(4).getText(), prop.getProperty("sprintUnitOfMeasure_Error"),
+				"Sprint unit of measure error message is displayed as expected.",
+				"Sprint unit of measure error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(5).getText(), prop.getProperty("storypoint_Error"),
+				"Story points error message is displayed as expected.",
+				"Story points error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(6).getText(), prop.getProperty("plannedCapacity_Error"),
+				"Planned Capacity error message is displayed as expected.",
+				"Planned Capacity error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(7).getText(), prop.getProperty("startDate_Error"),
+				"Start Date error message is displayed as expected.",
+				"Start Date error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(8).getText(), prop.getProperty("endDate_Error"),
+				"End Date error message is displayed as expected.",
+				"End Date error message is NOT displayed as expected.");
+		return true;
+	}
+
+	/*
+	 * This method is used to validate the Add Sprint popup fields.
+	 */
+	public boolean validateChangeRequestErrorMsgs() throws Exception {
+		Equals(addMileStonePopupErrorMsgs.get(0).getText(), prop.getProperty("changeRequest_Error"),
+				"Change Request error message is displayed as expected.",
+				"Change Request error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(1).getText(), prop.getProperty("changeType_Error"),
+				"Change Type error message is displayed as expected.",
+				"Change Type error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(2).getText(), prop.getProperty("crImpactedArea_Error"),
+				"Impacted Area error message is displayed as expected.",
+				"Impacted Area error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(3).getText(), prop.getProperty("crPlannedStartDate_Error"),
+				"Planned Start Date error message is displayed as expected.",
+				"Planned Start Date error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(4).getText(), prop.getProperty("crPlannedEndDate_Error"),
+				"Planned End Date error message is displayed as expected.",
+				"Planned End Date error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(5).getText(), prop.getProperty("changeRequestValue_Error"),
+				"Change Request Value error message is displayed as expected.",
+				"Change Request Value error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(6).getText(), prop.getProperty("clientApproval_Error"),
+				"Client Approval error message is displayed as expected.",
+				"Client Approval error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(7).getText(), prop.getProperty("internalApproval_Error"),
+				"Internal Approval error message is displayed as expected.",
+				"Internal Approval error message is NOT displayed as expected.");
+		Equals(addMileStonePopupErrorMsgs.get(8).getText(), prop.getProperty("crDescription_Error"),
+				"Change Request Description error message is displayed as expected.",
+				"Change Request Description error message is NOT displayed as expected.");
 		return true;
 	}
 }

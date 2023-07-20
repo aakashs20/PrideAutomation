@@ -17,7 +17,7 @@
 			<package name="com.project.testcases.pTracker" /> 
 		</packages -->
 		<classes>			
-			<class name="com.project.testcases.pTracker.TCG_PTrackerLogin" />
+			<!--class name="com.project.testcases.pTracker.TCG_PTrackerLogin" />
 			<class name="com.project.testcases.pTracker.TCG_DownloadFunctionalityPTracker" />
 			<class name="com.project.testcases.pTracker.TCG_ValidatePTrackerPage" />
 			<class name="com.project.testcases.pTracker.TCG_ValidateActiveProjectsTab_SubManager" />	
@@ -48,12 +48,20 @@
 		
 			<class name="com.project.testcases.pTracker.TCG_CreateNewFixedPriceProjectByFR" />	
 			<class name="com.project.testcases.pTracker.TCG_CreateNewStaffingProjectByFR" />	
-			<class name="com.project.testcases.pTracker.TCG_CreateNewSupportProjectByFR" />		
+			<class name="com.project.testcases.pTracker.TCG_CreateNewSupportProjectByFR" />	
 			
 			<class name="com.project.testcases.pTracker.proSubDetails.TCG_AddNewSubManager" />
-			<class name="com.project.testcases.pTracker.proSubDetails.TCG_AddUpdateDeletePaymentMilestone" />
+			<class name="com.project.testcases.pTracker.proSubDetails.TCG_AddUpdateDeletePaymentMilestone"/>
 			<class name="com.project.testcases.pTracker.proSubDetails.TCG_AddMilestoneThroughCR" />	
-			<class name="com.project.testcases.pTracker.proSubDetails.TCG_AddUpdateDeletePaymentMilestone"/>					
+			<class name="com.project.testcases.pTracker.proSubDetails.TCG_PrePopulatedDraftSaveFixedPriceFromExistingProject" /-->	
+
+			<class name="com.project.testcases.pTracker.TCG_CreateNewFixedPriceProjectByFR" />	
+			<class name="com.project.testcases.pTracker.deliveryMilestone.TCG_DeliveryMilestone_Milestone_Create_Update_Delete" />
+			<class name="com.project.testcases.pTracker.deliveryMilestone.TCG_DeliveryMilestone_Phase_Create_Update_Delete" />
+			<class name="com.project.testcases.pTracker.deliveryMilestone.TCG_DeliveryMilestone_Release_Create_Update_Delete" />
+			<class name="com.project.testcases.pTracker.deliveryMilestone.TCG_DeliveryMilestone_Task_Create_Update_Delete" />
+			<class name="com.project.testcases.pTracker.deliveryMilestone.TCG_DeliveryMilestone_CR_Create_Update_Delete" />
+			<!--class name="com.project.testcases.pTracker.TCG_ClosedActiveProjectFunctionality" /-->
 		</classes>
 	</test >
 	

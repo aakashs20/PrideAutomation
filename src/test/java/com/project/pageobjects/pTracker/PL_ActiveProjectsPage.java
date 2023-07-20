@@ -136,7 +136,8 @@ public class PL_ActiveProjectsPage extends TestBase{
 	@FindBy(css = PL_ActiveProjectConstant.PTRACK_INPUT_BOX)
 	public List<WebElement> Ptrack_Input_Box;
 	
-	
+	@FindBy(xpath = PL_ActiveProjectConstant.FIXED_PRICE_ACTIVE_FILTER_BTN)
+	public WebElement fixedPriceActiveFilterBtn;
 	
 	
 	

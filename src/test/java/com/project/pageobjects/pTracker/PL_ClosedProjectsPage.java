@@ -8,8 +8,15 @@ package com.project.pageobjects.pTracker;
 //import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.JList;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 
@@ -22,19 +29,30 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.project.pTracker.Utils.ExcelUtils;
+import com.project.pTracker.Utils.Operations;
 import com.project.testbase.TestBase;
 import com.project.utilities.ControlActions;
+import com.project.utilities.ExcelReader;
 
 
 public class PL_ClosedProjectsPage extends TestBase{
 	
 	WebDriverWait wait;
 	ControlActions controlActions;
+	Operations op ;
+	NewProjectsPage newProject;
+	WebDriver driver1 ;
+	ExcelReader reader;
+	
 	
 	public PL_ClosedProjectsPage(WebDriver driver) {
+		driver1 = driver ;
 		PageFactory.initElements(driver, this);
 		wait = new WebDriverWait(driver, 10);
 		controlActions = new ControlActions(driver);
+		op = new Operations(driver);
+		newProject = new NewProjectsPage(driver);
 	}
 	
 	@FindBy(xpath = ClosedProjectsConstants.DOWNLOAD_BUTTON)
@@ -52,8 +70,6 @@ public class PL_ClosedProjectsPage extends TestBase{
 	@FindBy(xpath = ClosedProjectsConstants.CLOSED_PROJECT_PAGINATION)
 	public List<WebElement> ClosedProjectPagination;
 	
-	
-
 	@FindBy(css = ClosedProjectsConstants.CLOSED_PROJECT_FILTER_BTN)
 	public WebElement closedProjectFilter;
 	
@@ -72,13 +88,591 @@ public class PL_ClosedProjectsPage extends TestBase{
 	@FindBy(xpath = ClosedProjectsConstants.CLOSED_PROJECT_APPLIED_FILTER)
 	public List<WebElement> closedProjectAppliedFilters;
 	
-	@FindBy(xpath=ClosedProjectsConstants.CLOSED_PROJECT_TYPE_SELECTOR)
+	@FindBy(xpath = ClosedProjectsConstants.CLOSED_PROJECT_TYPE_SELECTOR)
 	public List<WebElement> closedProjectTypeSelector;
 	
-	@FindBy(xpath=ClosedProjectsConstants.CLOSED_PROJECT_TABLE_PROJECT_TYPE)
+	@FindBy(xpath = ClosedProjectsConstants.CLOSED_PROJECT_TABLE_PROJECT_TYPE)
 	public List<WebElement> closedProjectTableProjectType;
 	
 	@FindBy(xpath = ClosedProjectsConstants.CLOSED_PROJECT_PAGINATION)
 	public WebElement closedProjectPagination;
 	
+	@FindBy(xpath = ClosedProjectsConstants.CLOSE_PROJECT_BTN)
+	public WebElement closedProjectBtn;
+
+	@FindBy(xpath = ClosedProjectsConstants.CLOSURE_REMARK_TXTBOX)
+	public WebElement closureRemarkTxtBox;
+
+	@FindBy(xpath = ClosedProjectsConstants.CLOSUREQUEST_SUBMIT_BTN)
+	public WebElement closureRequestSubmitBtn;
+
+	@FindBy(xpath = ClosedProjectsConstants.CLOSE_REQUEST_FRAME)
+	public WebElement closureRequestFrame;
+
+	@FindBy(xpath = ClosedProjectsConstants.REVISED_CLOSURE_DATE)
+	public WebElement revisedClosureDate;
+	
+	@FindBy(xpath = ClosedProjectsConstants.CALENDAR_ENABLED_DATELIST)
+	public List<WebElement> calendarEnabledDateLists;
+
+	@FindBy(xpath = ClosedProjectsConstants.PROJECT_NUMBER)
+	public WebElement projectNum;
+	
+	/**
+	 * Created By Harshith Kaup
+	 */
+	
+		
+	@FindBy(xpath= ClosedProjectsConstants.FIXEDPRICE_PROJECTTYPE_UNDER_CLOSEDPROJECT)
+	public WebElement fixedPriceProjectTypeUnderClosedProjectModule;
+	
+	
+	@FindBy(xpath= ClosedProjectsConstants.SUPPORTPROJECT_PROJECTTYPE_UNDER_CLOSEDPROJECT)
+	public WebElement supportProjectTypeUnderClosedProjectModule;
+	
+	
+	@FindBy(xpath= ClosedProjectsConstants.STAFFING_PROJECTTYPE_UNDER_CLOSEDPROJECT)
+	public WebElement staffingTypeUnderClosedProjectModule;
+	
+	
+	@FindBy(xpath= ClosedProjectsConstants.TIMEANDMATERIAL_PROJECTTYPE_UNDER_CLOSEDPROJECT)
+	public WebElement timeAndMaterialTypeUnderClosedProjectModule;
+	
+	
+	@FindBy(xpath= ClosedProjectsConstants.ClEARBUTTON_PROJECTTYPEFILTER__UNDER_CLOSEDPROJECT)
+	public WebElement clearLinkForProjectTypeFilterUnderClosedProjectModule;
+	
+	
+	@FindBy(xpath= ClosedProjectsConstants.ClEARBUTTON_SUBVERTICALFILTER_UNDER_CLOSEDPROJECT)
+	public WebElement clearLinkForSubVerticalFilterUnderClosedProjectModule;
+	
+	@FindBy(xpath= ClosedProjectsConstants.ClEARBUTTON__SUBVERTICALFILTERHEADFILTER__UNDER_CLOSEDPROJECT)
+	public WebElement clearLinkForSubVerticalHeadFilterUnderClosedProjectModule;
+	
+	@FindBy(xpath=  ClosedProjectsConstants.SUBVERTICALFILTER_SEARCHBOXENTRY)
+	public WebElement subverticalFilterSearchBoxEntry;
+	
+	@FindBy(xpath=  ClosedProjectsConstants.CLEARALLBUTTON_CLOSEDPROJECT_UI)
+	public WebElement clearAllButtonUnderClosedProjectDashboard;
+	
+	@FindBy(xpath = ClosedProjectsConstants.SUBVERTICALFILTER_UNDERFILTERPANEL_MENU_CHECKBOX)
+	public List<WebElement> subverticalFilterItemsUnderFilterPanelForClosedProjects;
+	
+	@FindBy(xpath = ClosedProjectsConstants.SUBVERTICALHEADFILTER_UNDERFILTERPANEL_MENU_CHECKBOX)
+	public List<WebElement> subverticalHeadFilterItemsUnderFilterPanelForClosedProjects;
+	
+	
+	@FindBy(xpath = "//*[@id='fccp_fr_1_b']/div[2]/div/div[1]/div[@class='apex-item-option is-checked']/label/span[1]")
+	public WebElement subverticalFilterItemsUnderFilterPanelAfterSelectionForClosedProjects;
+	
+	@FindBy(xpath = "//*[@id='fccp_fr_2_b']/div[2]/div/div[1]/div[@class='apex-item-option is-checked']")
+	public List<WebElement> subverticalFilterHeadItemsUnderFilterPanelAfterSelectionForClosedProjects;
+	
+	/*
+	 * This method is used to click on the submit button present on the Closure
+	 * Request Pop up.
+	 */
+	public boolean clkClosureRequestSubmitBtn() {
+		try {
+			op.waitForElementToBeClickable(closureRequestSubmitBtn);
+			op.clickElement(closureRequestSubmitBtn);
+			logInfo("Successfully clicked on Closure Request Submit Button");
+			return true;
+		} catch (Exception e) {
+			logError("Failed to click on Attachments Tab " + e.getMessage());
+			return false;
+		}
+	}
+	
+	  //Module specific functions. 
+	
+		String workspace = System.getProperty("user.dir");
+		String inputdatafilepath = workspace+"\\test-data-files\\UI-TestData\\TC_FilterFunctionalityPTrackerPageInputData.xls";
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void clickOnClearAllButtonForFiltersAppliedUnderClosedProject() {
+			op.waitForElementFluently(driver1, clearAllButtonUnderClosedProjectDashboard, 60);
+			op.clickElement(clearAllButtonUnderClosedProjectDashboard);
+
+		}
+
+		public void clickOnCloseProjectsMenu() {
+			op.clickElement(newProject.ClosedProjectTabLink);
+			wait.until(ExpectedConditions.visibilityOf(newProject.ClosedProjectTabFocused));
+			IsTrue(op.isElementDisplay(closedProjectFilter), "Closed Project Filter Visible",
+					"Closed Project Filter Not Visible");
+
+		}
+
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void clickOnClearForProjectTypeFilter() {
+			if (op.isElementDisplay(clearLinkForProjectTypeFilterUnderClosedProjectModule))
+				op.waitForElementFluently(driver1, clearLinkForProjectTypeFilterUnderClosedProjectModule, 60);
+			op.clickElement(clearLinkForProjectTypeFilterUnderClosedProjectModule);
+		}
+
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void clickOnClearForSubverticalFilter() {
+			op.waitForElementFluently(driver1, clearLinkForSubVerticalFilterUnderClosedProjectModule, 60);
+			op.clickElement(clearLinkForSubVerticalFilterUnderClosedProjectModule);
+		}
+
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void clickOnClearForSubverticalHeadFilter() {
+			op.waitForElementFluently(driver1, clearLinkForSubVerticalHeadFilterUnderClosedProjectModule, 60);
+			op.clickElement(clearLinkForSubVerticalHeadFilterUnderClosedProjectModule);
+		}
+
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void clickOnClearForProjecTypeFilter() {
+			op.waitForElementFluently(driver1, clearLinkForSubVerticalFilterUnderClosedProjectModule, 60);
+			op.clickElement(clearLinkForSubVerticalFilterUnderClosedProjectModule);
+		}			  
+	  
+				  
+		/**
+		 * Created by Harshith kaup
+		 */
+		public boolean verifyProjectTypes(List<WebElement> tableRows, String projectTypes) {
+			boolean status = false;
+			int rowNumber = 0;
+			for (; rowNumber < tableRows.size(); rowNumber++) {
+				Equals(op.getText(tableRows.get(rowNumber)), projectTypes, "Filter applied to Row Number " + rowNumber + 1,
+						"Filter did not applied to Row Number " + rowNumber + 1);
+			}
+			if (rowNumber == tableRows.size())
+				status = true;
+			return status;
+		}
+
+		/**
+		 * Created by Harshith kaup
+		 */
+		public void clickOnFixedPriceUnderClosedProjectsModule() {
+			op.waitForElementFluently(driver1, fixedPriceProjectTypeUnderClosedProjectModule, 60);
+			op.clickElement(fixedPriceProjectTypeUnderClosedProjectModule);
+
+		}
+
+		/**
+		 * Created by Harshith kaup
+		 */
+		public void clickOnSupportProjectUnderClosedProjectsModule() {
+			op.waitForElementFluently(driver1, supportProjectTypeUnderClosedProjectModule, 60);
+			op.clickElement(supportProjectTypeUnderClosedProjectModule);
+
+		}
+
+		/**
+		 * Created by Harshith kaup
+		 */
+		public void clickOnStaffingUnderClosedProjectsModule() {
+			op.waitForElementFluently(driver1, staffingTypeUnderClosedProjectModule, 60);
+			op.clickElement(staffingTypeUnderClosedProjectModule);
+
+		}
+
+		/**
+		 * Created by Harshith kaup
+		 */
+		public void clickOnTimeAndMaterialUnderClosedProjectsModule() {
+			op.waitForElementFluently(driver1, timeAndMaterialTypeUnderClosedProjectModule, 60);
+			op.clickElement(timeAndMaterialTypeUnderClosedProjectModule);
+
+		}
+
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void clickOnFilterIconUnderClosedProjectsModule() {
+			op.waitForElementFluently(driver1, closedProjectFilter, 60);
+			op.clickElement(closedProjectFilter);
+
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void clickOnUIToCloseTheFilteraAnel() {
+			op.waitingForAllElementsinaPage(driver1);
+			op.clickElement(driver1, "//div[@class='ui-widget-overlay ui-front']");
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void enterTextInVerticalFilterSearchbox(String expectedfilter) {
+			op.waitingForAllElementsinaPage(driver1);
+
+			driver1.findElement(By.xpath(ClosedProjectsConstants.SUBVERTICALFILTER_SEARCHBOXENTRY))
+					.sendKeys(expectedfilter);
+
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void enterTextInSubVerticalHeadFilterSearchbox(String expectedfilter) {
+			op.waitingForAllElementsinaPage(driver1);
+			driver1.findElement(By.xpath(ClosedProjectsConstants.SUBVERTICALFILTERHEAD_SEARCHBOXENTRY))
+					.sendKeys(expectedfilter);
+
+		}
+		
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void selectProjectTypeFiltersOnFilterPanel() {
+			op.clickElement(closedProjectFilterMenuCheckBox.get(0));
+			op.clickElement(closedProjectFilterMenuCheckBox.get(2));
+
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void selectaProjectTypeFiltersOnFilterPanel() {
+			op.clickElement(closedProjectFilterMenuCheckBox.get(0));
+
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void selectSubVerticalFilterOnFilterPanelForClosedProjects() {
+
+			op.clickElement(subverticalFilterItemsUnderFilterPanelForClosedProjects.get(0));
+		}
+		
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void selectSubVerticalHeadFiltersOnFilterPanelForClosedProjects() {
+
+			op.clickElement(subverticalHeadFilterItemsUnderFilterPanelForClosedProjects.get(0));
+
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void validateWhetherRecordsAreDisplayedAsperTheProjectTypeFiltersSelected() {
+			List<String> projectTypes = new ArrayList<>();
+			projectTypes.add(op.getText(closedProjectFilterMenuCheckBox.get(0)).replaceAll("[0-9]", ""));
+			projectTypes.add(op.getText(closedProjectFilterMenuCheckBox.get(2)).replaceAll("[0-9]", ""));
+
+			op.clickElement(driver1, "//div[@class='ui-widget-overlay ui-front']");
+			validateWhetherProjectTypeFiltersSelectedAreDisplayedOnUIAsFilterTag(projectTypes);
+
+			threadsleep(2000);
+			int counter = 0;
+			for (int rowNumber = 0; rowNumber < closedProjectTableProjectType.size(); rowNumber++) {
+				IsTrue(projectTypes.contains(op.getText(closedProjectTableProjectType.get(rowNumber))),
+						"Filter applied to Row Number " + rowNumber + 1,
+						"Filter did not applied to Row Number " + rowNumber + 1);
+				counter++;
+			}
+			if (counter == closedProjectTableProjectType.size())
+				;
+
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void validateWhetherRecordsAreDisplayedAsperTheFiltersSelectedUnderMultipleFiltersHeaders() {
+			List<String> projectTypes = new ArrayList<>();
+			projectTypes.add(op.getText(closedProjectFilterMenuCheckBox.get(0)).replaceAll("[0-9]", ""));
+
+			List<String> subverticals = new ArrayList<>();
+			String subverticalFilteratIndexzero = op
+					.getText(subverticalFilterItemsUnderFilterPanelAfterSelectionForClosedProjects);
+			subverticals.add(subverticalFilteratIndexzero);
+
+			List<String> subverticalHead = new ArrayList<>();
+			subverticalHead.add(op.getText(subverticalFilterHeadItemsUnderFilterPanelAfterSelectionForClosedProjects.get(0)).replaceAll("[0-9]", ""));
+
+			op.clickElement(driver1, "//div[@class='ui-widget-overlay ui-front']");
+			validateWhetherProjectTypeFiltersSelectedAreDisplayedOnUIAsFilterTag(projectTypes);
+			validateWhetherSubverticalFiltersSelectedAreDisplayedOnUIAsFilterTag(subverticals);
+			validateWhetherSubverticalHeadFiltersSelectedAreDisplayedOnUIAsFilterTag(subverticalHead);
+
+			threadsleep(2000);
+			int counter = 0;
+			for (int rowNumber = 0; rowNumber < closedProjectTableProjectType.size(); rowNumber++) {
+				IsTrue(projectTypes.contains(op.getText(closedProjectTableProjectType.get(rowNumber))),
+						"Filter applied to Row Number " + rowNumber + 1,"Filter did not applied to Row Number " + rowNumber + 1);
+				counter++;
+			}
+			if (counter == closedProjectTableProjectType.size());
+
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void validateWhetherProjectTypeFiltersSelectedAreDisplayedOnUIAsFilterTag(List<String> projectTypes) {
+
+			List<WebElement> actualFilters = driver1.findElements(By.xpath("//*[@id='cp_top_region']/ul/li[1]/button"));
+
+			for (String expappliedfilter : projectTypes) {
+				boolean result = false;
+				for (int i = 0; i < actualFilters.size(); i++) {
+					String actualfilters = actualFilters.get(i).getText();
+					System.out.println(actualfilters);
+					System.out.println(actualfilters);
+					if (expappliedfilter.equalsIgnoreCase(actualfilters)) {
+						System.out.println(expappliedfilter);
+						System.out.println(actualfilters);
+						result = true;
+						break;
+					}
+				}
+
+				IsTrue(result, "Filters" + expappliedfilter + "is being tagged in UI",
+						"Filters" + expappliedfilter + "is not being tagged in UI");
+
+			}
+
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void validateWhetherSubverticalFiltersSelectedAreDisplayedOnUIAsFilterTag(List<String> subverticals) {
+
+			List<WebElement> actualFilters = driver1.findElements(By.xpath("//*[@id='cp_top_region']/ul/li[2]/button"));
+			for (String expappliedfilter : subverticals) {
+				boolean result = false;
+				for (int i = 0; i < actualFilters.size(); i++) {
+					String actualfilters = actualFilters.get(i).getText();
+					System.out.println(actualfilters);
+					System.out.println(actualfilters);
+					if (expappliedfilter.equalsIgnoreCase(actualfilters)) {
+						System.out.println(expappliedfilter);
+						System.out.println(actualfilters);
+						result = true;
+						break;
+					}
+				}
+
+				IsTrue(result, "Filters" + expappliedfilter + "is being tagged in UI",
+						"Filters" + expappliedfilter + "is not being tagged in UI");
+
+			}
+		}
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void validateWhetherSubverticalHeadFiltersSelectedAreDisplayedOnUIAsFilterTag(List<String> subverticalHead) {
+
+			List<WebElement> actualFilters = driver1.findElements(By.xpath("//*[@id='cp_top_region']/ul/li[3]/button"));
+
+			for (String expappliedfilter : subverticalHead) {
+				boolean result = false;
+				for (int i = 0; i < actualFilters.size(); i++) {
+					String actualfilters = actualFilters.get(i).getText();
+					System.out.println(actualfilters);
+					System.out.println(actualfilters);
+					if (expappliedfilter.equalsIgnoreCase(actualfilters)) {
+						System.out.println(expappliedfilter);
+						System.out.println(actualfilters);
+						result = true;
+						break;
+					}
+				}
+
+				IsTrue(result, "Filters" + expappliedfilter + "is being tagged in UI",
+						"Filters" + expappliedfilter + "is not being tagged in UI");
+
+			}
+
+		}
+		
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void selectProjecttypeFiltersAfterClickingOnFilterIconUnderClosedProjectsModule()
+				throws IOException, Exception {
+
+			String workspace = System.getProperty("user.dir");
+			String inputdatafilepath = workspace
+					+ "\\test-data-files\\UI-TestData\\TC_FilterFunctionalityPTrackerPageInputData.xls";
+			int tcRowNum;
+			int header = 0; // Excel first row is 0
+			tcRowNum = 3; // Test Case Row No Is: 4
+			tcRowNum = ExcelUtils.getRowNum(inputdatafilepath, "inputdata", "TestName",
+					"TC_VALIDATE_FIXED_PRICE_FILTER_FOR_CLOSED_PROJECT");
+
+			HashMap<String, String> rowData = ExcelUtils.getTestDataXls(inputdatafilepath, "inputdata", header,
+					tcRowNum - 1);
+
+			String abc = rowData.get("ProjectTypes");
+			List<String> expectedfilter = new ArrayList<>(Arrays.asList(abc.split(",")));
+			String[] split = abc.split(",");
+			System.out.println(expectedfilter);
+			System.out.println(expectedfilter.get(0).split(","));
+			System.out.println(split[0]);
+			System.out.println(split[1]);
+			System.out.println(split[2]);
+
+			op.clickButton(closedProjectFilter);
+
+			op.waitingForAllElementsinaPage(driver1);
+
+			List<WebElement> ActualFilters = driver1.findElements(
+					By.xpath("//div[@id='fccp_fr']//div[@aria-labelledby='fccp_fr_0_lbl']/div/label/span[@class='label']"));
+
+			for (WebElement element : ActualFilters) {
+				op.waitingForAllElementsinaPage(driver1);
+				String filter = element.getText(); // change radio to element here
+				System.out.println(filter);
+				if (expectedfilter.contains(filter)) {
+					element.click();
+
+				}
+			}
+		}
+		
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void selectSubverticalFiltersAfterClickingOnFilterIconUnderClosedProjectsModule()
+				throws IOException, Exception {
+
+			String workspace = System.getProperty("user.dir");
+			String inputdatafilepath = workspace
+					+ "\\test-data-files\\UI-TestData\\TC_FilterFunctionalityPTrackerPageInputData.xls";
+			int tcRowNum;
+			int header = 0; // Excel first row is 0
+			tcRowNum = 3; // Test Case Row No Is: 4
+			tcRowNum = ExcelUtils.getRowNum(inputdatafilepath, "inputdata", "TestName",
+					"TC_VALIDATE_FIXED_PRICE_FILTER_FOR_CLOSED_PROJECT");
+
+			HashMap<String, String> rowData = ExcelUtils.getTestDataXls(inputdatafilepath, "inputdata", header,
+					tcRowNum - 1);
+
+			String abc = rowData.get("SubVertical");
+			List<String> expectedfilter = new ArrayList<>(Arrays.asList(abc.split(",")));
+			String[] split = abc.split(",");
+
+			op.clickButton(closedProjectFilter);
+
+			op.waitingForAllElementsinaPage(driver1);
+
+			for (String textfilter : expectedfilter) {
+				enterTextInVerticalFilterSearchbox(textfilter);
+				List<WebElement> ActualFilters = driver1.findElements(By.xpath(
+						"//div[@id='fccp_fr']//div[@aria-labelledby='fccp_fr_1_lbl']/div[@class='apex-item-option']/label/span[@class='label']"));
+
+				for (WebElement element : ActualFilters) {
+
+					String filter = element.getText();
+					System.out.println(filter);
+					if (expectedfilter.contains(filter)) {
+						op.waitingForAllElementsinaPage(driver1);
+						element.click();
+						op.waitingForAllElementsinaPage(driver1);
+						op.clear(subverticalFilterSearchBoxEntry);
+						break;
+					}
+				}
+			}
+
+			clickOnUIToCloseTheFilteraAnel();
+			System.out.println(abc);
+		}
+		
+		
+		/**
+		 * Created by Harshith kaup
+		 */
+
+		public void selectSubverticalHeadFiltersAfterClickingOnFilterIconUnderClosedProjectsModule()
+				throws IOException, Exception {
+
+			String workspace = System.getProperty("user.dir");
+			String inputdatafilepath = workspace
+					+ "\\test-data-files\\UI-TestData\\TC_FilterFunctionalityPTrackerPageInputData.xls";
+			int tcRowNum;
+			int header = 0; // Excel first row is 0
+			tcRowNum = 3; // Test Case Row No Is: 4
+			tcRowNum = ExcelUtils.getRowNum(inputdatafilepath, "inputdata", "TestName",
+					"TC_VALIDATE_FIXED_PRICE_FILTER_FOR_CLOSED_PROJECT");
+
+			HashMap<String, String> rowData = ExcelUtils.getTestDataXls(inputdatafilepath, "inputdata", header,
+					tcRowNum - 1);
+
+			String abc = rowData.get("SubVerticalHead");
+			List<String> expectedfilter = new ArrayList<>(Arrays.asList(abc.split("/")));
+			String[] split = abc.split("/");
+			System.out.println(expectedfilter.toString());
+			System.out.println(expectedfilter.get(0).split(","));
+			System.out.println(split[0]);
+			System.out.println(split[1]);
+
+			op.clickButton(closedProjectFilter);
+
+			op.waitingForAllElementsinaPage(driver1);
+
+			for (String textfilter : expectedfilter) {
+				enterTextInSubVerticalHeadFilterSearchbox(textfilter);
+
+				List<WebElement> ActualFilters = driver1.findElements(By.xpath(
+						"//div[@id='fccp_fr']//div[@aria-labelledby='fccp_fr_2_lbl']/div[@class='apex-item-option']/label/span[@class='label']"));
+
+				for (WebElement element : ActualFilters) {
+
+					String filter = element.getText();
+					System.out.println(filter);
+					// change radio to element here
+					System.out.println(filter);
+					// System.out.println(textfilter);
+
+					if (textfilter.contains(filter)) {
+						op.waitingForAllElementsinaPage(driver1);
+						element.click();
+						op.waitingForAllElementsinaPage(driver1);
+						// op.clear(subverticalHeadFilterSearchBoxEntry);
+						break;
+					}
+				}
+			}
+		}
+
 }

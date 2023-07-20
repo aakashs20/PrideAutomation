@@ -586,7 +586,6 @@ public class ManageLocationPage extends CommonPage{
 	/**
 	 * This method is used to create location instances for a location category
 	 * @author dahale_p
-	 * 25 June 2021
 	 * @param lip An object of Class LocationInstanceParams, in order to set
 	 * different fields for location category creation.
 	 * @return boolean This returns boolean true after creation location instances
@@ -1298,7 +1297,6 @@ public class ManageLocationPage extends CommonPage{
 	 * This method is used to select actual ROLE .
 	 * @author dahale_p
 	 * @param roleName
-	 * DATE 17 MAY 2022
 	 * @return boolean This returns true if required LOCATION get clicked.
 	 */
 	public boolean selectAndCopyLocation(String locationName) { 

@@ -588,7 +588,7 @@ public class NewProjectsPage extends TestBase{
 		threadsleep(1000);
 		op.selectDropdown(driver1, "//*[@class='ui-datepicker-month']", "Dec");
 		threadsleep(1000);
-		op.selectDropdown(driver1, "//*[@class='ui-datepicker-year']", "2021");
+		op.selectDropdown(driver1, "//*[@class='ui-datepicker-year']", "2022");
 		op.selectFromList(driver1,"//*[@id='ui-datepicker-div']/table/tbody/tr/td/a", rowData.get("StartDate"),"Start Day");
 		op.waitImplicitely(driver1, 120);
 		System.out.println("\n******************** " + op.getText(ProjectStartDate));
@@ -599,7 +599,7 @@ public class NewProjectsPage extends TestBase{
 		threadsleep(1000);
 		op.selectDropdown(driver1, "//*[@class='ui-datepicker-month']", "Dec");
 		threadsleep(1000);
-		op.selectDropdown(driver1, "//*[@class='ui-datepicker-year']", "2022");
+		op.selectDropdown(driver1, "//*[@class='ui-datepicker-year']", "2025");
 		op.selectFromList(driver1,"//*[@id='ui-datepicker-div']/table/tbody/tr/td/a", rowData.get("EndDate"),"End Day");
 		op.waitImplicitely(driver1, 120);
 		System.out.println("\n******************** " + op.getText(ProjectEndDate));

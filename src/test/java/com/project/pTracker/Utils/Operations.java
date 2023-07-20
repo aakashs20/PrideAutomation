@@ -12,12 +12,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -774,5 +777,86 @@ public class Operations extends ControlActions {
 		}
 	}
 	
+	
+	
+	/**
+	 * 	Created by Harshith kaup
+	 * Waits Fluently with retry Function.
+	 */
+
+	
+	@SuppressWarnings("deprecation")
+	public void waitForElementFluently(WebDriver driver, WebElement element ,int seconds) {
+		int retry = 0;
+		int retryCount = seconds < 25 ? 2 : 1;
+		while (retry < retryCount) {
+			
+			try {
+				
+				FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+						.withTimeout(seconds, TimeUnit.SECONDS)
+						.pollingEvery(200, TimeUnit.MILLISECONDS);
+				wait.until(ExpectedConditions.visibilityOf(driver.findElement((By) element)));
+			} catch (Exception ex) {
+
+			}
+			retry++;
+		}
+
+		   final long startTime = System.currentTimeMillis();
+		  
+		  
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+		   .withTimeout(seconds, TimeUnit.SECONDS) .pollingEvery((seconds / 5),
+		  TimeUnit.SECONDS).ignoring(StaleElementReferenceException.class);
+		  	  
+		  int tries = 0; 
+		  int retryCounts = 2; 
+		  boolean found = false;
+		  WebElement we = null;
+		  
+		   while (tries < retryCounts) { 
+			   logInfo( "Wait for element "+ element.toString()+" Try number " + (tries++));
+		//log.info( "Waiting for element with retry count = " + (tries++));
+		  try { we = wait.until(ExpectedConditions.visibilityOf(element));
+		        we = wait.until(ExpectedConditions .elementToBeClickable(element));
+		  
+		  found = true; // attempt a find to check that staleException is not
+		   // going to be thrown 
+		  break; 
+		  } catch (Exception e) 
+		  { 
+			  logInfo("Exception in waitForElementFluently: \n" +  e.getMessage() +
+		  "\n"); } }
+		 
+	}
+	
+	
+	/**
+	 * 	Created by Harshith kaup
+	 * Waits for All elements in a page until the page is loaded fully and its in ready state.
+	 */
+	public void waitingForAllElementsinaPage(WebDriver driver) {
+		try {
+			Thread.sleep(15000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
+			public Boolean apply(WebDriver driver) {
+				return ((JavascriptExecutor) driver).executeScript(
+						"return document.readyState").equals("complete");
+			}
+		};
+		
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+		try {
+			wait.until(expectation);
+		} catch (Throwable error) {
+
+
+}
+	}
+
 
 } // End of Class

@@ -35,7 +35,7 @@ public class PL_ActiveProjectConstant {
 	public static final String PTRACK_PAYMENT_MILESTONE ="//td[@headers='PAYMENT_MILESTONES']";
 	public static final String PTRACK_INPUT_BOX ="#P30_AP_FC_SEACH";
 
-	//*[@id="PopupLov_77_P77_PAYMENT_MILESTONE_dlg"]//ul[@role='listbox']/li[1]
+	public static final String FIXED_PRICE_ACTIVE_FILTER_BTN = "(//h4[@class='t-Card-subtitle'])[1]";
 
 
 	

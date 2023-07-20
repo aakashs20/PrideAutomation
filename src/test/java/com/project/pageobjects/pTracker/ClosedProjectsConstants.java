@@ -17,4 +17,30 @@ public class ClosedProjectsConstants {
 	public static final String CLOSED_PROJECT_TYPE_SELECTOR = "//ul[@id='R530072318487821345_cards']//div[@class='t-Card']";
 	public static final String CLOSED_PROJECT_TABLE_PROJECT_TYPE = "//table[@id='report_table_projects-classic-report']//td[@headers='PROJECT_TYPE']";
 	//public static final String CLOSED_PROJECT_PAGINATION = "//div[@id='report_projects-classic-report']//table[@class='t-Report-pagination t-Report-pagination--bottom']";
+	
+	public static final String CLOSE_PROJECT_BTN = "//span[contains(text(),'Close Project')]";
+	public static final String CLOSURE_REMARK_TXTBOX = "(//textarea[@id='P22_REMARK'])[1]";
+	public static final String CLOSUREQUEST_SUBMIT_BTN = "(//button[normalize-space()='Submit'])[1]";
+	public static final String CLOSE_REQUEST_FRAME = "//iframe[contains(@title,'Closure Request')]";
+	public static final String REVISED_CLOSURE_DATE = "//input[@id='P22_PROJECT_END_DATE']";
+	public static final String CALENDAR_ENABLED_DATELIST="//td[contains(@data-handler,'selectDay')]";
+	public static final String PROJECT_NUMBER="//td[@headers='PROJECT_NUMBER']";
+
+	/**
+	 * Created by Harshith Kaup
+	 */
+	public static final String FIXEDPRICE_PROJECTTYPE_UNDER_CLOSEDPROJECT = "//*[@id='R530072318487821345_cards']/li[1]/div/a/div[2]/h3[contains(text(), 'Fixed Price')]/../h4";
+	public static final String SUPPORTPROJECT_PROJECTTYPE_UNDER_CLOSEDPROJECT = "//*[@id='R530072318487821345_cards']/li[2]/div/a/div[2]/h3[contains(text(), 'Support Project')]/../h4";
+	public static final String STAFFING_PROJECTTYPE_UNDER_CLOSEDPROJECT = "//*[@id='R530072318487821345_cards']/li[3]/div/a/div[2]/h3[contains(text(), 'Staffing')]/../h4";
+	public static final String TIMEANDMATERIAL_PROJECTTYPE_UNDER_CLOSEDPROJECT = "//*[@id='R530072318487821345_cards']/li[4]/div/a/div[2]/h3[contains(text(), 'Time and Material')]/../h4";
+	public static final String ClEARBUTTON_PROJECTTYPEFILTER__UNDER_CLOSEDPROJECT = "//*[@id='fccp_fr_0']/button[contains(text(), 'Clear')]";
+	public static final String ClEARBUTTON_SUBVERTICALFILTER_UNDER_CLOSEDPROJECT = "//*[@id='fccp_fr_1']/button[contains(text(), 'Clear')]";
+	public static final String ClEARBUTTON__SUBVERTICALFILTERHEADFILTER__UNDER_CLOSEDPROJECT = "//*[@id='fccp_fr_2']/button[contains(text(), 'Clear')]";
+	public static final String SUBVERTICALFILTER_SEARCHBOXENTRY = "//*[@id='fccp_fr_1_f']";
+	public static final String SUBVERTICALFILTERHEAD_SEARCHBOXENTRY = "//*[@id='fccp_fr_2_f']";
+	public static final String CLEARALLBUTTON_CLOSEDPROJECT_UI = "//*[@id='cp_top_region']/ul/li[2]/button[contains(text(), 'Clear All')]";
+	public static final String SUBVERTICALFILTER_UNDERFILTERPANEL_MENU_CHECKBOX = "//div[@id='fccp_fr']//div[@aria-labelledby='fccp_fr_1_lbl']/div[@class='apex-item-option']/label/span[@class='label']";
+	public static final String SUBVERTICALHEADFILTER_UNDERFILTERPANEL_MENU_CHECKBOX = "//div[@id='fccp_fr']//div[@aria-labelledby='fccp_fr_2_lbl']/div[@class='apex-item-option']/label/span[@class='label']";
+
+
 }
